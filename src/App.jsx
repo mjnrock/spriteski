@@ -92,6 +92,7 @@ export default function App() {
             canvas.width = image.width + tileCount.x * gap;
             canvas.height = image.height + tileCount.y * gap;
 
+            //TODO This ctx draw here does not invoke a rerender, so it ends up 1 dispatch behind
             for(let i = 0; i < tileCount.x; i++) {
                 for(let j = 0; j < tileCount.y; j++) {
                     //TODO Store these dimensions as an array of "frames" elsewhere and use them here

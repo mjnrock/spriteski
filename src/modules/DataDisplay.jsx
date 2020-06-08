@@ -30,44 +30,38 @@ export default function Canvas(props) {
 
                 <Table.Body>
                     <Table.Row>
-                        <Table.Cell positive={ divisible.width ? true : false }>
-                            {
-                                divisible.width ? (
-                                    <Icon name="check" color="green" />
-                                ) : null
-                            }
+                        <Table.Cell>
                             { state.image.width }
                         </Table.Cell>
-                        <Table.Cell positive={ divisible.height ? true : false }>
-                            {
-                                divisible.height ? (
-                                    <Icon name="check" color="green" />
-                                ) : null
-                            }
+                        <Table.Cell>
                             { state.image.height }
                         </Table.Cell>
-                        <Table.Cell positive={ divisible.width ? true : false } >
-                            {
-                                divisible.width ? (
-                                    <Icon name="check" color="green" />
-                                ) : null
-                            }
+                        <Table.Cell>
                             { state.tile.width }
                         </Table.Cell>
-                        <Table.Cell positive={ divisible.height ? true : false }>
-                            {
-                                divisible.height ? (
-                                    <Icon name="check" color="green" />
-                                ) : null
-                            }
+                        <Table.Cell>
                             { state.tile.height }
                         </Table.Cell>
                     </Table.Row>
 
                     <Table.Row>
                         <Table.Cell colSpan="2">{ state.image.width * state.image.height } px</Table.Cell>
-                        <Table.Cell>{ (state.image.width / state.tile.width).toFixed(2) } : 1</Table.Cell>
-                        <Table.Cell>{ (state.image.height / state.tile.height).toFixed(2) } : 1</Table.Cell>
+                        <Table.Cell positive={ divisible.width ? true : false }>                            
+                            {
+                                divisible.width ? (
+                                    <Icon name="check" color="green" />
+                                ) : null
+                            }
+                            { (state.image.width / state.tile.width).toFixed(2) } : 1
+                        </Table.Cell>
+                        <Table.Cell positive={ divisible.height ? true : false }>                            
+                            {
+                                divisible.height ? (
+                                    <Icon name="check" color="green" />
+                                ) : null
+                            }
+                            { (state.image.height / state.tile.height).toFixed(2) } : 1
+                        </Table.Cell>
                     </Table.Row>
                 </Table.Body>
             </Table>
