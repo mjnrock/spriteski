@@ -46,9 +46,21 @@ export default function Canvas(props) {
         }
     }, [ props.image ]);
 
+    useEffect(() => {
+        const canvas = ReactDOM.findDOMNode(canvasRef.current);
+
+        if(canvas) {
+            const ctx = canvas.getContext("2d");
+
+            canvas.width = state.canvas.width;
+            canvas.height = state.canvas.height;
+            
+            ctx.drawImage(state.canvas, 0, 0);
+        }
+    });
+
     return (
         <Segment inverted textAlign="center">
-            { () => state.canvas }
             <canvas ref={ canvasRef } style={ { border: "1px solid #fff" } } />
         </Segment>
     );

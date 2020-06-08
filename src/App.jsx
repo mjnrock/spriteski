@@ -51,7 +51,7 @@ const reducer = (state, message) => {
             ...state,
             image: {
                 ...state.image,
-                image: data.image,
+                img: data.image,
                 width: data.width,
                 height: data.height
             }
@@ -76,12 +76,40 @@ export default function App() {
         console.log("APP", state);
 
         const mtype = state._lastMessage ? state._lastMessage.type : null;
-        const { canvas } = state;
+        const image = state.image.img;
+        const { canvas, tile } = state;
         const ctx = canvas.getContext("2d");
 
         if(mtype === EnumMessageType.TILE_SIZE) {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            //TODO Split the canvas image into tiles and paint somewhere (multiple canvases?, big canvas?, images?)
+
+            let gap = 1;
+            let tileCount = {
+                x: Math.ceil(image.width / tile.width),
+                y: Math.ceil(image.height / tile.height),
+            };
+
+            canvas.width = image.width + tileCount.x * gap;
+            canvas.height = image.height + tileCount.y * gap;
+
+            for(let i = 0; i < tileCount.x; i++) {
+                for(let j = 0; j < tileCount.y; j++) {
+                    //TODO Store these dimensions as an array of "frames" elsewhere and use them here
+                    //? This is obviously not a 1:1 transfer; make a "frames" collection that dynamically updates based on tile size
+                    //* Probably can do ^ in the reducer when there is an "IMAGE" or "TILE_SIZE" event, or make a condition in this useEffect (but then where to store?)
+                    ctx.drawImage(
+                        image,
+                        tile.width * i,
+                        tile.height * j,
+                        tile.width,
+                        tile.height,
+                        (tile.width * i) + (gap * i),
+                        (tile.height * j) + (gap * j),
+                        tile.width,
+                        tile.height
+                    );
+                }
+            }
         }
     });
 

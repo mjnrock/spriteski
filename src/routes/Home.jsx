@@ -38,8 +38,14 @@ function Home() {
                 <Canvas image={ image } />
             </Segment>
 
-            <TileSizeMenu />
-            <DataDisplay />
+                {
+                    image ? (
+                        <>
+                            <TileSizeMenu />
+                            <DataDisplay />
+                        </>
+                    ) : null
+                }
         </Segment>
     );
 }
