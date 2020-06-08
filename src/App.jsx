@@ -5,23 +5,33 @@ import {
     Route,
 } from "react-router-dom";
 
-// import Routes from "./routes/package";
+import Routes from "./routes/package";
 
 import ScrollToTop from "./ScrollToTop";
 
-const initialState = {};
+const initialState = {
+    tile: {
+        size: 16
+    }
+};
 export const Context = React.createContext(initialState);
 
 export const EnumMessageType = {
-    MESSAGE: "MESSAGE",
+    TILE_SIZE: "TILE_SIZE",
 };
 
 const reducer = (state, message) => {
     console.log("Dispatch:", message);
-    // const data = message.payload || {};
+    const data = message.payload;
 
-    if(message.type === EnumMessageType.MESSAGE) {
-        return state;
+    if(message.type === EnumMessageType.TILE_SIZE) {
+        return {
+            ...state,
+            tile: {
+                ...state.tile,
+                size: data
+            }
+        };
     }
 
     return state;
@@ -36,7 +46,7 @@ export default function App() {
                 <Context.Provider value={{ state, dispatch }}>
                     <Switch>
                         <Route path="/">
-                            <div>Home</div>
+                            <Routes.Home />
                         </Route>
                     </Switch>
                 </Context.Provider>

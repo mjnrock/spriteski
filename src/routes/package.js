@@ -1,1 +1,5 @@
-export default {};
+import Home from "./Home";
+
+export default {
+    Home,
+};
