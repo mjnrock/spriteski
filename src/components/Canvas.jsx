@@ -1,29 +1,55 @@
-import React, { useEffect } from "react";
+/* eslint-disable */
+import React, { useEffect, useContext } from "react";
 import ReactDOM from "react-dom";
 import { Segment } from "semantic-ui-react";
 
+import { Context, EnumMessageType } from "./../App";
+
+function drawTransparency(canvas, ctx) {
+    const tSize = 16;
+
+    let iter = 0;
+    for(let x = 0; x < canvas.width; x += tSize) {
+        for(let y = 0; y < canvas.height; y += tSize) {
+            ctx.fillStyle = (iter % 2 === 0) ? "#fff" : "#ddd";
+            ctx.fillRect(x, y, tSize, tSize);
+            ++iter;
+        }
+        ++iter;
+    }
+}
+
 export default function Canvas(props) {
+    const { state } = useContext(Context);
     const canvasRef = React.createRef();
 
     useEffect(() => {
         const canvas = ReactDOM.findDOMNode(canvasRef.current);
 
-        if(canvas && props.image) {
+        if(canvas) {
             const ctx = canvas.getContext("2d");
-            const ar = props.image.width / props.image.height;
-            let height = props.image.height;
-            let width = height * ar;
+            drawTransparency(state.canvas, state.canvas.getContext("2d"));
+            
+            ctx.drawImage(state.canvas, 0, 0);
 
-            canvas.width = width;
-            canvas.height = height;
+            if(props.image) {
+                const ar = props.image.width / props.image.height;
+                let height = props.image.height;
+                let width = height * ar;
 
-            ctx.drawImage(props.image, 0, 0);
+                canvas.width = width;
+                canvas.height = height;
+
+                drawTransparency(canvas, ctx);
+                ctx.drawImage(props.image, 0, 0);
+            }
         }
-    }, [ props.image, canvasRef ]);
+    }, [ props.image ]);
 
     return (
-        <Segment basic textAlign="center">
-            <canvas ref={ canvasRef } style={ { border: "1px solid #000" } } />
+        <Segment inverted textAlign="center">
+            { () => state.canvas }
+            <canvas ref={ canvasRef } style={ { border: "1px solid #fff" } } />
         </Segment>
     );
 };

@@ -1,20 +1,22 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Segment, Header } from "semantic-ui-react";
 
 import { Context, EnumMessageType } from "./../App";
 import UploadImage from "./../components/UploadImage";
 import Canvas from "./../components/Canvas";
-import Slider from "./../components/Slider";
-import DataDisplay from "./../components/DataDisplay";
+import TileSizeMenu from "./../modules/TileSizeMenu";
+import DataDisplay from "../modules/DataDisplay";
 
 function Home() {
+    // eslint-disable-next-line
     const { state, dispatch } = useContext(Context);
     const [ image, setImage ] = useState();
 
     function selectImage(img) {
         dispatch({
-            type: EnumMessageType.IMAGE_SIZE,
+            type: EnumMessageType.IMAGE,
             payload: {
+                image: img,
                 width: img.width,
                 height: img.height
             }
@@ -31,12 +33,13 @@ function Home() {
             <Segment>
                 <UploadImage onSelect={ selectImage } />
             </Segment>
-            
+
             <Segment>
-                <DataDisplay />
-                <Slider label={ <span className="input-label">Tile Size</span> } min={ 0 } max={ 512 } value={ state.tile.size } onChange={ value => dispatch({ type: EnumMessageType.TILE_SIZE, payload: value }) } />
                 <Canvas image={ image } />
             </Segment>
+
+            <TileSizeMenu />
+            <DataDisplay />
         </Segment>
     );
 }
