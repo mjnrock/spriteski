@@ -14,7 +14,7 @@ export default function Slider(props) {
     if(props.label) {
         return (
             <Grid>
-                <Grid.Row textAlign="center">
+                <Grid.Row textAlign="center" verticalAlign="middle">
                     <Grid.Column width={ 3 }>
                         { props.label }
                     </Grid.Column>

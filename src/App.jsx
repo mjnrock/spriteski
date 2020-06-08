@@ -12,6 +12,10 @@ import ScrollToTop from "./ScrollToTop";
 const initialState = {
     tile: {
         size: 16
+    },
+    image: {
+        width: null,
+        height: null
     }
 };
 export const Context = React.createContext(initialState);
@@ -30,6 +34,15 @@ const reducer = (state, message) => {
             tile: {
                 ...state.tile,
                 size: data
+            }
+        };
+    } else if(message.type === EnumMessageType.IMAGE_SIZE) {
+        return {
+            ...state,
+            image: {
+                ...state.image,
+                width: data.width,
+                height: data.height
             }
         };
     }
