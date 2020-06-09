@@ -158,8 +158,8 @@ export default function App() {
                     //* Probably can do ^ in the reducer when there is an "IMAGE" or "TILE_SIZE" event, or make a condition in this useEffect (but then where to store?)
                     ctx.drawImage(
                         image,
-                        tile.width * i,
-                        tile.height * j,
+                        1 + tile.width * i,
+                        1 + tile.height * j,
                         tile.width,
                         tile.height,
                         gap + (tile.width * i) + (gap * i),
