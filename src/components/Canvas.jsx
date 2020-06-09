@@ -60,7 +60,7 @@ export default function Canvas(props) {
 
     return (
         <Segment inverted textAlign="center">
-            <canvas ref={ canvasRef } style={ { border: "1px solid #fff" } } />
+            <canvas ref={ canvasRef } />
         </Segment>
     );
 };

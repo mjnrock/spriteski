@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { Segment, Header, Button, Icon } from "semantic-ui-react";
+import { Segment, Header, Button } from "semantic-ui-react";
 
 import { Context, EnumMessageType } from "../App";
 import Slider from "../components/Slider";

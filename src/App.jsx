@@ -93,6 +93,7 @@ const reducer = (state, message) => {
     return newState;
 };
 
+// eslint-disable-next-line
 function drawTransparency(canvas, ctx) {
     const tSize = 16;
 
@@ -117,6 +118,7 @@ export default function App() {
         const image = state.image.img;
         const { canvas, tile } = state;
         const ctx = canvas.getContext("2d");
+        ctx.imageSmoothingEnabled= false;
 
         //TODO Make functions for coloring the canvas, so these events can conditionally invoke
         if(mtype === EnumMessageType.TOGGLE_TILE_LINES) {
@@ -136,6 +138,7 @@ export default function App() {
         } else if(mtype === EnumMessageType.CANVAS && image) {
             ctx.drawImage(image, 0, 0);
         } else if(mtype === EnumMessageType.TILE_SIZE) {
+            //TODO This entire offset structure is demonstably incorrect, being off by a few pixels.  Abstract into functions and reconstruct.
             let gap = 2;
             let tileCount = {
                 x: Math.ceil(image.width / tile.width),
@@ -159,20 +162,29 @@ export default function App() {
                         tile.height * j,
                         tile.width,
                         tile.height,
-                        (tile.width * i) + (gap * i),
-                        (tile.height * j) + (gap * j),
+                        gap + (tile.width * i) + (gap * i),
+                        gap + (tile.height * j) + (gap * j),
                         tile.width,
                         tile.height
                     );
 
                     if(state.config.showTileLines) {
+                        let bw = tile.width + gap,
+                            bh = tile.height + gap;
+
                         ctx.strokeStyle = state.config.tileLineColor;
                         ctx.strokeRect(
-                            (tile.width * i) + (gap * i) - gap,
-                            (tile.height * j) + (gap * j) - gap,
-                            tile.width + (gap * 2),
-                            tile.height + (gap * 2)
+                            bw * i,
+                            bh * j,
+                            bw,
+                            bh
                         );
+                        // ctx.strokeRect(
+                        //     (tile.width * i) + (gap * (i - 1)),
+                        //     (tile.height * j) + (gap * (j - 1)),
+                        //     tile.width + gap,
+                        //     tile.height + gap
+                        // );
                     }
                 }
             }

@@ -1,5 +1,5 @@
-import React, { useState, useContext, useEffect } from "react";
-import { Segment, Header } from "semantic-ui-react";
+import React, { useState, useContext } from "react";
+import { Segment, Header, Step, Icon } from "semantic-ui-react";
 
 import { Context, EnumMessageType } from "./../App";
 import UploadImage from "./../components/UploadImage";
@@ -30,22 +30,40 @@ function Home() {
                 <Header.Content>Spriteski</Header.Content>
             </Header>
 
-            <Segment>
-                <UploadImage onSelect={ selectImage } />
-            </Segment>
+            <Step.Group widths={ 2 }>
+                <Step active>
+                    <Icon name="upload" />
+                    <Step.Content>
+                        <Step.Title>Upload</Step.Title>
+                    </Step.Content>
+                </Step>
+                
+                <Step>
+                    <Icon name="info" />
+                    <Step.Content>
+                        <Step.Title>Info</Step.Title>
+                    </Step.Content>
+                </Step>
+            </Step.Group>
 
             <Segment>
-                <Canvas image={ image } />
-            </Segment>
+                <Segment color="blue">
+                    <UploadImage onSelect={ selectImage } />
+                </Segment>
 
-                {
-                    image ? (
-                        <>
-                            <TileSizeMenu />
-                            <DataDisplay />
-                        </>
-                    ) : null
-                }
+                <Segment color="blue">
+                    <Canvas image={ image } />
+                </Segment>
+
+                    {
+                        image ? (
+                            <>
+                                <TileSizeMenu />
+                                <DataDisplay />
+                            </>
+                        ) : null
+                    }
+            </Segment>
         </Segment>
     );
 }
