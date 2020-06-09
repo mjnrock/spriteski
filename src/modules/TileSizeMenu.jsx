@@ -69,8 +69,8 @@ function TileSizeMenu() {
             {
                 isCustomTileSize ? (
                     <Segment basic>
-                        <Slider label={ <span className="input-label">Tile Width</span> } min={ 0 } max={ 512 } value={ state.tile.width } onChange={ value => setTileSize(state.tile.width, value) } />
-                        <Slider label={ <span className="input-label">Tile Height</span> } min={ 0 } max={ 512 } value={ state.tile.height } onChange={ value => setTileSize(value, state.tile.height) } />
+                        <Slider label={ <span className="input-label">Tile Width</span> } min={ 1 } max={ 512 } value={ state.tile.width } onChange={ value => setTileSize(state.tile.width, value) } />
+                        <Slider label={ <span className="input-label">Tile Height</span> } min={ 1 } max={ 512 } value={ state.tile.height } onChange={ value => setTileSize(value, state.tile.height) } />
                     </Segment>
                 ) : null
             }

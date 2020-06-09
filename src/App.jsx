@@ -83,7 +83,7 @@ export default function App() {
         if(mtype === EnumMessageType.TILE_SIZE) {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            let gap = 1;
+            let gap = 2;
             let tileCount = {
                 x: Math.ceil(image.width / tile.width),
                 y: Math.ceil(image.height / tile.height),
