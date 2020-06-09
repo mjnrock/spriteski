@@ -1,6 +1,5 @@
 /* eslint-disable */
 import React, { useEffect, useContext } from "react";
-import ReactDOM from "react-dom";
 import { Segment } from "semantic-ui-react";
 
 import { Context, EnumMessageType } from "./../App";
@@ -23,31 +22,31 @@ export default function Canvas(props) {
     const { state } = useContext(Context);
     const canvasRef = React.createRef();
 
-    useEffect(() => {
-        const canvas = ReactDOM.findDOMNode(canvasRef.current);
+    // useEffect(() => {
+    //     const canvas = ReactDOM.findDOMNode(canvasRef.current);
 
-        if(canvas) {
-            const ctx = canvas.getContext("2d");
-            drawTransparency(state.canvas, state.canvas.getContext("2d"));
+    //     if(canvas) {
+    //         const ctx = canvas.getContext("2d");
+    //         drawTransparency(state.canvas, state.canvas.getContext("2d"));
             
-            ctx.drawImage(state.canvas, 0, 0);
+    //         ctx.drawImage(state.canvas, 0, 0);
 
-            if(props.image) {
-                const ar = props.image.width / props.image.height;
-                let height = props.image.height;
-                let width = height * ar;
+    //         if(props.image) {
+    //             const ar = props.image.width / props.image.height;
+    //             let height = props.image.height;
+    //             let width = height * ar;
 
-                canvas.width = width;
-                canvas.height = height;
+    //             canvas.width = width;
+    //             canvas.height = height;
 
-                drawTransparency(canvas, ctx);
-                ctx.drawImage(props.image, 0, 0);
-            }
-        }
-    }, [ props.image ]);
+    //             drawTransparency(canvas, ctx);
+    //             ctx.drawImage(props.image, 0, 0);
+    //         }
+    //     }
+    // }, [ props.image ]);
 
     useEffect(() => {
-        const canvas = ReactDOM.findDOMNode(canvasRef.current);
+        const canvas = canvasRef.current;
 
         if(canvas) {
             const ctx = canvas.getContext("2d");

@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { Segment, Header, Button } from "semantic-ui-react";
+import { Segment, Header, Button, Icon } from "semantic-ui-react";
 
 import { Context, EnumMessageType } from "../App";
 import Slider from "../components/Slider";
@@ -24,6 +24,7 @@ function TileSizeMenu() {
 
             buttons.push(
                 <Button
+                    key={ `${ n }x${ n }` }
                     basic={ isMatch.neither || isMatch.xor }
                     color="blue"
                     onClick={ e => {
@@ -53,6 +54,20 @@ function TileSizeMenu() {
             <Header as="h4" color="grey" textAlign="center">
                 <Header.Content>Tile Dimensions</Header.Content>
             </Header>
+
+            {/* //TODO WIP */}
+            {/* <Segment basic>
+                <input
+                    type="color"
+                    value={ state.config.tileLineColor }
+                    onChange={ console.log }
+                />
+                <Button onClick={ e => dispatch({
+                    type: EnumMessageType.TOGGLE_TILE_LINES
+                })}>
+                    <Icon name={ state.config.showTileLines ? "hide" : "unhide" } />
+                </Button>
+            </Segment> */}
 
             <Button.Group fluid>
                 {

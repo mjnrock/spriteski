@@ -11,16 +11,21 @@ import ScrollToTop from "./ScrollToTop";
 
 const initialState = {
     canvas: document.createElement("canvas", {
-        width: 500,
-        height: 500
+        width: 0,
+        height: 0
     }),
     tile: {
-        width: 16,
-        height: 16
+        width: 0,
+        height: 0
     },
     image: {
         width: null,
         height: null
+    },
+
+    config: {
+        showTileLines: true,
+        tileLineColor: "#f00"
     }
 };
 export const Context = React.createContext(initialState);
@@ -29,6 +34,9 @@ export const EnumMessageType = {
     CANVAS: "CANVAS",
     IMAGE: "IMAGE",
     TILE_SIZE: "TILE_SIZE",
+
+    TOGGLE_TILE_LINES: "TOGGLE_TILE_LINES",
+    TILE_LINE_COLOR: "TILE_LINE_COLOR",
 };
 
 const reducer = (state, message) => {
@@ -61,6 +69,22 @@ const reducer = (state, message) => {
             ...state,
             canvas: data
         };
+    } else if(message.type === EnumMessageType.TOGGLE_TILE_LINES) {
+        newState = {
+            ...state,
+            config: {
+                ...state.config,
+                showTileLines: !state.config.showTileLines
+            }
+        };
+    } else if(message.type === EnumMessageType.TILE_LINE_COLOR) {
+        newState = {
+            ...state,
+            config: {
+                ...state.config,
+                tileLineColor: data
+            }
+        };
     }
 
     newState._lastMessage = Object.freeze(message);
@@ -68,6 +92,20 @@ const reducer = (state, message) => {
     
     return newState;
 };
+
+function drawTransparency(canvas, ctx) {
+    const tSize = 16;
+
+    let iter = 0;
+    for(let x = 0; x < canvas.width; x += tSize) {
+        for(let y = 0; y < canvas.height; y += tSize) {
+            ctx.fillStyle = (iter % 2 === 0) ? "#fff" : "#ddd";
+            ctx.fillRect(x, y, tSize, tSize);
+            ++iter;
+        }
+        ++iter;
+    }
+}
 
 export default function App() {
     const [ state, dispatch ] = React.useReducer(reducer, initialState);
@@ -80,9 +118,24 @@ export default function App() {
         const { canvas, tile } = state;
         const ctx = canvas.getContext("2d");
 
-        if(mtype === EnumMessageType.TILE_SIZE) {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        //TODO Make functions for coloring the canvas, so these events can conditionally invoke
+        if(mtype === EnumMessageType.TOGGLE_TILE_LINES) {
+            //TODO Create a reaction from this message.
+        } else if(mtype === EnumMessageType.TILE_LINE_COLOR) {
+            //TODO Create a reaction from this message.
+        } else if(mtype === EnumMessageType.IMAGE) {
+            canvas.width = image.width;
+            canvas.height = image.height;
 
+            ctx.drawImage(image, 0, 0);
+
+            dispatch({
+                type: EnumMessageType.CANVAS,
+                payload: canvas
+            });
+        } else if(mtype === EnumMessageType.CANVAS && image) {
+            ctx.drawImage(image, 0, 0);
+        } else if(mtype === EnumMessageType.TILE_SIZE) {
             let gap = 2;
             let tileCount = {
                 x: Math.ceil(image.width / tile.width),
@@ -91,6 +144,8 @@ export default function App() {
 
             canvas.width = image.width + tileCount.x * gap;
             canvas.height = image.height + tileCount.y * gap;
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             //TODO This ctx draw here does not invoke a rerender, so it ends up 1 dispatch behind
             for(let i = 0; i < tileCount.x; i++) {
@@ -109,8 +164,23 @@ export default function App() {
                         tile.width,
                         tile.height
                     );
+
+                    if(state.config.showTileLines) {
+                        ctx.strokeStyle = state.config.tileLineColor;
+                        ctx.strokeRect(
+                            (tile.width * i) + (gap * i) - gap,
+                            (tile.height * j) + (gap * j) - gap,
+                            tile.width + (gap * 2),
+                            tile.height + (gap * 2)
+                        );
+                    }
                 }
             }
+
+            dispatch({
+                type: EnumMessageType.CANVAS,
+                payload: canvas
+            });
         }
     });
 
