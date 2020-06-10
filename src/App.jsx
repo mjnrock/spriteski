@@ -139,6 +139,7 @@ export default function App() {
             ctx.drawImage(image, 0, 0);
         } else if(mtype === EnumMessageType.TILE_SIZE) {
             //TODO This entire offset structure is demonstably incorrect, being off by a few pixels.  Abstract into functions and reconstruct.
+            //? Image dimensions are 0-indexed, and that makes an unaccounted for difference here
             let gap = 2;
             let tileCount = {
                 x: Math.ceil(image.width / tile.width),
