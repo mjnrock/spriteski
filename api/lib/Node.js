@@ -65,9 +65,11 @@ export default class Node extends EventEmitter {
                 this.before(msg, this);
             }
 
+            console.log(this.id, this._reducers)
+
             for(let reducer of this._reducers) {
                 if(typeof reducer === "function") {
-                    let newState = reducer.call(this, msg) || this.state;
+                    let newState = reducer.call(this, this._state, msg) || this.state;
 
                     if(!(typeof newState === "object" || Array.isArray(newState))) {
                         newState = [ newState ];
@@ -81,6 +83,32 @@ export default class Node extends EventEmitter {
                 this.after(msg, this);
             }
         }
+    }
+
+    addReducer(...reducers) {
+        for(let reducer of reducers) {
+            if(typeof reducer === "function") {
+                this._reducers.push(reducer);
+            }
+        }
+
+        return this;
+    }
+    removeReducer(...reducers) {
+        this._reducers = this._reducers.filter(reducer => {
+            if(reducers.includes(reducer)) {    // I don't know if .includes uses a === equivalent
+                return false;
+            }
+
+            return true;
+        });
+
+        return this;
+    }
+    clearReducers() {
+        this._reducers = [];
+
+        return this;
     }
 
     track(node, twoWay = false) {
