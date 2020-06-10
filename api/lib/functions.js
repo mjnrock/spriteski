@@ -13,5 +13,5 @@ export function freeze(obj) {
 };
 
 export function freezeCopy(obj) {
-    return freeze(JSON.parse(JSON.stringify(obj)));
+    return freeze(Object.assign({}, obj));
 };

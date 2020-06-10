@@ -94,7 +94,7 @@ export default class Node extends EventEmitter {
             const [ type, reducer ] = arguments;
             
             if(typeof reducer === "function") {
-                this._reducers.push(function(state, msg) {
+                this._reducers.push((state, msg) => {
                     if(msg.type === type) {
                         return reducer(state, msg);
                     }
@@ -106,6 +106,7 @@ export default class Node extends EventEmitter {
 
         return this;
     }
+    
     clearReducers() {
         this._reducers = [];
 

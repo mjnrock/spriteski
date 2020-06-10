@@ -26,7 +26,7 @@ node2.addReducer("test", (state, msg) => {
 
 node.send("test2", { cat: 1 });
 
-console.log(node2.state)
+console.log(node2.flatten())
 // node.send("test2", { cat: 1 });
 
 // console.log(node2.state)
