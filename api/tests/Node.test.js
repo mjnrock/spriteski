@@ -10,14 +10,23 @@ let node2 = new Node();
 node2.track(node);
 
 node2.addReducer((state, msg) => {
-    if(msg.type === "test") {
-        return {
-            ...state,
-            dug: 5
-        };
-    }
+    console.log(111)
+    return {
+        ...state,
+        dug: 5
+    };
+});
+node2.addReducer("test", (state, msg) => {
+    console.log(222)
+    return {
+        ...state,
+        dug: 6
+    };
 });
 
-node.send("test", { cat: 1 });
+node.send("test2", { cat: 1 });
 
 console.log(node2.state)
+// node.send("test2", { cat: 1 });
+
+// console.log(node2.state)
