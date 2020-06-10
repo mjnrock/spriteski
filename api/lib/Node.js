@@ -67,7 +67,7 @@ export default class Node extends EventEmitter {
 
             for(let reducer of this._reducers) {
                 if(typeof reducer === "function") {
-                    let newState = reducer.call(this, msg);
+                    let newState = reducer.call(this, msg) || this.state;
 
                     if(!(typeof newState === "object" || Array.isArray(newState))) {
                         newState = [ newState ];
