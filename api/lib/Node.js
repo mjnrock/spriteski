@@ -1,7 +1,7 @@
 import EventEmitter from "events";
 import { v4 as uuidv4 } from "uuid";
 
-import { freezeCopy } from "./functions";
+import { freeze, freezeCopy } from "./functions";
 
 export const EnumEventType = {
     MESSAGE: "message",
@@ -12,7 +12,8 @@ export default class Node extends EventEmitter {
         super();
 
         this.id = uuidv4();
-        this._state = state;
+        this._state = freeze(state);
+        this._reducers = [];
         this._config = {
             isSelfMessaging: true
         };
@@ -59,9 +60,25 @@ export default class Node extends EventEmitter {
         }));
     }
     receive(msg) {
-        if(typeof this.next === "function") {
-            if((this.config.isSelfMessaging && msg.emitter.id === this.id) || msg.emitter.id !== this.id) {
-                this.next(msg);
+        if((this.config.isSelfMessaging && msg.emitter.id === this.id) || msg.emitter.id !== this.id) {            
+            if(typeof this.before === "function") {
+                this.before(msg, this);
+            }
+
+            for(let reducer of this._reducers) {
+                if(typeof reducer === "function") {
+                    let newState = reducer.call(this, msg);
+
+                    if(!(typeof newState === "object" || Array.isArray(newState))) {
+                        newState = [ newState ];
+                    }
+
+                    this._state = freeze(newState);
+                }
+            }
+            
+            if(typeof this.after === "function") {
+                this.after(msg, this);
             }
         }
     }
