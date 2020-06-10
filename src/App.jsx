@@ -1,7 +1,7 @@
 import React from "react";
 
 import Node from "./lib/node/package";
-import { useNode } from "./lib/hooks";
+import { useNodeContext } from "./lib/hooks";
 
 const StateNode = new Node.Node({
     cats: 2
@@ -15,7 +15,7 @@ StateNode.addReducer("cats", (state, msg) => {
 export const Context = React.createContext(StateNode);
 
 function SubComponent(props) {
-    const { node, state } = useNode();
+    const { node, state } = useNodeContext();
     
     return (
         <div>

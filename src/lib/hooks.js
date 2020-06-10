@@ -2,7 +2,7 @@ import { useContext, useState, useEffect } from "react";
 import { Context } from "./../App";
 import Node from "./node/Node";
 
-export function useNode() {
+export function useNodeContext() {
     const { node } = useContext(Context);
     const [ state, setState ] = useState({
         node: node,
