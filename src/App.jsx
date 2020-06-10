@@ -1,17 +1,8 @@
 import React from "react";
 
-import Node from "./lib/node/package";
+import StateNode from "./lib/state";
 import { useNodeContext } from "./lib/hooks";
 
-const StateNode = new Node.Node({
-    cats: 2
-});
-StateNode.addReducer("cats", (state, msg) => {
-    return {
-        ...state,
-        cats: msg.payload
-    };
-})
 export const Context = React.createContext(StateNode);
 
 function SubComponent(props) {

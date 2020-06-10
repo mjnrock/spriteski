@@ -1,26 +1,28 @@
+/* eslint-disable */
 import { useContext, useState, useEffect } from "react";
 import { Context } from "./../App";
 import Node from "./node/Node";
 
-export function useNodeContext() {
-    const { node } = useContext(Context);
+//* Only real requirement is that the Context.Provider contains a kvp of { node: <Node> }
+export function useNodeContext(context) {
+    const { node: ctxNode } = useContext(context || Context);
     const [ state, setState ] = useState({
-        node: node,
-        state: node.state
+        node: ctxNode,
+        state: ctxNode.state
     });
 
     useEffect(() => {
-        const NODE = new Node();
+        const componentNode = new Node();
 
-        NODE.watchMessages(node);
-        NODE.after = (msg) => {
+        componentNode.watchMessages(ctxNode);
+        componentNode.after = (msg) => {
             setState({
-                node: node,
-                state: node.state
+                node: ctxNode,
+                state: ctxNode.state
             });
         }
 
-        return () => NODE.unwatchMessages(node);
+        return () => componentNode.unwatchMessages(ctxNode);
     }, []);
 
     return state;
