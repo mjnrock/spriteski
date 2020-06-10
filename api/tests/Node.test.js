@@ -14,7 +14,7 @@ node2.addReducer((state, msg) => {
     };
 });
 
-node.send("test2", { cat: 1 });
+node.dispatch("test2", { cat: 1 });
 
 console.log(node2.flatten())
 
