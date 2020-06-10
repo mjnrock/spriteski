@@ -2,8 +2,10 @@ import EventEmitter from "events";
 import { v4 as uuidv4 } from "uuid";
 
 import { freeze, freezeCopy } from "./functions";
+import Message from "./Message";
 
 export const EnumEventType = {
+    STATE: "state",
     MESSAGE: "message",
 };
 
@@ -23,6 +25,16 @@ export default class Node extends EventEmitter {
 
     get state() {
         return this._state;
+    }
+    set state(newState) {
+        const oldState = this._state;
+
+        this._state = newState;
+
+        this.emit(EnumEventType.STATE, freezeCopy({
+            previous: oldState,
+            current: newState
+        }));
     }
     get config() {
         return this._config;
@@ -51,15 +63,17 @@ export default class Node extends EventEmitter {
     }
 
     send(type, payload) {
-        this.emit(EnumEventType.MESSAGE, freezeCopy({
-            id: uuidv4(),
-            type: type,
-            payload: payload,
-            timestamp: Date.now(),
-            emitter: this
-        }));
+        this.emit(EnumEventType.MESSAGE, new Message(
+            type,
+            payload,
+            this
+        ));
     }
     receive(msg) {
+        if(!Message.Conforms(msg)) {
+            return;
+        }
+
         if((this.config.isSelfMessaging && msg.emitter.id === this.id) || msg.emitter.id !== this.id) {            
             if(typeof this.before === "function") {
                 this.before(msg, this);
@@ -73,7 +87,7 @@ export default class Node extends EventEmitter {
                         newState = [ newState ];
                     }
 
-                    this._state = freeze(newState);
+                    this.state = newState;
                 }
             }
             
@@ -81,6 +95,48 @@ export default class Node extends EventEmitter {
                 this.after(msg, this);
             }
         }
+    }
+    watchMessages(node, twoWay = false) {
+        if(node instanceof EventEmitter) {
+            node.on(EnumEventType.MESSAGE, this.receive.bind(this));
+
+            if(twoWay) {
+                this.on(EnumEventType.MESSAGE, node.receive.bind(node));
+            }
+        }
+
+        return this;
+    }
+    unwatchMessages(node, twoWay = false) {
+        if(node instanceof EventEmitter) {
+            node.off(EnumEventType.MESSAGE, this.receive.bind(this));
+
+            if(twoWay) {
+                this.off(EnumEventType.MESSAGE, node.receive.bind(node));
+            }
+        }
+
+        return this;
+    }
+
+    next(stateObj) {}
+    watchState(node) {
+        if(node instanceof EventEmitter) {
+            node.on(EnumEventType.STATE, stateObj => {
+                this.next(stateObj);
+            });
+        }
+
+        return this;
+    }
+    unwatchState(node) {
+        if(node instanceof EventEmitter) {
+            node.off(EnumEventType.STATE, stateObj => {
+                this.next(stateObj);
+            });
+        }
+
+        return this;
     }
 
     addReducer() {
@@ -105,33 +161,9 @@ export default class Node extends EventEmitter {
         }
 
         return this;
-    }
-    
+    }    
     clearReducers() {
         this._reducers = [];
-
-        return this;
-    }
-
-    track(node, twoWay = false) {
-        if(node instanceof EventEmitter) {
-            node.on(EnumEventType.MESSAGE, this.receive.bind(this));
-
-            if(twoWay) {
-                this.on(EnumEventType.MESSAGE, node.receive.bind(node));
-            }
-        }
-
-        return this;
-    }
-    untrack(node, twoWay = false) {
-        if(node instanceof EventEmitter) {
-            node.off(EnumEventType.MESSAGE, this.receive.bind(this));
-
-            if(twoWay) {
-                this.off(EnumEventType.MESSAGE, node.receive.bind(node));
-            }
-        }
 
         return this;
     }
