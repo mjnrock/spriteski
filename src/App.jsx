@@ -1,12 +1,19 @@
 import React from "react";
+import { spawnStateNode, useNodeContext } from "@lespantsfancy/hive";
 
-import StateNode from "./lib/state";
-import { useNodeContext } from "./lib/hooks";
-
-export const Context = React.createContext(StateNode);
+const initStateNode = spawnStateNode({
+    cats: 0
+}, [ "cats", (state, msg) => {
+        return {
+            ...state,
+            cats: msg.payload
+        };
+    }
+]);
+export const Context = React.createContext(initStateNode);
 
 function SubComponent(props) {
-    const { node, state } = useNodeContext();
+    const { node, state } = useNodeContext(Context);
     
     return (
         <div>
@@ -18,7 +25,7 @@ function SubComponent(props) {
 
 export default function App() {
     return (
-        <Context.Provider value={{ node: StateNode }}>
+        <Context.Provider value={{ node: initStateNode }}>
             <SubComponent />
             <SubComponent />
             <SubComponent />
