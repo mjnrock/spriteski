@@ -19,6 +19,8 @@ node.send("test2", { cat: 1 });
 console.log(node2.flatten())
 
 
-node2.watchState(node);
-node2.next = console.log;
+node2.watchState(node, true);
+node.onState = console.log;
+node2.onState = console.log;
 node.state = { cat: 5 };
+node2.state = { cat: 4 };

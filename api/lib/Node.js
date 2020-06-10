@@ -20,7 +20,7 @@ export default class Node extends EventEmitter {
             isSelfMessaging: true
         };
 
-        this.on(EnumEventType.MESSAGE, this.receive.bind(this));
+        this.on(EnumEventType.MESSAGE, this.onMessage.bind(this));
     }
 
     get state() {
@@ -69,7 +69,7 @@ export default class Node extends EventEmitter {
             this
         ));
     }
-    receive(msg) {
+    onMessage(msg) {
         if(!Message.Conforms(msg)) {
             return;
         }
@@ -98,10 +98,10 @@ export default class Node extends EventEmitter {
     }
     watchMessages(node, twoWay = false) {
         if(node instanceof EventEmitter) {
-            node.on(EnumEventType.MESSAGE, this.receive.bind(this));
+            node.on(EnumEventType.MESSAGE, this.onMessage.bind(this));
 
             if(twoWay) {
-                this.on(EnumEventType.MESSAGE, node.receive.bind(node));
+                this.on(EnumEventType.MESSAGE, node.onMessage.bind(node));
             }
         }
 
@@ -109,31 +109,43 @@ export default class Node extends EventEmitter {
     }
     unwatchMessages(node, twoWay = false) {
         if(node instanceof EventEmitter) {
-            node.off(EnumEventType.MESSAGE, this.receive.bind(this));
+            node.off(EnumEventType.MESSAGE, this.onMessage.bind(this));
 
             if(twoWay) {
-                this.off(EnumEventType.MESSAGE, node.receive.bind(node));
+                this.off(EnumEventType.MESSAGE, node.onMessage.bind(node));
             }
         }
 
         return this;
     }
 
-    next(stateObj) {}
-    watchState(node) {
+    onState(stateObj) {}
+    watchState(node, twoWay = false) {
         if(node instanceof EventEmitter) {
             node.on(EnumEventType.STATE, stateObj => {
-                this.next(stateObj);
+                this.onState(stateObj);
             });
+
+            if(twoWay) {
+                this.on(EnumEventType.STATE, stateObj => {
+                    node.onState(stateObj);
+                });
+            }
         }
 
         return this;
     }
-    unwatchState(node) {
+    unwatchState(node, twoWay = false) {
         if(node instanceof EventEmitter) {
             node.off(EnumEventType.STATE, stateObj => {
-                this.next(stateObj);
+                this.onState(stateObj);
             });
+
+            if(twoWay) {
+                this.off(EnumEventType.STATE, stateObj => {
+                    node.onState(stateObj);
+                });
+            }
         }
 
         return this;
