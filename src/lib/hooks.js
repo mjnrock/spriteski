@@ -1,23 +1,27 @@
 import { useContext, useState, useEffect } from "react";
+import { Context } from "./../App";
+import Node from "./node/Node";
 
-const RootContext = React.createContext({});
-
-//? This is some random template stuff placed here for convenience; it's not meant to work
-function useNodeConntector(node) {
-    const Context = useContext(RootContext);
-    const [ node, setNode ] = useState(Context.node);
+export function useNode() {
+    const { node } = useContext(Context);
+    const [ state, setState ] = useState({
+        node: node,
+        state: node.state
+    });
 
     useEffect(() => {
-        function onState(stateObj) {}
-        function onMessage(state, msg) {}
+        const NODE = new Node();
 
-        Context.watchState(onState);
-        Context.watchMessages(onMessage);
-        return () => {
-            Context.unwatchState(onState);
-            Context.unwatchMessages(onMessage);
-        };
+        NODE.watchMessages(node);
+        NODE.after = (msg) => {
+            setState({
+                node: node,
+                state: node.state
+            });
+        }
+
+        return () => NODE.unwatchMessages(node);
     }, []);
 
-    return node;
-}
+    return state;
+};

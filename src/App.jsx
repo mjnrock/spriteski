@@ -1,6 +1,7 @@
-import React, { useContext, useEffect, useState } from "react";
+import React from "react";
 
 import Node from "./lib/node/package";
+import { useNode } from "./lib/hooks";
 
 const StateNode = new Node.Node({
     cats: 2
@@ -13,26 +14,8 @@ StateNode.addReducer("cats", (state, msg) => {
 })
 export const Context = React.createContext(StateNode);
 
-function useNodeState(node) {
-    const [ state, setState ] = useState(node.state);
-
-    useEffect(() => {
-        const NODE = new Node.Node();
-
-        NODE.watchMessages(node);
-        NODE.after = (msg) => {
-            setState(node.state);
-        }
-
-        return () => NODE.unwatchMessages(node);
-    }, []);
-
-    return state;
-}
-
 function SubComponent(props) {
-    const { node } = useContext(Context);
-    const state = useNodeState(node);
+    const { node, state } = useNode();
     
     return (
         <div>
@@ -43,10 +26,10 @@ function SubComponent(props) {
 }
 
 export default function App() {
-    const state = StateNode;
-
     return (
-        <Context.Provider value={{ node: state }}>
+        <Context.Provider value={{ node: StateNode }}>
+            <SubComponent />
+            <SubComponent />
             <SubComponent />
         </Context.Provider>
     );
