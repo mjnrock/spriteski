@@ -1,11 +1,13 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { Segment, Header, Button } from "semantic-ui-react";
+import { useNodeContext } from "@lespantsfancy/hive";
 
-import { Context, EnumMessageType } from "../App";
+import { Context } from "../App";
+import { EnumMessageType } from "../reducers";
 import Slider from "../components/Slider";
 
 function TileSizeMenu() {
-    const { state, dispatch } = useContext(Context);
+    const { node, state } = useNodeContext(Context);
 
     const [ isCustomTileSize, setIsCustomTileSize ] = useState(false);
 
@@ -40,12 +42,9 @@ function TileSizeMenu() {
     }
 
     function setTileSize(w, h) {
-        dispatch({
-            type: EnumMessageType.TILE_SIZE,
-            payload: {
-                width: w,
-                height: h
-            }
+        node.dispatch(EnumMessageType.TILE_SIZE, {
+            width: w,
+            height: h
         });
     }
 

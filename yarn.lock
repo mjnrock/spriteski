@@ -1268,10 +1268,10 @@
     "@types/istanbul-reports" "^1.1.1"
     "@types/yargs" "^13.0.0"
 
-"@lespantsfancy/hive@^0.1.11":
-  version "0.1.11"
-  resolved "https://registry.yarnpkg.com/@lespantsfancy/hive/-/hive-0.1.11.tgz#cee10f22e622f4787578a7288102c8227f235b11"
-  integrity sha512-sfQQO53dwMb7GgZ3DBQoKc5HQ2U+D6xk7vY/vm+OWV0Jw0n46o+ko3nVSROt0imfcYxqBxwxauQZLt/8gZznjA==
+"@lespantsfancy/hive@^0.1.12":
+  version "0.1.12"
+  resolved "https://registry.yarnpkg.com/@lespantsfancy/hive/-/hive-0.1.12.tgz#d6b81a95d1316ddff6fa098636b4074122af50ab"
+  integrity sha512-8/yfssixViR3hGadNGVulExMQahvzmFj4IxL4OTtRm3ZG94uKkh8bhkcLZu8NTMSzHj7PT/0H/IvokapCaCiHg==
   dependencies:
     uuid "^8.1.0"
 

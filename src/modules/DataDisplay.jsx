@@ -1,10 +1,11 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Table, Segment, Icon } from "semantic-ui-react";
+import { useNodeContext } from "@lespantsfancy/hive";
 
 import { Context } from "../App";
 
 export default function Canvas(props) {
-    const { state } = useContext(Context);
+    const { state } = useNodeContext(Context);
 
     const divisible = {
         width: (state.image.width % state.tile.width) === 0,

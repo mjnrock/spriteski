@@ -1,23 +1,27 @@
-import React from "react";
+import React, { useState, useContext } from "react";
 import { Segment, Header, Step, Icon } from "semantic-ui-react";
-import { useNodeContext } from "@lespantsfancy/hive";
 
-import { Context } from "./../App";
-import { EnumMessageType } from "./../reducers";
+import { Context, EnumMessageType } from "./../App";
 import UploadImage from "./../components/UploadImage";
 import Canvas from "./../components/Canvas";
 import TileSizeMenu from "./../modules/TileSizeMenu";
 import DataDisplay from "../modules/DataDisplay";
 
 function Home() {
-    const { node, state } = useNodeContext(Context);
+    // eslint-disable-next-line
+    const { state, dispatch } = useContext(Context);
+    const [ image, setImage ] = useState();
 
     function selectImage(img) {
-        node.dispatch(EnumMessageType.IMAGE, {
-            image: img,
-            width: img.width,
-            height: img.height
+        dispatch({
+            type: EnumMessageType.IMAGE,
+            payload: {
+                image: img,
+                width: img.width,
+                height: img.height
+            }
         });
+        setImage(img);
     }
 
     return (
@@ -48,11 +52,11 @@ function Home() {
                 </Segment>
 
                 <Segment color="blue">
-                    <Canvas image={ state.image.img } />
+                    <Canvas image={ image } />
                 </Segment>
 
                     {
-                        state.image.img ? (
+                        image ? (
                             <>
                                 <TileSizeMenu />
                                 <DataDisplay />
