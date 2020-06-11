@@ -32,7 +32,7 @@ export const reducers = [
                 ...state,
                 image: {
                     ...state.image,
-                    img: data.image,
+                    ref: data.image,
                     width: data.width,
                     height: data.height
                 }
@@ -45,7 +45,10 @@ export const reducers = [
 
             return {
                 ...state,
-                canvas: data
+                canvas: {
+                    ...state.canvas,
+                    ref: data
+                }
             }
         }
     ], [

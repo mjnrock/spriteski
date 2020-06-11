@@ -48,11 +48,11 @@ function Home() {
                 </Segment>
 
                 <Segment color="blue">
-                    <Canvas image={ state.image.img } />
+                    <Canvas />
                 </Segment>
 
                     {
-                        state.image.img ? (
+                        state.image.ref ? (
                             <>
                                 <TileSizeMenu />
                                 <DataDisplay />

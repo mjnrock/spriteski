@@ -1,16 +1,18 @@
 /* eslint-disable */
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import { Segment } from "semantic-ui-react";
-import { useNodeContext } from "@lespantsfancy/hive";
 
 import { Context } from "./../App";
+import { useNodeContext } from "@lespantsfancy/hive";
 
-function drawTransparency(canvas, ctx, tileSize = 16) {
+function drawTransparency(canvas, ctx) {
+    const tSize = 16;
+
     let iter = 0;
-    for(let x = 0; x < canvas.width; x += tileSize) {
-        for(let y = 0; y < canvas.height; y += tileSize) {
+    for(let x = 0; x < canvas.width; x += tSize) {
+        for(let y = 0; y < canvas.height; y += tSize) {
             ctx.fillStyle = (iter % 2 === 0) ? "#fff" : "#ddd";
-            ctx.fillRect(x, y, tileSize, tileSize);
+            ctx.fillRect(x, y, tSize, tSize);
             ++iter;
         }
         ++iter;
@@ -27,10 +29,10 @@ export default function Canvas(props) {
         if(canvas) {
             const ctx = canvas.getContext("2d");
 
-            canvas.width = state.canvas.width;
-            canvas.height = state.canvas.height;
+            canvas.width = state.canvas.ref.width;
+            canvas.height = state.canvas.ref.height;
             
-            ctx.drawImage(state.canvas, 0, 0);
+            ctx.drawImage(state.canvas.ref, 0, 0);
         }
     });
 

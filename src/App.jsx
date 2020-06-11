@@ -4,44 +4,53 @@ import {
     Switch,
     Route,
 } from "react-router-dom";
-import { spawnStateNode } from "@lespantsfancy/hive";
+// import { spawnStateNode } from "@lespantsfancy/hive";
+import initStateNode from "./stateNode";
 
 import Routes from "./routes/package";
 import ScrollToTop from "./ScrollToTop";
-import { reducers, EnumMessageType } from "./reducers";
+import { EnumMessageType } from "./reducers";
+import Message from "@lespantsfancy/hive/lib/Message";
+// import StateNode from "./stateNode";
 
-const initStateNode = spawnStateNode({
-    canvas: document.createElement("canvas", {
-        width: 0,
-        height: 0
-    }),
-    tile: {
-        width: 0,
-        height: 0
-    },
-    image: {
-        img: null,
-        width: null,
-        height: null
-    },
+// const initStateNode = spawnStateNode({
+//     canvas: document.createElement("canvas", {
+//         width: 0,
+//         height: 0
+//     }),
+//     tile: {
+//         width: 0,
+//         height: 0
+//     },
+//     image: {
+//         img: null,
+//         width: null,
+//         height: null
+//     },
 
-    config: {
-        showTileLines: true,
-        tileLineColor: "#f00"
-    }
-}, ...reducers);
+//     config: {
+//         showTileLines: true,
+//         tileLineColor: "#f00"
+//     }
+// }, ...reducers);
+// reducers.forEach(reducer => {
+//     if(Array.isArray(reducer)) {
+//         console.log(...reducer)
+//         initStateNode.addReducer(...reducer);
+//     } else {
+//         initStateNode.addReducer(reducer);
+//     }
+// });
+// console.log(initStateNode._reducers.toString())
 initStateNode.after = (state, msg, node) => {
     const data = msg.payload || {};
 
     if(msg.type === EnumMessageType.IMAGE) {
-        const ctx = state.canvas.getContext("2d");
-        state.canvas.width = data.image.width;
-        state.canvas.height = data.image.height;
-        ctx.drawImage(data.image, 0, 0);
+        node.drawImage(data.image);
     } else if(msg.type === EnumMessageType.TILE_SIZE) {
-        const canvas = state.canvas;
-        const image = state.image.img;
-        const ctx = state.canvas.getContext("2d");
+        const canvas = state.canvas.ref;
+        const image = state.image.ref;
+        const ctx = canvas.getContext("2d");
         ctx.imageSmoothingEnabled= false;
         const tile = state.tile;
         
@@ -52,8 +61,8 @@ initStateNode.after = (state, msg, node) => {
         let bw = tile.width,
             bh = tile.height;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(state.image.img, 0, 0);
-        ctx.strokeStyle = state.config.tileLineColor;
+        ctx.drawImage(image, 0, 0);
+        ctx.strokeStyle = "#f00";
 
         for(let i = 0; i < tileCount.x; i++) {
             for(let j = 0; j < tileCount.y; j++) {

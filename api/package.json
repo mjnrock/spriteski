@@ -10,6 +10,8 @@
         "esm": "^3.2.25"
     },
     "dependencies": {
+        "@lespantsfancy/hive": "^0.1.16",
+        "canvas": "^2.6.1",
         "uuid": "^8.1.0"
     }
 }

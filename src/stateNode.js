@@ -1,15 +1,15 @@
-import { createCanvas } from "canvas";
+// import { createCanvas } from "canvas";
 import Hive, { spawnStateNode } from "@lespantsfancy/hive";
+import { reducers } from "./reducers";
 
 const StateNode = spawnStateNode({
     canvas: {
         width: null,
         height: null,
-        // ref: document.createElement("canvas", {
-        //     width: 0,
-        //     height: 0,
-        // }),
-        ref: createCanvas(0, 0),
+        ref: document.createElement("canvas", {
+            width: 0,
+            height: 0,
+        }),
     },
     image: {
         width: null,
@@ -17,18 +17,31 @@ const StateNode = spawnStateNode({
         ref: null,
     },
     tile: {
-        width: null,
-        height: null,
+        width: 0,
+        height: 0,
     },
 
     frames: {},
-}, );
+}, ...reducers);
 
 StateNode.drawImage = function(image) {
     const canvas = this.state.canvas.ref;
     const ctx = canvas.getContext("2d");
 
+    this.state.canvas.ref.width = image.width;
+    this.state.canvas.ref.height = image.height;
+
     ctx.drawImage(image, 0, 0);
+    
+    this.state = {
+        ...this.state,
+        canvas: {
+            ...this.state.canvas,
+            canvas: canvas,
+            width: image.width,
+            height: image.height,
+        }
+    };
 }
 StateNode.resizeCanvas = function(width, height) {
     this.state.canvas.ref.width = width;
@@ -71,11 +84,11 @@ StateNode.tessellate = function(tw, th) {
 
     for(let x = 0; x <= canvas.width; x += tw) {
         for(let y = 0; y <= canvas.height; y += th) {
-            // const frame = document.createElement("canvas", {
-            //     m width: tw,
-            //     height: th,
-            // });
-            const frame = createCanvas(tw, th);
+            const frame = document.createElement("canvas", {
+                width: tw,
+                height: th,
+            });
+            // const frame = createCanvas(tw, th);
             const ftx = frame.getContext("2d");
 
             ftx.drawImage(
@@ -95,8 +108,4 @@ StateNode.tessellate = function(tw, th) {
     }
 };
 
-
-
-StateNode.onState = console.log;
-StateNode.addFrame(545, 156, "cat");
-console.log(StateNode.mapFrames());
+export default StateNode;
