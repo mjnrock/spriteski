@@ -77,13 +77,13 @@ StateNode.tessellate = function(tw, th) {
 
     for(let x = 0; x < canvas.width; x += tw) {
         for(let y = 0; y < canvas.height; y += th) {
-            const frame = document.createElement("canvas", {
-                width: tw,
-                height: th,
-            });
+            const frame = document.createElement("canvas");
             // const frame = createCanvas(tw, th);
             const ftx = frame.getContext("2d");
 
+            frame.width = tw;
+            frame.height = th;
+            
             ftx.drawImage(
                 canvas,
                 x,
