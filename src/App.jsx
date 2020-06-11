@@ -38,6 +38,33 @@ initStateNode.after = (state, msg, node) => {
         state.canvas.width = data.image.width;
         state.canvas.height = data.image.height;
         ctx.drawImage(data.image, 0, 0);
+    } else if(msg.type === EnumMessageType.TILE_SIZE) {
+        const canvas = state.canvas;
+        const image = state.image.img;
+        const ctx = state.canvas.getContext("2d");
+        ctx.imageSmoothingEnabled= false;
+        const tile = state.tile;
+        
+        let tileCount = {
+            x: Math.ceil(image.width / tile.width),
+            y: Math.ceil(image.height / tile.height),
+        };
+        let bw = tile.width,
+            bh = tile.height;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(state.image.img, 0, 0);
+        ctx.strokeStyle = state.config.tileLineColor;
+
+        for(let i = 0; i < tileCount.x; i++) {
+            for(let j = 0; j < tileCount.y; j++) {
+                ctx.strokeRect(
+                    bw * i,
+                    bh * j,
+                    bw,
+                    bh
+                );
+            }
+        }
     }
 };
 export const Context = React.createContext(initStateNode);
