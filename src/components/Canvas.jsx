@@ -20,7 +20,7 @@ function drawTransparency(canvas, ctx) {
 }
 
 export default function Canvas(props) {
-    const { state } = useNodeContext(Context);
+    const {  state } = useNodeContext(Context);
     const canvasRef = React.createRef();
 
     useEffect(() => {
@@ -39,6 +39,11 @@ export default function Canvas(props) {
     return (
         <Segment inverted textAlign="center">
             <canvas ref={ canvasRef } />
+            {
+                state.frames.map(([ x, y, frame ]) => (
+                    <img src={ frame.toDataURL() } />
+                ))
+            }
         </Segment>
     );
 };

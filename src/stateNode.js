@@ -20,7 +20,7 @@ const StateNode = spawnStateNode({
         height: 0,
     },
 
-    frames: {},
+    frames: [],
 }, ...reducers);
 
 StateNode.drawImage = function(image) {
@@ -56,33 +56,27 @@ StateNode.resizeCanvas = function(width, height) {
     };
 }
 StateNode.addFrame = function(x, y, image) {
+    let frames = [
+        ...this.state.frames
+    ];
+    frames.push([
+        x,
+        y,
+        image,
+    ]);
+
     this.state = {
         ...this.state,
-        frames: {
-            ...this.state.frames,
-            [ `${ x }.${ y }` ]: image
-        }
+        frames: frames
     };
-};
-StateNode.mapFrames = function(fn) {
-    const frames = Object.entries(this.state.frames).map(([ pos, frame ]) => {
-        const [ x, y ] = pos.split(".").map(n => ~~n);
-
-        return [ x, y, frame ];
-    }) || [];
-
-    if(typeof fn === "function") {
-        return fn(frames);
-    }
-
-    return frames;
 };
 StateNode.tessellate = function(tw, th) {
     const canvas = this.state.canvas.ref;
+    let frames = [];
     // const ctx = canvas.getContext("2d");
 
-    for(let x = 0; x <= canvas.width; x += tw) {
-        for(let y = 0; y <= canvas.height; y += th) {
+    for(let x = 0; x < canvas.width; x += tw) {
+        for(let y = 0; y < canvas.height; y += th) {
             const frame = document.createElement("canvas", {
                 width: tw,
                 height: th,
@@ -102,9 +96,11 @@ StateNode.tessellate = function(tw, th) {
                 th,
             );
 
-            this.addFrame(x, y, frame);
+            frames.push([ x, y, frame ]);
         }
     }
+
+    return frames;
 };
 
 export default StateNode;

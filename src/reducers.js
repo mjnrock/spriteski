@@ -2,16 +2,17 @@ export const EnumMessageType = {
     CANVAS: "CANVAS",
     IMAGE: "IMAGE",
     TILE_SIZE: "TILE_SIZE",
+    TESSELLATE: "TESSELLATE",
 
     TOGGLE_TILE_LINES: "TOGGLE_TILE_LINES",
     TILE_LINE_COLOR: "TILE_LINE_COLOR",
 };
 
 export const reducers = [
-    (state, msg) => console.log(state, msg),
+    (state, msg) => console.log(msg.type, state),
     [
         EnumMessageType.TILE_SIZE,
-        (state, msg) => {
+        (state, msg, node) => {
             const data = msg.payload || {};
 
             return {
@@ -22,6 +23,18 @@ export const reducers = [
                     height: data.height
                 }
             }
+        }
+    ], [
+        EnumMessageType.TESSELLATE,
+        (state, msg, node) => {
+            const data = msg.payload || {};
+
+            const frames = node.tessellate(data.width, data.height);
+
+            return {
+                ...state,
+                frames: frames
+            };
         }
     ], [
         EnumMessageType.IMAGE,
