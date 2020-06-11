@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React, { useEffect } from "react";
-import { Segment, Tab } from "semantic-ui-react";
+import { Image, Tab, Table } from "semantic-ui-react";
 
 import { Context } from "./../App";
 import { useNodeContext } from "@lespantsfancy/hive";
@@ -53,22 +53,47 @@ export default function Canvas(props) {
             menuItem: "Tiles",
             render: () => (
                 <Tab.Pane textAlign="center">
-                    {
-                        state.frames.length ? (
-                            state.frames.map(([ x, y, frame ]) => (
-                                <div key={ `${x}.${y}` }>
-                                    <img
-                                        style={ {
-                                            border: "1px solid #000",
-                                            margin: 1
-                                        } }
-                                        src={ frame.toDataURL() }
-                                    />
-                                    <div>{ x }, { y }</div>
-                                </div>
-                            )) 
-                        ): null
-                    }
+                    <Table textAlign="center">
+                        <Table.Header>
+                            <Table.Row>
+                                <Table.HeaderCell>Tile</Table.HeaderCell>
+                                <Table.HeaderCell>Position</Table.HeaderCell>
+                                <Table.HeaderCell>Dimensions</Table.HeaderCell>
+                                <Table.HeaderCell>Tags</Table.HeaderCell>
+                                <Table.HeaderCell>Actions</Table.HeaderCell>
+                            </Table.Row>
+                        </Table.Header>
+
+                        <Table.Body>
+                            {
+                                state.frames.map(([ x, y, frame ]) => (                                
+                                    <Table.Row key={ `${ x }.${ y }` }>
+                                        <Table.Cell>
+                                            <Image
+                                                style={ {
+                                                    border: "1px solid #000",
+                                                    margin: 1
+                                                } }
+                                                src={ frame.toDataURL() }
+                                            />
+                                        </Table.Cell>
+                                        <Table.Cell>
+                                            { x }, { y }
+                                        </Table.Cell>
+                                        <Table.Cell>
+                                            { state.tile.width } x { state.tile.height }
+                                        </Table.Cell>
+                                        <Table.Cell>
+                                            []
+                                        </Table.Cell>
+                                        <Table.Cell>
+                                            []
+                                        </Table.Cell>
+                                    </Table.Row>
+                                )) 
+                            }
+                        </Table.Body>
+                    </Table>
                 </Tab.Pane>
             ),
         },
