@@ -1,5 +1,4 @@
-// import { createCanvas } from "canvas";
-import Hive, { spawnStateNode } from "@lespantsfancy/hive";
+import { spawnStateNode } from "@lespantsfancy/hive";
 import { reducers } from "./reducers";
 
 const StateNode = spawnStateNode({
@@ -80,7 +79,7 @@ StateNode.mapFrames = function(fn) {
 };
 StateNode.tessellate = function(tw, th) {
     const canvas = this.state.canvas.ref;
-    const ctx = canvas.getContext("2d");
+    // const ctx = canvas.getContext("2d");
 
     for(let x = 0; x <= canvas.width; x += tw) {
         for(let y = 0; y <= canvas.height; y += th) {

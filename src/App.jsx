@@ -4,44 +4,12 @@ import {
     Switch,
     Route,
 } from "react-router-dom";
-// import { spawnStateNode } from "@lespantsfancy/hive";
-import initStateNode from "./stateNode";
 
 import Routes from "./routes/package";
 import ScrollToTop from "./ScrollToTop";
 import { EnumMessageType } from "./reducers";
-import Message from "@lespantsfancy/hive/lib/Message";
-// import StateNode from "./stateNode";
+import initStateNode from "./stateNode";
 
-// const initStateNode = spawnStateNode({
-//     canvas: document.createElement("canvas", {
-//         width: 0,
-//         height: 0
-//     }),
-//     tile: {
-//         width: 0,
-//         height: 0
-//     },
-//     image: {
-//         img: null,
-//         width: null,
-//         height: null
-//     },
-
-//     config: {
-//         showTileLines: true,
-//         tileLineColor: "#f00"
-//     }
-// }, ...reducers);
-// reducers.forEach(reducer => {
-//     if(Array.isArray(reducer)) {
-//         console.log(...reducer)
-//         initStateNode.addReducer(...reducer);
-//     } else {
-//         initStateNode.addReducer(reducer);
-//     }
-// });
-// console.log(initStateNode._reducers.toString())
 initStateNode.after = (state, msg, node) => {
     const data = msg.payload || {};
 
