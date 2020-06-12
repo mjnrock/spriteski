@@ -1,12 +1,12 @@
 /* eslint-disable */
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Tab } from "semantic-ui-react";
 import { useNodeContext } from "@lespantsfancy/hive";
 
 import { Context } from "./../App";
 import CollectionEntry from "./../modules/CollectionEntry";
 
-function drawTransparency(canvas, ctx) {
+export function drawTransparency(canvas, ctx) {
     const tSize = 16;
 
     let iter = 0;
