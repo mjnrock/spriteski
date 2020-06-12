@@ -4,9 +4,11 @@ import {
     Switch,
     Route,
 } from "react-router-dom";
+import { Header, Segment } from "semantic-ui-react";
 
 import Routes from "./routes/package";
 import ScrollToTop from "./ScrollToTop";
+import NavBar from "./NavBar";
 import { EnumMessageType } from "./reducers";
 import initStateNode from "./stateNode";
 
@@ -29,11 +31,26 @@ export default function App() {
         <Router>
             <ScrollToTop>
                 <Context.Provider value={{ node: initStateNode }}>
-                    <Switch>
-                        <Route path="/">
-                            <Routes.Home />
-                        </Route>
-                    </Switch>
+                    <Segment>
+                        <Header as="h2" color="blue" textAlign="center">
+                            <Header.Content>Spriteski</Header.Content>
+                        </Header>
+
+                        <NavBar />
+
+                        <Switch>
+                            <Route path="/upload">
+                                <Routes.Upload />
+                            </Route>
+                            <Route path="/sequencer">
+                                <Routes.Sequencer />
+                            </Route>
+                            
+                            <Route path="/">
+                                <Routes.Home />
+                            </Route>
+                        </Switch>
+                    </Segment>
                 </Context.Provider>
             </ScrollToTop>
         </Router>
