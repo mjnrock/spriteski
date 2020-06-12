@@ -46,7 +46,11 @@ function Home() {
             <Segment>
                 <Segment color="blue">
                     <UploadImage onSelect={ selectImage } />
-                    <SaveFile />
+                    {
+                        state.image.ref && state.tile.width > 0 ? (
+                            <SaveFile />
+                        ) : null
+                    }
                 </Segment>
 
                 <Segment color="blue">

@@ -23,11 +23,6 @@ function drawTransparency(canvas, ctx) {
 export default function Canvas(props) {
     const { state, node } = useNodeContext(Context);
     const canvasRef = React.createRef();
-    const [ updates, setUpdates ] = useState(0);
-
-    function forceUpdate() {
-        setUpdates(updates + 1);
-    }
 
     function redrawCanvas() {
         const canvas = canvasRef.current;
