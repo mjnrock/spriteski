@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Tab } from "semantic-ui-react";
 import { useNodeContext } from "@lespantsfancy/hive";
 
@@ -21,8 +21,13 @@ function drawTransparency(canvas, ctx) {
 }
 
 export default function Canvas(props) {
-    const { state } = useNodeContext(Context);
+    const { state, node } = useNodeContext(Context);
     const canvasRef = React.createRef();
+    const [ updates, setUpdates ] = useState(0);
+
+    function forceUpdate() {
+        setUpdates(updates + 1);
+    }
 
     function redrawCanvas() {
         const canvas = canvasRef.current;
@@ -62,6 +67,7 @@ export default function Canvas(props) {
 
     return (
         <Tab
+            onTabChange={ e => node.dispatch() }
             menu={{ secondary: true, pointing: true }}
             panes={ panes }
         />

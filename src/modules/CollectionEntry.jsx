@@ -50,7 +50,7 @@ function CollectionEntry() {
                     {
                         state.frames.map(({ x, y, frame, tags }) => (                                
                             <Table.Row key={ `${ x }.${ y }` }>
-                                <Table.Cell width={ 8 }>
+                                <Table.Cell width={ 7 }>
                                     <Segment basic>
                                         <Image
                                             centered
@@ -68,7 +68,7 @@ function CollectionEntry() {
                                 <Table.Cell width={ 2 }>
                                     { state.tile.width } x { state.tile.height }
                                 </Table.Cell>
-                                <Table.Cell width={ 2 }>
+                                <Table.Cell width={ 3 }>
                                     <TagEntry onTag={ tag => onFrameTag(x, y, tag) } tags={ tags } />
                                 </Table.Cell>
                                 <Table.Cell width={ 2 }>
