@@ -57,7 +57,7 @@ function CollectionEntry() {
                                             style={ {
                                                 border: "1px solid #000",
                                                 margin: "auto"
-                                            } }
+                                            }}
                                             src={ frame.toDataURL() }
                                         />
                                     </Segment>
