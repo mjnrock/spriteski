@@ -8,6 +8,7 @@ import UploadImage from "./../components/UploadImage";
 import Canvas from "./../components/Canvas";
 import TileSizeMenu from "./../modules/TileSizeMenu";
 import DataDisplay from "../modules/DataDisplay";
+import SaveFile from "../components/SaveFile";
 
 function Home() {
     const { node, state } = useNodeContext(Context);
@@ -45,6 +46,7 @@ function Home() {
             <Segment>
                 <Segment color="blue">
                     <UploadImage onSelect={ selectImage } />
+                    <SaveFile />
                 </Segment>
 
                 <Segment color="blue">
