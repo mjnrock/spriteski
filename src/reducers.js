@@ -3,6 +3,9 @@ export const EnumMessageType = {
     IMAGE: "IMAGE",
     TILE_SIZE: "TILE_SIZE",
     TESSELLATE: "TESSELLATE",
+    FRAME_TAG: "FRAME_TAG",
+    COLLECTION_TAG: "COLLECTION_TAG",
+    DELETE_FRAME: "DELETE_FRAME",
 
     TOGGLE_TILE_LINES: "TOGGLE_TILE_LINES",
     TILE_LINE_COLOR: "TILE_LINE_COLOR",
@@ -21,6 +24,63 @@ export const reducers = [
                     ...state.tile,
                     width: data.width,
                     height: data.height
+                }
+            }
+        }
+    ], [
+        EnumMessageType.DELETE_FRAME,
+        (state, msg) => {
+            const data = msg.payload || {};
+
+            let frames = [ ...state.frames ];
+            frames = frames.filter(frame => !(frame.x === data.x && frame.y === data.y));
+
+            return {
+                ...state,
+                frames: frames
+            }
+        }
+    ], [
+        EnumMessageType.FRAME_TAG,
+        (state, msg) => {
+            const data = msg.payload || {};
+
+            let index = null;
+            let frames = [ ...state.frames ];
+            const [ frame ] = frames.filter((f, i) => {
+                if(f.x === data.x && f.y === data.y) {
+                    index = i;
+
+                    return true;
+                }
+
+                return false;
+            }) || [];
+
+            if(frame && index !== null && index !== void 0) {
+                let tags = [ ...data.tags ];
+
+                frames.splice(index, 1, {
+                    ...frame,
+                    tags
+                });
+            }
+
+            return {
+                ...state,
+                frames: frames
+            }
+        }
+    ], [
+        EnumMessageType.COLLECTION_TAG,
+        (state, msg) => {
+            const data = msg.payload || {};
+
+            return {
+                ...state,
+                collection: {
+                    ...state.collection,
+                    tags: data
                 }
             }
         }

@@ -20,6 +20,9 @@ const StateNode = spawnStateNode({
         height: 0,
     },
 
+    collection: {
+        tags: [],
+    },
     frames: [],
 }, ...reducers);
 
@@ -59,11 +62,12 @@ StateNode.addFrame = function(x, y, image) {
     let frames = [
         ...this.state.frames
     ];
-    frames.push([
+    frames.push({
         x,
         y,
-        image,
-    ]);
+        frame: image,
+        tags: [],
+    });
 
     this.state = {
         ...this.state,
@@ -73,8 +77,12 @@ StateNode.addFrame = function(x, y, image) {
 StateNode.tessellate = function(tw, th) {
     const canvas = this.state.canvas.ref;
     let frames = [];
-    // const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext("2d");
+    ctx.strokeStyle = "#f00";
 
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(this.state.image.ref, 0, 0);
+    ctx.imageSmoothingEnabled= false;
     for(let x = 0; x < canvas.width; x += tw) {
         for(let y = 0; y < canvas.height; y += th) {
             const frame = document.createElement("canvas");
@@ -83,7 +91,7 @@ StateNode.tessellate = function(tw, th) {
 
             frame.width = tw;
             frame.height = th;
-            
+
             ftx.drawImage(
                 canvas,
                 x,
@@ -96,7 +104,23 @@ StateNode.tessellate = function(tw, th) {
                 th,
             );
 
-            frames.push([ x, y, frame ]);
+            frames.push({
+                x: x / tw,
+                y: y / th,
+                frame,
+                tags: [],
+            });
+        }
+    }
+    
+    for(let x = 0; x < canvas.width; x += tw) {
+        for(let y = 0; y < canvas.height; y += th) {
+            ctx.strokeRect(
+                x,
+                y,
+                tw,
+                th
+            );
         }
     }
 

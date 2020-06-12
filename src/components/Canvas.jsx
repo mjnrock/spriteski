@@ -1,9 +1,10 @@
 /* eslint-disable */
 import React, { useEffect } from "react";
-import { Image, Tab, Table } from "semantic-ui-react";
+import { Tab } from "semantic-ui-react";
+import { useNodeContext } from "@lespantsfancy/hive";
 
 import { Context } from "./../App";
-import { useNodeContext } from "@lespantsfancy/hive";
+import CollectionEntry from "./../modules/CollectionEntry";
 
 function drawTransparency(canvas, ctx) {
     const tSize = 16;
@@ -53,47 +54,7 @@ export default function Canvas(props) {
             menuItem: "Tiles",
             render: () => (
                 <Tab.Pane textAlign="center">
-                    <Table textAlign="center">
-                        <Table.Header>
-                            <Table.Row>
-                                <Table.HeaderCell>Tile</Table.HeaderCell>
-                                <Table.HeaderCell>Position</Table.HeaderCell>
-                                <Table.HeaderCell>Dimensions</Table.HeaderCell>
-                                <Table.HeaderCell>Tags</Table.HeaderCell>
-                                <Table.HeaderCell>Actions</Table.HeaderCell>
-                            </Table.Row>
-                        </Table.Header>
-
-                        <Table.Body>
-                            {
-                                state.frames.map(([ x, y, frame ]) => (                                
-                                    <Table.Row key={ `${ x }.${ y }` }>
-                                        <Table.Cell>
-                                            <Image
-                                                style={ {
-                                                    border: "1px solid #000",
-                                                    margin: 1
-                                                } }
-                                                src={ frame.toDataURL() }
-                                            />
-                                        </Table.Cell>
-                                        <Table.Cell>
-                                            { x }, { y }
-                                        </Table.Cell>
-                                        <Table.Cell>
-                                            { state.tile.width } x { state.tile.height }
-                                        </Table.Cell>
-                                        <Table.Cell>
-                                            []
-                                        </Table.Cell>
-                                        <Table.Cell>
-                                            []
-                                        </Table.Cell>
-                                    </Table.Row>
-                                )) 
-                            }
-                        </Table.Body>
-                    </Table>
+                    <CollectionEntry />
                 </Tab.Pane>
             ),
         },
