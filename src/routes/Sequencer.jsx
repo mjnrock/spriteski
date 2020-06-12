@@ -4,12 +4,12 @@ import { useNodeContext } from "@lespantsfancy/hive";
 
 import { Context } from "./../App";
 
-export function TableRow(props) {
+export function TableRow({ active, src, duration, ...rest }) {
     return (
-        <Table.Row textAlign="center" verticalAlign="middle">
+        <Table.Row { ...rest } textAlign="center" verticalAlign="middle">
             <Table.Cell width={ 1 }>
                 {
-                    props.active ? (
+                    active ? (
                         <Icon name="circle" color="green" />
                     ) : (
                         <Icon name="circle outline" />
@@ -24,12 +24,12 @@ export function TableRow(props) {
                         border: "1px solid #000",
                         margin: "auto"
                     }}
-                    src={ props.src }
+                    src={ src }
                 />
             </Table.Cell>
 
             <Table.Cell width={ 8 }>
-                <Progress percent={ props.duration } color="blue" size="large" active style={{ margin: "auto" }} />
+                <Progress percent={ duration } color="blue" size="large" active style={{ margin: "auto" }} />
             </Table.Cell>
         </Table.Row>
     );
@@ -59,9 +59,18 @@ export default function Sequencer() {
 
                 <Table.Body>
                     {
-                        state.frames.map(({ x, y, frame, tags }) => (
-                            <TableRow active={ false } src={ frame.toDataURL() } duration={ Math.round(Math.random() * 100) } />
-                        ))
+                        state.frames.map(({ x, y, frame, tags }) => {
+                            const key = `${ x }.${ y }`;
+                            
+                            return (
+                                <TableRow
+                                    key={ key }
+                                    active={ false }
+                                    src={ frame.toDataURL() }
+                                    duration={ Math.round(Math.random() * 100) }
+                                />
+                            );
+                        })
                     }
                 </Table.Body>
             </Table>
