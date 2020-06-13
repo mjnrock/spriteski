@@ -1,16 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Table, Icon, Image } from "semantic-ui-react";
 import Slider from "../components/Slider";
 
 export default function FrameTableRow({ active, src, duration, maxFps, ...rest }) {
-    const [ speed, setSpeed ] = useState(1);
+    const [ speed, setSpeed ] = useState(duration);
 
-    function adjustSpeed(e) {
-        const target = e.target;
-
-        if(target) {
-            setSpeed(~~target.value);
+    useEffect(() => {
+        if(speed > maxFps) {
+            setSpeed(maxFps);
         }
+
+        console.log(speed, maxFps)
+    }, [ speed, maxFps ]);
+
+    function adjustSpeed(value) {
+        setSpeed(value);
     }
 
     return (

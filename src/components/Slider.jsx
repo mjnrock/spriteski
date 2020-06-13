@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Grid, Input } from "semantic-ui-react";
 
-export default function Slider(props) {
+export default function Slider(props) {    
     const [ value, setValue ] = useState(props.value || 0);
+    const val = props.value === void 0 || props.value === null ? value : props.value;
 
     useEffect(() => {
         if(typeof props.onChange === "function") {
@@ -20,11 +21,11 @@ export default function Slider(props) {
                     </Grid.Column>
 
                     <Grid.Column width={ 9 }>
-                        <input className="slider" type="range" min={ props.min } max={ props.max } value={ value } onChange={ e => setValue(~~e.target.value) } />
+                        <input className="slider" type="range" min={ props.min } max={ props.max } value={ val } onChange={ e => setValue(~~e.target.value) } />
                     </Grid.Column>
                     
                     <Grid.Column width={ 4 }>
-                        <Input className="slider-value" type="number" min={ props.min } max={ props.max } value={ value } onChange={ e => setValue(~~e.target.value) } />
+                        <Input className="slider-value" type="number" min={ props.min } max={ props.max } value={ val } onChange={ e => setValue(~~e.target.value) } />
                     </Grid.Column>
                 </Grid.Row>
             </Grid>
@@ -35,11 +36,11 @@ export default function Slider(props) {
         <Grid>
             <Grid.Row>
                 <Grid.Column width={ 10 }>
-                    <input className="slider" type="range" min={ props.min } max={ props.max } value={ value } onChange={ e => setValue(~~e.target.value) } />
+                    <input className="slider" type="range" min={ props.min } max={ props.max } value={ val } onChange={ e => setValue(~~e.target.value) } />
                 </Grid.Column>
                 
                 <Grid.Column width={ 6 }>
-                    <Input className="slider-value" type="number" min={ props.min } max={ props.max } value={ value } onChange={ e => setValue(~~e.target.value) } />
+                    <Input className="slider-value" type="number" min={ props.min } max={ props.max } value={ val } onChange={ e => setValue(~~e.target.value) } />
                 </Grid.Column>
             </Grid.Row>
         </Grid>

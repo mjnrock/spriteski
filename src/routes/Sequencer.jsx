@@ -4,14 +4,24 @@ import { useNodeContext } from "@lespantsfancy/hive";
 // import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
 import { Context } from "./../App";
+import { EnumMessageType } from "./../reducers";
 
 import FrameFinder from "./../modules/FrameFinder";
 import SequencePreview from "../modules/SequencePreview";
 import FrameTableRow from "./../modules/FrameTableRow";
 
 export default function Sequencer() {
-    const { state } = useNodeContext(Context);
-    const [ fps, setFps ] = useState(8);
+    const { node, state } = useNodeContext(Context);
+    const [ fps, setFps ] = useState(state.sequence.fps);
+
+    function adjustFps(e) {
+        const value = ~~e.target.value;
+
+        if(Number.isInteger(value)) {
+            node.dispatch(EnumMessageType.UPDATE_SEQUENCE_FPS, value);
+            setFps(value);
+        }
+    }
 
     return (
         <Segment>
@@ -19,7 +29,7 @@ export default function Sequencer() {
 
             <SequencePreview />
 
-            <Input label="FPS" type="number" fluid min={ 1 } max={ 60 } value={ fps } onChange={ e => setFps(~~e.target.value) } />
+            <Input label="FPS" type="number" fluid min={ 1 } max={ 60 } value={ fps } onChange={ adjustFps } />
 
             <Table color="blue">
                 <Table.Header>

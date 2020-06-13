@@ -8,6 +8,7 @@ export const EnumMessageType = {
     DELETE_FRAME: "DELETE_FRAME",
     
     ADD_SEQUENCE_FRAME: "ADD_SEQUENCE_FRAME",
+    UPDATE_SEQUENCE_FPS: "UPDATE_SEQUENCE_FPS",
 
     TOGGLE_TILE_LINES: "TOGGLE_TILE_LINES",
     TILE_LINE_COLOR: "TILE_LINE_COLOR",
@@ -61,6 +62,19 @@ export const reducers = [
                             index: state.sequence.score.length
                         }
                     ]
+                }
+            }
+        }
+    ],   [
+        EnumMessageType.UPDATE_SEQUENCE_FPS,
+        (state, msg) => {
+            const data = msg.payload || {};
+
+            return {
+                ...state,
+                sequence: {
+                    ...state.sequence,
+                    fps: data
                 }
             }
         }

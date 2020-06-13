@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Segment, Progress } from "semantic-ui-react";
+import React from "react";
+import { Segment } from "semantic-ui-react";
 import { useNodeContext } from "@lespantsfancy/hive";
 
 import { Context } from "../App";
@@ -12,7 +12,6 @@ import SaveFile from "../components/SaveFile";
 
 function Upload() {
     const { node, state } = useNodeContext(Context);
-    const [ prog, setProg ] = useState(0);
 
     function selectImage(img) {
         node.dispatch(EnumMessageType.IMAGE, {

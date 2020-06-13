@@ -23,6 +23,7 @@ const StateNode = spawnStateNode({
 
     sequence: {
         id: uuidv4(),
+        fps: 8,
         canvas: null,
         score: []
     },
