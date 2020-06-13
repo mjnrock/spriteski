@@ -26,9 +26,9 @@ export default function SequencePreview(props) {
         <Segment inverted textAlign="center">
             <Button
                 fluid
-                color={ state.sequence.animation.timeout ? "blue" : "grey" }
+                color={ state.sequence.animation.isRunning ? "green" : "grey" }
                 onClick={ e => node.dispatch(EnumMessageType.TOGGLE_SEQUENCE_PREVIEW) }
-            >Retoggle Animation</Button>
+            >{ state.sequence.animation.isRunning ? "Stop" : "Play" } Animation</Button>
 
             <canvas ref={ canvasRef } />
         </Segment>

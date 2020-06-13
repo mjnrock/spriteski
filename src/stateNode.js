@@ -29,7 +29,7 @@ const StateNode = spawnStateNode({
             ref: document.createElement("canvas"),
             index: 0,
             timeout: null,
-            _validator: Date.now()
+            isRunning: false
         },
         score: []
     },
@@ -212,8 +212,11 @@ StateNode.animateSequence = function(index = 0) {
                     index: ind, //* Using the next index makes the FrameTableRow "active" work properly, not sure why
                     timeout: setTimeout(() => {            
                         clearTimeout(this.state.sequence.animation.timeout);
-                        this.dispatch();
-                        this.animateSequence(ind);
+                        
+                        if(this.state.sequence.animation.isRunning) {
+                            this.dispatch();
+                            this.animateSequence(ind);
+                        }
                     }, frame.duration * (1000 / this.state.sequence.fps)),
                     _validator: Date.now() + frame.duration * (1000 / this.state.sequence.fps)
                 }

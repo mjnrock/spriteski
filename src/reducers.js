@@ -18,7 +18,7 @@ export const EnumMessageType = {
 };
 
 export const reducers = [
-    (state, msg) => console.log(msg.type, state),
+    // (state, msg) => console.log(msg.type, state),
     [
         EnumMessageType.TILE_SIZE,
         (state, msg, node) => {
@@ -93,13 +93,19 @@ export const reducers = [
         (state, msg) => {
             const data = msg.payload || {};
 
+            const score = state.sequence.score.map(obj => ({
+                ...obj,
+                duration: Math.min(obj.duration, data)
+            }));
+
             return {
                 ...state,
                 sequence: {
                     ...state.sequence,
-                    fps: data
+                    fps: data,
+                    score: score
                 }
-            }
+            };
         }
     ], [
         EnumMessageType.UPDATE_SEQUENCE_FRAME_SPEED,
@@ -220,7 +226,35 @@ export const reducers = [
     ], [
         EnumMessageType.TOGGLE_SEQUENCE_PREVIEW,
         (state, msg, node) => {
+            clearTimeout(state.sequence.animation.timeout);
+            
+            if(state.sequence.animation.isRunning) {
+                return {
+                    ...state,
+                    sequence: {
+                        ...state.sequence,
+                        animation: {
+                            ...state.sequence.animation,
+                            timeout: null,
+                            isRunning: false
+                        }
+                    }
+                }
+            }
+        
             node.animateSequence(0);
+
+            return {
+                ...state,
+                sequence: {
+                    ...state.sequence,
+                    animation: {
+                        ...state.sequence.animation,
+                        timeout: null,
+                        isRunning: true
+                    }
+                }
+            }
         }
     ], [
         EnumMessageType.TILE_LINE_COLOR,

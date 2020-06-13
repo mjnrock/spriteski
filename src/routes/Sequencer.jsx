@@ -65,8 +65,6 @@ export default function Sequencer() {
                     {
                         state.sequence.score.map(({ x, y, frame, duration, index }) => {
                             const key = `${ index }:${ x }.${ y }`;
-
-                            console.log(state.sequence.animation.index, index , state.sequence.animation.index === index )
                             
                             return (
                                 <FrameTableRow
