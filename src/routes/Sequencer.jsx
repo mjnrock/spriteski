@@ -23,6 +23,15 @@ export default function Sequencer() {
         }
     }
 
+    function adjustFrameSpeed(x, y, i, speed) {
+        node.dispatch(EnumMessageType.UPDATE_SEQUENCE_FRAME_SPEED, {
+            x,
+            y,
+            i,
+            speed,
+        });
+    }
+
     return (
         <Segment>
             <FrameFinder />
@@ -42,24 +51,34 @@ export default function Sequencer() {
                             <Icon name="image" />
                         </Table.HeaderCell>
 
-                        <Table.HeaderCell width={ 8 }>
+                        <Table.HeaderCell width={ 7 }>
                             <Icon name="clock outline" />
+                        </Table.HeaderCell>
+
+                        <Table.HeaderCell width={ 1 }>
+                            <Icon name="bars" />
                         </Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
 
                 <Table.Body>
                     {
-                        state.sequence.score.map(({ x, y, frame, duration }, i) => {
-                            const key = `${ i }:${ x }.${ y }`;
+                        state.sequence.score.map(({ x, y, frame, duration, index }) => {
+                            const key = `${ index }:${ x }.${ y }`;
+
+                            console.log(state.sequence.animation.index, index , state.sequence.animation.index === index )
                             
                             return (
                                 <FrameTableRow
                                     key={ key }
-                                    active={ false }
+                                    active={ state.sequence.animation.index === index }
                                     src={ frame.toDataURL() }
                                     duration={ duration }
                                     maxFps={ fps }
+                                    onAdjustSpeed={ speed => adjustFrameSpeed(x, y, index, speed) }
+                                    onDelete={ () => node.dispatch(EnumMessageType.REMOVE_SEQUENCE_FRAME, {
+                                        index: ~~index
+                                    }) }
                                 />
                             );
                         })

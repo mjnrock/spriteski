@@ -25,6 +25,12 @@ const StateNode = spawnStateNode({
         id: uuidv4(),
         fps: 8,
         canvas: null,
+        animation: {
+            ref: document.createElement("canvas"),
+            index: 0,
+            timeout: null,
+            _validator: Date.now()
+        },
         score: []
     },
     collection: {
@@ -171,6 +177,50 @@ StateNode.createManifest = function() {
 
     return obj;
 };
+StateNode.animateSequence = function(index = 0) {
+    if(this.state.sequence.animation.timeout) {
+        clearTimeout(this.state.sequence.animation.timeout);
+    }
+
+    const canvas = this.state.sequence.animation.ref;
+    const ctx = canvas.getContext("2d");
+    const [ frame ] = this.state.sequence.score.filter(s => s.index === index);
+
+    if(frame) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(
+            this.state.sequence.canvas,
+            this.state.tile.width * index,
+            0,
+            this.state.tile.width,
+            this.state.tile.height,
+            0,
+            0,
+            this.state.tile.width,
+            this.state.tile.height
+        );
+    
+        const ind = index < this.state.sequence.score.length - 1 ? index + 1 : 0;
+    
+        this.state = {
+            ...this.state,
+            sequence: {
+                ...this.state.sequence,
+                animation: {
+                    ...this.state.sequence.animation,
+                    // index: index,
+                    index: ind, //* Using the next index makes the FrameTableRow "active" work properly, not sure why
+                    timeout: setTimeout(() => {            
+                        clearTimeout(this.state.sequence.animation.timeout);
+                        this.dispatch();
+                        this.animateSequence(ind);
+                    }, frame.duration * (1000 / this.state.sequence.fps)),
+                    _validator: Date.now() + frame.duration * (1000 / this.state.sequence.fps)
+                }
+            }
+        };
+    }
+};
 StateNode.createSequence = function() {
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
@@ -187,11 +237,17 @@ StateNode.createSequence = function() {
         ctx.drawImage(frame, offX, 0);
     }
 
+    this.state.sequence.animation.ref.width = this.state.tile.width;
+    this.state.sequence.animation.ref.height = this.state.tile.height;
+
     this.state = {
         ...this.state,
         sequence: {
             ...this.state.sequence,
-            canvas: canvas
+            canvas: canvas,
+            animation: {
+                ...this.state.sequence.animation
+            }
         }
     }
 };

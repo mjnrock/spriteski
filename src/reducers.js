@@ -7,8 +7,11 @@ export const EnumMessageType = {
     COLLECTION_TAG: "COLLECTION_TAG",
     DELETE_FRAME: "DELETE_FRAME",
     
+    TOGGLE_SEQUENCE_PREVIEW: "TOGGLE_SEQUENCE_PREVIEW",
     ADD_SEQUENCE_FRAME: "ADD_SEQUENCE_FRAME",
+    REMOVE_SEQUENCE_FRAME: "REMOVE_SEQUENCE_FRAME",
     UPDATE_SEQUENCE_FPS: "UPDATE_SEQUENCE_FPS",
+    UPDATE_SEQUENCE_FRAME_SPEED: "UPDATE_SEQUENCE_FRAME_SPEED",
 
     TOGGLE_TILE_LINES: "TOGGLE_TILE_LINES",
     TILE_LINE_COLOR: "TILE_LINE_COLOR",
@@ -43,7 +46,7 @@ export const reducers = [
                 frames: frames
             }
         }
-    ],  [
+    ], [
         EnumMessageType.ADD_SEQUENCE_FRAME,
         (state, msg) => {
             const data = msg.payload || {};
@@ -58,14 +61,34 @@ export const reducers = [
                             x: data.x,
                             y: data.y,
                             frame: data.frame,
-                            duration: 0,
-                            index: state.sequence.score.length
+                            duration: state.sequence.fps,
+                            index: state.sequence.score.length || 0
                         }
                     ]
                 }
             }
         }
-    ],   [
+    ], [
+        EnumMessageType.REMOVE_SEQUENCE_FRAME,
+        (state, msg) => {
+            const data = msg.payload || {};
+
+            let newScore = state.sequence.score.filter(f => f.index !== data.index);
+            newScore.sort((a, b) => a.index - b.index);
+            newScore = newScore.map((obj, i) => ({
+                ...obj,
+                index: i
+            }));
+
+            return {
+                ...state,
+                sequence: {
+                    ...state.sequence,
+                    score: newScore
+                }
+            };
+        }
+    ], [
         EnumMessageType.UPDATE_SEQUENCE_FPS,
         (state, msg) => {
             const data = msg.payload || {};
@@ -75,6 +98,27 @@ export const reducers = [
                 sequence: {
                     ...state.sequence,
                     fps: data
+                }
+            }
+        }
+    ], [
+        EnumMessageType.UPDATE_SEQUENCE_FRAME_SPEED,
+        (state, msg) => {
+            const data = msg.payload || {};
+
+            const score = [];
+            state.sequence.score.forEach((obj, i) => {
+                score.push({
+                    ...obj,
+                    duration: obj.x === data.x && obj.y === data.y ? data.speed : obj.duration
+                });
+            });
+
+            return {
+                ...state,
+                sequence: {
+                    ...state.sequence,
+                    score: score
                 }
             }
         }
@@ -172,6 +216,11 @@ export const reducers = [
                     showTileLines: !state.config.showTileLines
                 }
             }
+        }
+    ], [
+        EnumMessageType.TOGGLE_SEQUENCE_PREVIEW,
+        (state, msg, node) => {
+            node.animateSequence(0);
         }
     ], [
         EnumMessageType.TILE_LINE_COLOR,

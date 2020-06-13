@@ -39,7 +39,7 @@ export default function FrameFinder(props) {
                                             cursor: "pointer"
                                         }}
                                         onClick={ e => addToScore(x, y, frame) }
-                                        src={ data}
+                                        src={ data }
                                     />
                                 </Grid.Column>
                             );

@@ -1,24 +1,25 @@
 import React, { useState, useEffect } from "react";
-import { Table, Icon, Image } from "semantic-ui-react";
+import { Table, Icon, Image, Button } from "semantic-ui-react";
 import Slider from "../components/Slider";
 
-export default function FrameTableRow({ active, src, duration, maxFps, ...rest }) {
+export default function FrameTableRow({ active, src, duration, maxFps, onAdjustSpeed, onDelete, ...rest }) {
     const [ speed, setSpeed ] = useState(duration);
 
     useEffect(() => {
         if(speed > maxFps) {
             setSpeed(maxFps);
         }
-
-        console.log(speed, maxFps)
     }, [ speed, maxFps ]);
 
     function adjustSpeed(value) {
+        if(typeof onAdjustSpeed === "function") {
+            onAdjustSpeed(value);
+        }
         setSpeed(value);
     }
 
     return (
-        <Table.Row { ...rest } textAlign="center" verticalAlign="middle">
+        <Table.Row { ...rest } textAlign="center" verticalAlign="middle" active={ active }>
             <Table.Cell width={ 1 }>
                 {
                     active ? (
@@ -40,8 +41,14 @@ export default function FrameTableRow({ active, src, duration, maxFps, ...rest }
                 />
             </Table.Cell>
 
-            <Table.Cell width={ 8 }>
+            <Table.Cell width={ 7 }>
                 <Slider value={ speed } min={ 1 } max={ maxFps } onChange={ adjustSpeed } />
+            </Table.Cell>
+
+            <Table.Cell width={ 1 }>
+                <Button icon color="red" onClick={ onDelete }>
+                    <Icon name="trash" />
+                </Button>
             </Table.Cell>
         </Table.Row>
     );
