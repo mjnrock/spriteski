@@ -1,45 +1,23 @@
 import React from "react";
-import { Segment, Table, Icon, Image, Progress } from "semantic-ui-react";
+import { Segment, Table, Icon } from "semantic-ui-react";
 import { useNodeContext } from "@lespantsfancy/hive";
+// import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
 import { Context } from "./../App";
 
-export function TableRow({ active, src, duration, ...rest }) {
-    return (
-        <Table.Row { ...rest } textAlign="center" verticalAlign="middle">
-            <Table.Cell width={ 1 }>
-                {
-                    active ? (
-                        <Icon name="circle" color="green" />
-                    ) : (
-                        <Icon name="circle outline" />
-                    )
-                }
-            </Table.Cell>
-
-            <Table.Cell width={ 7 }>
-                <Image
-                    centered
-                    style={{
-                        border: "1px solid #000",
-                        margin: "auto"
-                    }}
-                    src={ src }
-                />
-            </Table.Cell>
-
-            <Table.Cell width={ 8 }>
-                <Progress percent={ duration } color="blue" size="large" active style={{ margin: "auto" }} />
-            </Table.Cell>
-        </Table.Row>
-    );
-};
+import FrameFinder from "./../modules/FrameFinder";
+import ScoreViewer from "../modules/ScoreViewer";
+import FrameTableRow from "./../modules/FrameTableRow";
 
 export default function Sequencer() {
     const { state } = useNodeContext(Context);
 
     return (
         <Segment>
+            <FrameFinder />
+
+            <ScoreViewer />
+
             <Table>
                 <Table.Header>
                     <Table.Row textAlign="center">
@@ -59,11 +37,11 @@ export default function Sequencer() {
 
                 <Table.Body>
                     {
-                        state.frames.map(({ x, y, frame, tags }) => {
+                        state.frames.map(({ x, y, frame, tags }, i) => {
                             const key = `${ x }.${ y }`;
                             
                             return (
-                                <TableRow
+                                <FrameTableRow
                                     key={ key }
                                     active={ false }
                                     src={ frame.toDataURL() }
@@ -73,6 +51,29 @@ export default function Sequencer() {
                         })
                     }
                 </Table.Body>
+
+                {/* <DragDropContext>
+                    <Droppable>
+                        <Table.Body>
+                            {
+                                state.frames.map(({ x, y, frame, tags }, i) => {
+                                    const key = `${ x }.${ y }`;
+                                    
+                                    return (
+                                        <Draggable draggableId={ key } index={ i }>                                    
+                                            <FrameTableRow
+                                                key={ key }
+                                                active={ false }
+                                                src={ frame.toDataURL() }
+                                                duration={ Math.round(Math.random() * 100) }
+                                            />
+                                        </Draggable>
+                                    );
+                                })
+                            }
+                        </Table.Body>
+                    </Droppable>
+                </DragDropContext> */}
             </Table>
         </Segment>
     );
