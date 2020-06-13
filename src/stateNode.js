@@ -21,6 +21,11 @@ const StateNode = spawnStateNode({
         height: 0,
     },
 
+    sequence: {
+        id: uuidv4(),
+        canvas: null,
+        score: []
+    },
     collection: {
         id: uuidv4(),
         tags: [],
@@ -164,6 +169,30 @@ StateNode.createManifest = function() {
     delete obj.canvas;
 
     return obj;
-}
+};
+StateNode.createSequence = function() {
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    canvas.width = this.state.sequence.score.length * this.state.tile.width;
+    canvas.height = this.state.tile.height;
+    
+    let score = [ ...this.state.sequence.score ];
+    score.sort((a, b) => a.index - b.index);
+
+    for(let i in score) {
+        const { frame, index } = score[ i ];
+
+        let offX = index * this.state.tile.width;
+        ctx.drawImage(frame, offX, 0);
+    }
+
+    this.state = {
+        ...this.state,
+        sequence: {
+            ...this.state.sequence,
+            canvas: canvas
+        }
+    }
+};
 
 export default StateNode;

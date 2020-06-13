@@ -1,24 +1,27 @@
-import React from "react";
-import { Segment, Table, Icon } from "semantic-ui-react";
+import React, { useState } from "react";
+import { Segment, Table, Icon, Input } from "semantic-ui-react";
 import { useNodeContext } from "@lespantsfancy/hive";
 // import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
 import { Context } from "./../App";
 
 import FrameFinder from "./../modules/FrameFinder";
-import ScoreViewer from "../modules/ScoreViewer";
+import SequencePreview from "../modules/SequencePreview";
 import FrameTableRow from "./../modules/FrameTableRow";
 
 export default function Sequencer() {
     const { state } = useNodeContext(Context);
+    const [ fps, setFps ] = useState(8);
 
     return (
         <Segment>
             <FrameFinder />
 
-            <ScoreViewer />
+            <SequencePreview />
 
-            <Table>
+            <Input label="FPS" type="number" fluid min={ 1 } max={ 60 } value={ fps } onChange={ e => setFps(~~e.target.value) } />
+
+            <Table color="blue">
                 <Table.Header>
                     <Table.Row textAlign="center">
                         <Table.HeaderCell width={ 1 }>
@@ -37,15 +40,16 @@ export default function Sequencer() {
 
                 <Table.Body>
                     {
-                        state.frames.map(({ x, y, frame, tags }, i) => {
-                            const key = `${ x }.${ y }`;
+                        state.sequence.score.map(({ x, y, frame, duration }, i) => {
+                            const key = `${ i }:${ x }.${ y }`;
                             
                             return (
                                 <FrameTableRow
                                     key={ key }
                                     active={ false }
                                     src={ frame.toDataURL() }
-                                    duration={ Math.round(Math.random() * 100) }
+                                    duration={ duration }
+                                    maxFps={ fps }
                                 />
                             );
                         })

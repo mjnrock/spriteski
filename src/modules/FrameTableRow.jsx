@@ -1,7 +1,18 @@
-import React from "react";
-import { Table, Icon, Image, Progress } from "semantic-ui-react";
+import React, { useState } from "react";
+import { Table, Icon, Image } from "semantic-ui-react";
+import Slider from "../components/Slider";
 
-export default function FrameTableRow({ active, src, duration, ...rest }) {
+export default function FrameTableRow({ active, src, duration, maxFps, ...rest }) {
+    const [ speed, setSpeed ] = useState(1);
+
+    function adjustSpeed(e) {
+        const target = e.target;
+
+        if(target) {
+            setSpeed(~~target.value);
+        }
+    }
+
     return (
         <Table.Row { ...rest } textAlign="center" verticalAlign="middle">
             <Table.Cell width={ 1 }>
@@ -26,7 +37,7 @@ export default function FrameTableRow({ active, src, duration, ...rest }) {
             </Table.Cell>
 
             <Table.Cell width={ 8 }>
-                <Progress percent={ duration } color="blue" size="large" active style={{ margin: "auto" }} />
+                <Slider value={ speed } min={ 1 } max={ maxFps } onChange={ adjustSpeed } />
             </Table.Cell>
         </Table.Row>
     );

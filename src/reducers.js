@@ -6,6 +6,8 @@ export const EnumMessageType = {
     FRAME_TAG: "FRAME_TAG",
     COLLECTION_TAG: "COLLECTION_TAG",
     DELETE_FRAME: "DELETE_FRAME",
+    
+    ADD_SEQUENCE_FRAME: "ADD_SEQUENCE_FRAME",
 
     TOGGLE_TILE_LINES: "TOGGLE_TILE_LINES",
     TILE_LINE_COLOR: "TILE_LINE_COLOR",
@@ -38,6 +40,28 @@ export const reducers = [
             return {
                 ...state,
                 frames: frames
+            }
+        }
+    ],  [
+        EnumMessageType.ADD_SEQUENCE_FRAME,
+        (state, msg) => {
+            const data = msg.payload || {};
+
+            return {
+                ...state,
+                sequence: {
+                    ...state.sequence,
+                    score: [
+                        ...state.sequence.score,
+                        {
+                            x: data.x,
+                            y: data.y,
+                            frame: data.frame,
+                            duration: 0,
+                            index: state.sequence.score.length
+                        }
+                    ]
+                }
             }
         }
     ], [

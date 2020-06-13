@@ -35,7 +35,7 @@ export default function Slider(props) {
         <Grid>
             <Grid.Row>
                 <Grid.Column width={ 10 }>
-                    <input className="slider-range" type="range" min={ props.min } max={ props.max } value={ value } onChange={ e => setValue(~~e.target.value) } />
+                    <input className="slider" type="range" min={ props.min } max={ props.max } value={ value } onChange={ e => setValue(~~e.target.value) } />
                 </Grid.Column>
                 
                 <Grid.Column width={ 6 }>

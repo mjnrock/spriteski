@@ -22,6 +22,8 @@ initStateNode.after = (state, msg, node) => {
             width: data.width,
             height: data.height,
         });
+    } else if(msg.type === EnumMessageType.ADD_SEQUENCE_FRAME) {
+        node.createSequence();
     }
 };
 export const Context = React.createContext(initStateNode);
