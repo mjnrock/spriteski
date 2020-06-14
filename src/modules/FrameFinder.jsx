@@ -100,11 +100,11 @@ export default function FrameFinder({ children, opener, open, ...rest } = {}) {
                         ) : null
                     }
 
-                    <Segment color="blue" style={{ overflowY: "scroll", maxHeight: 600 }}>
+                    <Segment color="blue" style={{ overflowY: "auto", maxHeight: 600 }}>
                         <Grid columns={ 8 }>
                             {
                                 open && frames.length ? frames.map(obj => {
-                                    console.log("RENDERED")
+                                    console.log("FRAME RENDERED")
                                     const { x, y, frame } = obj;
                                     const key = `${ x }.${ y }`;
                                     const data = frame.toDataURL();

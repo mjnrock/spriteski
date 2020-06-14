@@ -27,7 +27,7 @@ function TabWrapper(props) {
     return (
         <Segment
             basic
-            style={{ overflow: "scroll", maxHeight: 600, cursor: "move" }}
+            style={{ overflow: "auto", maxHeight: 600, cursor: "move" }}
             onMouseDown={ e => {
                 if(!isDown) {
                     setIsDown(true);
