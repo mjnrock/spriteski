@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Segment, Table, Icon, Input, Grid } from "semantic-ui-react";
+import { Segment, Table, Icon, Input, Button, Grid } from "semantic-ui-react";
 import { useNodeContext } from "@lespantsfancy/hive";
 // import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
@@ -112,6 +112,17 @@ export default function Sequencer() {
                     </Droppable>
                 </DragDropContext> */}
             </Table>
+
+            {
+                state.sequence.score.length ? (
+                    <Button.Group fluid>
+                        <Button icon labelPosition="left" color="red" onClick={ e => node.dispatch(EnumMessageType.RESET_SEQUENCE) }>
+                            <Icon name="remove" />
+                            Clear Frames
+                        </Button>
+                    </Button.Group>
+                ) : null
+            }
         </Segment>
     );
 };

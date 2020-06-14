@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from "uuid";
+
 export const EnumMessageType = {
     CANVAS: "CANVAS",
     IMAGE: "IMAGE",
@@ -13,6 +15,7 @@ export const EnumMessageType = {
     UPDATE_SEQUENCE_INDEX: "UPDATE_SEQUENCE_INDEX",
     UPDATE_SEQUENCE_FPS: "UPDATE_SEQUENCE_FPS",
     UPDATE_SEQUENCE_FRAME_SPEED: "UPDATE_SEQUENCE_FRAME_SPEED",
+    RESET_SEQUENCE: "RESET_SEQUENCE",
 
     TOGGLE_TILE_LINES: "TOGGLE_TILE_LINES",
     TILE_LINE_COLOR: "TILE_LINE_COLOR",
@@ -45,6 +48,25 @@ export const reducers = [
             return {
                 ...state,
                 frames: frames
+            }
+        }
+    ], [
+        EnumMessageType.RESET_SEQUENCE,
+        (state, msg) => {
+            return {
+                ...state,
+                sequence: {
+                    id: uuidv4(),
+                    fps: 8,
+                    canvas: null,
+                    animation: {
+                        ref: document.createElement("canvas"),
+                        index: 0,
+                        timeout: null,
+                        isRunning: false
+                    },
+                    score: []
+                }
             }
         }
     ], [
