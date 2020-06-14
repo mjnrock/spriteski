@@ -32,18 +32,18 @@ function Upload() {
                 }
             </Segment>
 
+            {
+                state.image.ref ? (
+                    <>
+                        <TileSizeMenu />
+                        <DataDisplay />
+                    </>
+                ) : null
+            }
+
             <Segment color="blue">
                 <Canvas />
             </Segment>
-
-                {
-                    state.image.ref ? (
-                        <>
-                            <TileSizeMenu />
-                            <DataDisplay />
-                        </>
-                    ) : null
-                }
         </Segment>
     );
 }

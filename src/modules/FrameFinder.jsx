@@ -54,8 +54,8 @@ export default function FrameFinder({ children, ...rest } = {}) {
 
                     <Input icon="search" fluid placeholder="Search frames..." autoFocus value={ input } onChange={ e => setInput(String(e.target.value).replace(/\s\s+/g, " ")) } />
 
-                    <Segment color="blue">
-                        <Grid columns="equal">
+                    <Segment color="blue" style={{ overflowY: "scroll", maxHeight: 600 }}>
+                        <Grid columns={ 8 }>
                             {
                                 frames.length ? frames.map(({ x, y, frame }) => {
                                     const key = `${ x }.${ y }`;

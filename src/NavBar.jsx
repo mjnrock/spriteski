@@ -38,9 +38,14 @@ export default function NavBar(props) {
                 Sequencer
             </Menu.Item>
 
-            <>
-                <FrameFinder open={ isOpen } onClose={ () => setIsOpen(false) } />
-            </>
+            <Menu.Menu position="right">
+                <FrameFinder open={ isOpen } onClose={ () => setIsOpen(false) }>
+                    <Menu.Item onClick={ () => setIsOpen(true) }>
+                        <Icon name="search" />
+                        Search
+                    </Menu.Item>
+                </FrameFinder>
+            </Menu.Menu>
         </Menu>
     )
 };

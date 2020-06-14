@@ -1,6 +1,6 @@
 /* eslint-disable */
-import React, { useEffect } from "react";
-import { Tab } from "semantic-ui-react";
+import React, { useEffect, useState } from "react";
+import { Tab, Segment } from "semantic-ui-react";
 import { useNodeContext } from "@lespantsfancy/hive";
 
 import { Context } from "./../App";
@@ -18,6 +18,47 @@ export function drawTransparency(canvas, ctx) {
         }
         ++iter;
     }
+}
+
+function TabWrapper(props) {
+    const [ start, setStart ] = useState({ x: 0, y: 0 });
+    const [ isDown, setIsDown ] = useState(false);
+
+    return (
+        <Segment
+            basic
+            style={{ overflow: "scroll", maxHeight: 600, cursor: "move" }}
+            onMouseDown={ e => {
+                if(!isDown) {
+                    setIsDown(true);
+                    setStart({
+                        x: e.clientX,
+                        y: e.clientY,
+                    });
+                }
+            }}
+            onMouseUp={ e => {
+                setIsDown(false); 
+            }}
+            onMouseMove={ e => {
+                if(isDown && e.buttons === 1) {
+                    const container = e.target.parentNode;
+                    const dx = start.x - e.clientX;
+                    const dy = start.y - e.clientY;
+
+                    container.scrollLeft += dx;
+                    container.scrollTop += dy;
+
+                    setStart({
+                        x: e.clientX,
+                        y: e.clientY,
+                    });
+                }
+            }}
+        >
+            { props.children }
+        </Segment>
+    );
 }
 
 export default function Canvas(props) {
@@ -45,8 +86,8 @@ export default function Canvas(props) {
         {
             menuItem: "Canvas",
             render: () => (
-                <Tab.Pane inverted textAlign="center">
-                    <canvas ref={ canvasRef } />
+                <Tab.Pane textAlign="center" as={ TabWrapper }>
+                    <canvas ref={ canvasRef } style={{ margin: "auto" }} />
                 </Tab.Pane>
             ),
         },
