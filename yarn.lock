@@ -1269,9 +1269,9 @@
     "@types/yargs" "^13.0.0"
 
 "@lespantsfancy/hive@^0.1.22":
-  version "0.1.26"
-  resolved "https://registry.yarnpkg.com/@lespantsfancy/hive/-/hive-0.1.26.tgz#dfda0d046e30a504b179a4d15b30a3d9d088cef3"
-  integrity sha512-FLqqcq/SDuKUf8FESMSuBS2Lm+Ej21zB5pRZUBSrx3i4/m1z2/YwHaSpW/LK8PFIN51XGnBlM8cYyzaDMZiwbg==
+  version "0.1.27"
+  resolved "https://registry.yarnpkg.com/@lespantsfancy/hive/-/hive-0.1.27.tgz#4aa688a118715cbb0be642223fae9b468ca2a5b5"
+  integrity sha512-YR0sUjYd8FWbv3m/ieoO0DagqEZWqskLc9RySpK3ZOPybv17BiUJKJUv/+2ryZX//CLXsCMuUfMbFkDff1YI/Q==
   dependencies:
     uuid "^8.1.0"
 
