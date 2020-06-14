@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import {
     Link,
-    useLocation
+    useLocation,
+    useHistory
 } from "react-router-dom";
 import { Menu, Icon } from "semantic-ui-react";
 
@@ -9,6 +10,7 @@ import FrameFinder from "./modules/FrameFinder";
 
 export default function NavBar(props) {
     const { pathname } = useLocation();
+    const history = useHistory();
     const [ isOpen, setIsOpen ] = useState(false);
 
     useEffect(() => {
@@ -16,15 +18,23 @@ export default function NavBar(props) {
             // console.log(e.which, e)
             if(e.ctrlKey === true && (e.which === 32 || e.which === 70)) {
                 e.preventDefault();
-
                 setIsOpen(true);
+            } else if(e.altKey === true) {
+                if(e.which === 49) {
+                    e.preventDefault();
+                    history.push("/upload");
+                } else if(e.which === 50) {
+                    e.preventDefault();
+                    history.push("/sequencer");
+                }
             }
+            // console.log(e.which)
         };
 
         return () => {
             window.onkeydown = null;
         };
-    }, []);
+    }, [ history ]);
 
     return (
         <Menu icon="labeled">
@@ -39,7 +49,7 @@ export default function NavBar(props) {
             </Menu.Item>
 
             <Menu.Menu position="right">
-                <FrameFinder open={ isOpen } onClose={ () => setIsOpen(false) }>
+                <FrameFinder open={ isOpen } opener={ setIsOpen } onClose={ () => setIsOpen(false) }>
                     <Menu.Item onClick={ () => setIsOpen(true) }>
                         <Icon name="search" />
                         Search

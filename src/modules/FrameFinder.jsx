@@ -1,22 +1,34 @@
 import React, { useState } from "react";
-import { Segment, Image, Grid, Input, Modal, Header, Button } from "semantic-ui-react";
+import { Segment, Image, Grid, Input, Modal, Header, Button, Label, Table, Icon } from "semantic-ui-react";
 import { useNodeContext } from "@lespantsfancy/hive";
 
 import { Context } from "./../App";
 import { EnumMessageType } from "./../reducers";
 
-export default function FrameFinder({ children, ...rest } = {}) {
+export default function FrameFinder({ children, opener, open, ...rest } = {}) {
     const { node, state } = useNodeContext(Context);
     const [ isOrLogic, setIsOrLogic ] = useState(true);
     const [ input, setInput ] = useState("");
     const [ selections, setSelections ] = useState([]);
+    const [ contextMenuTarget, setContextMenuTarget ] = useState();
 
-    function addToScore(x, y, frame) {
-        node.dispatch(EnumMessageType.ADD_SEQUENCE_FRAME, {
-            x,
-            y,
-            frame,
-        });
+    function addSelectedFrames() {
+        for(let selection of selections) {
+            const [ x, y ] = selection.split(".");
+            const [ frame ] = state.frames.filter(obj => obj.x === ~~x && obj.y === ~~y);
+
+            if(frame) {
+                node.dispatch(EnumMessageType.ADD_SEQUENCE_FRAME, {
+                    x: ~~x,
+                    y: ~~y,
+                    frame: frame.frame,
+                });
+            }
+        }
+
+        if(typeof opener === "function") {
+            opener(false);
+        }
     }
 
     let frames = state.frames,
@@ -42,7 +54,7 @@ export default function FrameFinder({ children, ...rest } = {}) {
     }
 
     return (
-        <Modal trigger={ children } { ...rest }>
+        <Modal trigger={ children } { ...rest } open={ open }>
             <Modal.Content>
                 <Segment>
                     <Button.Group fluid style={{ marginBottom: 16 }}>
@@ -53,30 +65,67 @@ export default function FrameFinder({ children, ...rest } = {}) {
 
                     <Input icon="search" fluid placeholder="Search frames..." autoFocus value={ input } onChange={ e => setInput(String(e.target.value).replace(/\s\s+/g, " ")) } />
 
+                    {
+                        contextMenuTarget ? (
+                            <div style={{ marginTop: 14, marginBottom: 14 }}>
+                                <Table color="teal">
+                                    <Table.Header>
+                                        <Table.Row textAlign="center">
+                                            <Table.HeaderCell>
+                                                <Icon name="location arrow" />
+                                            </Table.HeaderCell>
+                                            <Table.HeaderCell>
+                                                <Icon name="tags" />
+                                            </Table.HeaderCell>
+                                        </Table.Row>
+                                    </Table.Header>
+
+                                    <Table.Body>
+                                        <Table.Row textAlign="center">
+                                            <Table.Cell>{ contextMenuTarget.x }, { contextMenuTarget.y }</Table.Cell>
+                                            <Table.Cell>{
+                                                contextMenuTarget.tags.map(tag => (
+                                                    <Label key={ tag } color="blue">{ tag }</Label>
+                                                ))
+                                            }</Table.Cell>
+                                        </Table.Row>
+                                    </Table.Body>
+                                </Table>
+                                
+                                <Button icon labelPosition="left" color="grey" onClick={ e => setContextMenuTarget() }>
+                                    <Icon name="hide" />
+                                    Hide Details
+                                </Button>
+                            </div>
+                        ) : null
+                    }
+
                     <Segment color="blue" style={{ overflowY: "scroll", maxHeight: 600 }}>
                         <Grid columns={ 8 }>
                             {
-                                frames.length ? frames.map(({ x, y, frame }) => {
+                                frames.length ? frames.map(obj => {
+                                    const { x, y, frame } = obj;
                                     const key = `${ x }.${ y }`;
                                     const data = frame.toDataURL();
                                     const isSelected = selections.includes(key);
+                                    const isContextMenu = contextMenuTarget && obj.x === contextMenuTarget.x && obj.y === contextMenuTarget.y;
                                     const label = isSelected ? ({
                                             label: { corner: "left", icon: "check", color: "blue" }
-                                        }) : {};
+                                        }) : (isContextMenu ? ({
+                                            label: { corner: "left", icon: "target", color: "teal" }
+                                        }) : {});
                                     
                                     return (
                                         <Grid.Column key={ key }>
                                             <Image
                                                 centered
                                                 style={ {
-                                                    border: isSelected ? "2px solid #1678C2" : "1px solid rgba(34,36,38,.3)",
+                                                    border: isSelected ? "2px solid #1678C2" : (isContextMenu ? "2px solid #009C95" : "1px solid rgba(34,36,38,.3)"),
                                                     boxShadow: "0 1px 2px 0 rgba(34,36,38,.3)",
                                                     borderRadius: 5,
                                                     cursor: "pointer"
                                                 }}
-                                                onClick={ e => {
-                                                    addToScore(x, y, frame);
-                                                    
+                                                onClick={ e => {                                                    
                                                     if(isSelected) {
                                                         setSelections(selections.filter(s => s !== key));
                                                     } else {
@@ -84,6 +133,15 @@ export default function FrameFinder({ children, ...rest } = {}) {
                                                             ...selections,
                                                             key
                                                         ]);
+                                                    }
+                                                }}
+                                                onContextMenu={ e => {
+                                                    e.preventDefault();
+
+                                                    if(isContextMenu) {
+                                                        setContextMenuTarget();
+                                                    } else {
+                                                        setContextMenuTarget(obj);
                                                     }
                                                 }}
                                                 src={ data }
@@ -107,7 +165,7 @@ export default function FrameFinder({ children, ...rest } = {}) {
             {
                 selections.length ? (
                     <Modal.Actions>
-                        <Button icon="check" color="blue" content="Add Frames" />
+                        <Button icon="check" color="blue" content="Add Frames" onClick={ addSelectedFrames } />
                     </Modal.Actions>   
                 ) : null
             }         

@@ -38,7 +38,7 @@ export default function Sequencer() {
             <Grid columns="equal">
                 <Grid.Row>
                     <Grid.Column textAlign="center">
-                        <Input label="FPS" type="number" fluid min={ 1 } max={ 60 } value={ fps } onChange={ adjustFps } style={{ textAlign: "center" }} />
+                        <Input label="FPS" color="teal" type="number" fluid min={ 1 } max={ 60 } value={ fps } onChange={ adjustFps } style={{ textAlign: "center" }} />
                     </Grid.Column>
                     <Grid.Column>
                         <Input label="ms" labelPosition="right" readOnly={ true } value={ (1000 / fps).toFixed(2) } fluid style={{ textAlign: "center" }} />

@@ -27,7 +27,7 @@ export default function SaveFile(props) {
 
     return (
         <>
-            <Button icon labelPosition="left" color="blue" size="large" onClick={ download }>
+            <Button icon labelPosition="left" color="teal" size="large" onClick={ download }>
                 <Icon name="download" />
                 Save Manifest
             </Button>

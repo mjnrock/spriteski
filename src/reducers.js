@@ -62,7 +62,7 @@ export const reducers = [
                             x: data.x,
                             y: data.y,
                             frame: data.frame,
-                            duration: state.sequence.fps,
+                            duration: 1,
                             index: state.sequence.score.length || 0
                         }
                     ]
