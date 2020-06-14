@@ -46,7 +46,7 @@ function TagEntry(props) {
                     </Grid.Row>
 
                     <Grid.Row>
-                        <Input fluid placeholder="Enter tags..." onKeyUp={ editTags } />
+                        <Input icon="tags" iconPosition="left" fluid placeholder="Enter tags..." onKeyUp={ editTags } />
                     </Grid.Row>
                 </Grid.Column>
             </Grid>

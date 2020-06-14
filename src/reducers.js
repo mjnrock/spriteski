@@ -10,6 +10,7 @@ export const EnumMessageType = {
     TOGGLE_SEQUENCE_PREVIEW: "TOGGLE_SEQUENCE_PREVIEW",
     ADD_SEQUENCE_FRAME: "ADD_SEQUENCE_FRAME",
     REMOVE_SEQUENCE_FRAME: "REMOVE_SEQUENCE_FRAME",
+    UPDATE_SEQUENCE_INDEX: "UPDATE_SEQUENCE_INDEX",
     UPDATE_SEQUENCE_FPS: "UPDATE_SEQUENCE_FPS",
     UPDATE_SEQUENCE_FRAME_SPEED: "UPDATE_SEQUENCE_FRAME_SPEED",
 
@@ -104,6 +105,40 @@ export const reducers = [
                     ...state.sequence,
                     fps: data,
                     score: score
+                }
+            };
+        }
+    ], [
+        EnumMessageType.UPDATE_SEQUENCE_INDEX,
+        (state, msg) => {
+            const data = msg.payload || {};
+
+            let index = state.sequence.animation.index;
+            switch(data) {
+                case "step backward":
+                    index = 0;
+                    break;
+                case "backward":
+                    index = Math.max(index - 1, 0);
+                    break;
+                case "forward":
+                    index = Math.min(index + 1, state.sequence.score.length - 1);
+                    break;
+                case "step forward":
+                    index = state.sequence.score.length - 1;
+                    break;
+                default:
+                    break;
+            }
+
+            return {
+                ...state,
+                sequence: {
+                    ...state.sequence,
+                    animation: {
+                        ...state.sequence.animation,
+                        index: index
+                    }
                 }
             };
         }

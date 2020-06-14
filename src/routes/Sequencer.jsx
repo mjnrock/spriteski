@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import { Segment, Table, Icon, Input } from "semantic-ui-react";
+import { Segment, Table, Icon, Input, Grid } from "semantic-ui-react";
 import { useNodeContext } from "@lespantsfancy/hive";
 // import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
 import { Context } from "./../App";
 import { EnumMessageType } from "./../reducers";
 
-import FrameFinder from "./../modules/FrameFinder";
 import SequencePreview from "../modules/SequencePreview";
 import FrameTableRow from "./../modules/FrameTableRow";
 
@@ -34,11 +33,18 @@ export default function Sequencer() {
 
     return (
         <Segment>
-            <FrameFinder />
-
             <SequencePreview />
 
-            <Input label="FPS" type="number" fluid min={ 1 } max={ 60 } value={ fps } onChange={ adjustFps } />
+            <Grid columns="equal">
+                <Grid.Row>
+                    <Grid.Column textAlign="center">
+                        <Input label="FPS" type="number" fluid min={ 1 } max={ 60 } value={ fps } onChange={ adjustFps } style={{ textAlign: "center" }} />
+                    </Grid.Column>
+                    <Grid.Column>
+                        <Input label="ms" labelPosition="right" readOnly={ true } value={ (1000 / fps).toFixed(2) } fluid style={{ textAlign: "center" }} />
+                    </Grid.Column>
+                </Grid.Row>
+            </Grid>
 
             <Table color="blue">
                 <Table.Header>

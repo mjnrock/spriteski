@@ -1,6 +1,8 @@
 import { spawnStateNode } from "@lespantsfancy/hive";
 import { reducers } from "./reducers";
 import { v4 as uuidv4 } from "uuid";
+// eslint-disable-next-line
+import ls from "local-storage";
 
 const StateNode = spawnStateNode({
     canvas: {
@@ -39,6 +41,10 @@ const StateNode = spawnStateNode({
     },
     frames: [],
 }, ...reducers);
+
+// StateNode.onState = function({ previous, current }, node) {
+//     ls("spriteski", current);
+// };
 
 StateNode.drawImage = function(image) {
     const canvas = this.state.canvas.ref;
@@ -177,13 +183,14 @@ StateNode.createManifest = function() {
 
     return obj;
 };
-StateNode.animateSequence = function(index = 0) {
+StateNode.animateSequence = function() {
     if(this.state.sequence.animation.timeout) {
         clearTimeout(this.state.sequence.animation.timeout);
     }
 
     const canvas = this.state.sequence.animation.ref;
     const ctx = canvas.getContext("2d");
+    const index = this.state.sequence.animation.index;
     const [ frame ] = this.state.sequence.score.filter(s => s.index === index);
 
     if(frame) {
@@ -215,7 +222,7 @@ StateNode.animateSequence = function(index = 0) {
                         
                         if(this.state.sequence.animation.isRunning) {
                             this.dispatch();
-                            this.animateSequence(ind);
+                            this.animateSequence();
                         }
                     }, frame.duration * (1000 / this.state.sequence.fps)),
                     _validator: Date.now() + frame.duration * (1000 / this.state.sequence.fps)
