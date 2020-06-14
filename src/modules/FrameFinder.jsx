@@ -40,7 +40,6 @@ export default function FrameFinder({ children, ...rest } = {}) {
 
         frames = result;
     }
-    console.log(input, splits.length);
 
     return (
         <Modal trigger={ children } { ...rest }>
