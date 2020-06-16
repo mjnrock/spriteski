@@ -34,15 +34,22 @@ export default class Tessellator {
     }
 
     draw(input, { type = "image/png", quality = 1.0 } = {}) {
-        Base64.Decode(input).then(canvas => {
-            if(canvas instanceof HTMLCanvasElement) {
-                this.canvas = canvas;
-                this.image = new Image();
-                this.image.src = canvas.toDataURL(type, quality);
-                
-                this.tessellate();
-            }
-        })
+        return new Promise((resolve, reject) => {
+            Base64.Decode(input).then(canvas => {
+                if(canvas instanceof HTMLCanvasElement) {
+                    this.canvas = canvas;
+                    this.image = new Image();
+                    this.image.src = canvas.toDataURL(type, quality);
+                    
+                    this.tessellate();
+
+                    resolve({
+                        canvas,
+                        tiles: [ ...this.tiles ]
+                    });
+                }
+            });
+        });
     }
 
     tessellate() {

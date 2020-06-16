@@ -3,7 +3,7 @@ import Base64 from "./Base64";
 export default class Note {
     constructor(x, y, base64) {
         this.x = x;
-        this.y = y;        
+        this.y = y;
         this.base64 = base64;
     }
 
@@ -13,14 +13,14 @@ export default class Note {
 
 
 
-    toJson() {
+    serialize() {
         return JSON.stringify(this);
     }
     toObject() {
         return JSON.parse(JSON.stringify(this));
     }
 
-    static FromJson(json) {
+    static Deserialize(json) {
         let obj = json;
 
         while(typeof obj === "string" || obj instanceof String) {

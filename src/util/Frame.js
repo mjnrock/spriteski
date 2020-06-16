@@ -1,11 +1,12 @@
-import Note from "./Note";
+import Chord from "./Chord";
 
 export default class Frame {
-    constructor(row, index, duration, chord = [], { tags = [] } = {}) {
+    constructor(row, index, duration, note, { tags = [] } = {}) {
         this.row = row;
         this.index = index;
         this.duration = duration;
-        this.chord = chord;
+        // this.chord = new Chord(...notes);
+        this.note = note;
         this.tags = new Set(tags);
     }
 
@@ -41,58 +42,36 @@ export default class Frame {
         return false;
     }
 
-    addNote(x, y, base64) {
-        this.chord.push(new Note(x, y, base64));
-
-        return this;
-    }
-    removeNote(x, y) {
-        this.chord = this.chord.filter(note => note.x !== x && note.y !== y);
-
-        return this;
-    }
-
-    /* TODO ALlow this to expand to multi-Note chords, instead of just 0,0
-     * |---|---|---|    |---------|
-     * |---|-x-|---| -> |----x----|
-     * |---|---|---|    |---------|
-     */
     toCanvas() {
-        if(this.chord.length) {
-            const [ note ] = this.chord.filter(note => note.x === 0 && note.y === 0);
-
-            if(note instanceof Note) {
-                return note.toCanvas();
-            }
-        }
-
-        return false;
+        return this.note.toCanvas();
     }
 
 
 
 
-    toJson() {
+    serialize() {
         return JSON.stringify(obj);
     }
     toObject() {
         return JSON.parse(JSON.stringify(this));
     }
 
-    static FromJson(json) {
+    static Deserialize(json) {
         let obj = json;
 
         while(typeof obj === "string" || obj instanceof String) {
             obj = JSON.parse(json);
         }
         
-        const chord = (obj.chord || []).map(note => Note.FromJson(note));
+        // const chord = Chord.Deserialize(obj.chord);
+        const note = Note.Deserialize(obj.note);
 
         return new Frame(
             ~~obj.row,
             ~~obj.index,
             ~~obj.duration,
-            chord,
+            // chord,
+            note,
             {
                 tags: Array.isArray(obj.tags) ? obj.tags : [],
             },
@@ -109,7 +88,8 @@ export default class Frame {
         return "row" in obj
             && "index" in obj
             && "duration" in obj
-            && "chord" in obj
+            // && "chord" in obj
+            && "note" in obj
             && "tags" in obj;
     }
     static JsonConforms(json) {

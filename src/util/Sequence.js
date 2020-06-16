@@ -33,18 +33,18 @@ export default class Sequence {
             row[ frame.row ].push(frame);
         });
 
-        Object.entries(rows).forEach((row, i) => {
+        Object.values(rows).forEach((row, i) => {
             row.sort((a, b) => a.index - b.index);
             row.forEach(frame => frame.index = i);
         });
 
-        return this;
+        return rows;
     }
 
     addFrame(frame) {
         if(Frame.Conforms(frame)) {
             this.frames.push(frame);
-        } else if(arguments.length >= 3 && arguments.length <= 5) {
+        } else if(arguments.length >= 4 && arguments.length <= 5) {
             const newFrame = new Frame(...arguments);
             
             this.frames.push(newFrame);
@@ -60,24 +60,52 @@ export default class Sequence {
         return this;
     }
 
+    async toCanvas() {
+        return new Promise((resolve, reject) => {
+            try {
+                const canvas = document.createElement("canvas");
+                const ctx = canvas.getContext("2d");
+                const rows = this.normalizePositions();
+        
+                let x = 0,
+                    y = 0;
+        
+                for(let [ rowNum, row ] of Object.entries(rows)) {
+                    for(let frame of row) {
+                        let c = await frame.toCanvas();
+        
+                        ctx.drawImage(c, x * c.width, y * c.height);
+                    }
+        
+                    y++;
+                    x = 0;
+                }
+    
+                resolve(canvas);
+            } catch(e) {
+                reject(e);
+            }
+        });
+    }
+
     
 
 
-    toJson() {
+    serialize() {
         return JSON.stringify(obj);
     }
     toObject() {
         return JSON.parse(JSON.stringify(this));
     }
 
-    static FromJson(json) {
+    static Deserialize(json) {
         let obj = json;
 
         while(typeof obj === "string" || obj instanceof String) {
             obj = JSON.parse(json);
         }
 
-        const frames = (obj.frames || []).map(frame => Frame.FromJson(frame));
+        const frames = (obj.frames || []).map(frame => Frame.Deserialize(frame));
 
         return new Frame(
             obj.fps,

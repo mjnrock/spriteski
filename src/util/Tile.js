@@ -53,7 +53,7 @@ export default class Tile {
 
 
 
-    toJson(type = "image/png", quality = 1.0) {
+    serialize(type = "image/png", quality = 1.0) {
         const obj = this.toObject();
         obj.base64 = this.canvas.toDataURL(type, quality);
         obj.tags = [ ...this.tags ];
@@ -65,7 +65,7 @@ export default class Tile {
         return JSON.parse(JSON.stringify(this));
     }
 
-    static FromJson(json) {
+    static Deserialize(json) {
         let obj = json;
 
         while(typeof obj === "string" || obj instanceof String) {
