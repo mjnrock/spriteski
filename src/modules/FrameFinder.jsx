@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Segment, Image, Grid, Input, Modal, Header, Button, Label, Table, Icon } from "semantic-ui-react";
 import { useNodeContext } from "@lespantsfancy/hive";
 
@@ -11,6 +11,12 @@ export default function FrameFinder({ children, opener, open, ...rest } = {}) {
     const [ input, setInput ] = useState("");
     const [ selections, setSelections ] = useState([]);
     const [ contextMenuTarget, setContextMenuTarget ] = useState();
+
+    useEffect(() => {
+        if(!open) {
+            setSelections([]);
+        }
+    }, [ open ]);
 
     function addSelectedFrames() {
         for(let selection of selections) {
@@ -91,11 +97,6 @@ export default function FrameFinder({ children, opener, open, ...rest } = {}) {
                                         </Table.Row>
                                     </Table.Body>
                                 </Table>
-                                
-                                <Button icon labelPosition="left" color="grey" onClick={ e => setContextMenuTarget() }>
-                                    <Icon name="hide" />
-                                    Hide Details
-                                </Button>
                             </div>
                         ) : null
                     }
@@ -111,7 +112,7 @@ export default function FrameFinder({ children, opener, open, ...rest } = {}) {
                                     const isSelected = selections.includes(key);
                                     const isContextMenu = contextMenuTarget && obj.x === contextMenuTarget.x && obj.y === contextMenuTarget.y;
                                     const label = isSelected ? ({
-                                            label: { corner: "left", icon: "check", color: "blue" }
+                                            label: { corner: "left", icon: "check", color: isContextMenu ? "teal" : "blue" }
                                         }) : (isContextMenu ? ({
                                             label: { corner: "left", icon: "target", color: "teal" }
                                         }) : {});
@@ -121,7 +122,7 @@ export default function FrameFinder({ children, opener, open, ...rest } = {}) {
                                             <Image
                                                 centered
                                                 style={ {
-                                                    border: isSelected ? "2px solid #1678C2" : (isContextMenu ? "2px solid #009C95" : "1px solid rgba(34,36,38,.3)"),
+                                                    border: isContextMenu ? "2px solid #009C95" : (isSelected ? "2px solid #1678C2" : "1px solid rgba(34,36,38,.3)"),
                                                     boxShadow: "0 1px 2px 0 rgba(34,36,38,.3)",
                                                     borderRadius: 5,
                                                     cursor: "pointer"
@@ -163,13 +164,24 @@ export default function FrameFinder({ children, opener, open, ...rest } = {}) {
                 </Segment>
             </Modal.Content>
 
+            <Modal.Actions>
+            {
+                contextMenuTarget ? (
+                    <Button floated="left" icon labelPosition="left" color="teal" style={{ marginBottom: 14 }} onClick={ e => setContextMenuTarget() }>
+                        <Icon name="hide" />
+                        Hide Details
+                    </Button>
+                ) : null
+            }
             {
                 selections.length ? (
-                    <Modal.Actions>
+                    <>
+                        <Button icon="x" color="grey" content="Deselect All" onClick={ e => setSelections([]) } />
                         <Button icon="check" color="blue" content="Add Frames" onClick={ addSelectedFrames } />
-                    </Modal.Actions>   
+                    </>
                 ) : null
-            }         
+            }
+            </Modal.Actions>      
         </Modal>
     );
 };

@@ -153,9 +153,9 @@ StateNode.createManifest = function() {
         for (let key in obj) {
             let element = obj[ key ];
 
-            if (element instanceof HTMLCanvasElement || element.tagName === "CANVAS") {
+            if (element instanceof HTMLCanvasElement) {
                 newObj[ key ] = element.toDataURL("image/png", 1);
-            } else if (element instanceof HTMLImageElement || element.tagName === "IMG") {
+            } else if (element instanceof HTMLImageElement) {
                 const canvas = document.createElement("canvas");
                 const ctx = canvas.getContext("2d");
 
