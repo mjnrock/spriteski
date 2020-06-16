@@ -1,4 +1,4 @@
-import Base64 from "./../util/Base64";
+import Base64 from "./Base64";
 
 export default class Note {
     constructor(x, y, base64) {
@@ -7,9 +7,11 @@ export default class Note {
         this.base64 = base64;
     }
 
-    async toCanvas() {
-        return await Base64.Decode(this.base64);
+    toCanvas() {
+        return Base64.Decode(this.base64);
     }
+
+
 
     toJson() {
         return JSON.stringify(this);
@@ -26,8 +28,8 @@ export default class Note {
         }
 
         return new Node(
-            obj.x,
-            obj.y,
+            ~~obj.x,
+            ~~obj.y,
             obj.base64,
         );
     }

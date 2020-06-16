@@ -1,10 +1,25 @@
 import Frame from "./Frame";
 
 export default class Sequence {
-    constructor(fps, frames = [], tags = []) {
+    constructor(fps, frames = [], { tags = [] } = {}) {
         this.fps = fps;
         this.frames = frames;
-        this.tags = tags;
+        this.tags = new Set(tags);
+    }
+
+    addTag(...tags) {
+        for(let tag of tags) {
+            this.tags.add(tag);
+        }
+
+        return this;
+    }
+    removeTag(...tags) {
+        for(let tag of tags) {
+            this.tags.delete(tag);
+        }
+
+        return this;
     }
 
     normalizePositions() {
@@ -45,9 +60,11 @@ export default class Sequence {
         return this;
     }
 
+    
+
 
     toJson() {
-        return JSON.stringify(this);
+        return JSON.stringify(obj);
     }
     toObject() {
         return JSON.parse(JSON.stringify(this));
@@ -65,7 +82,9 @@ export default class Sequence {
         return new Frame(
             obj.fps,
             frames,
-            obj.tags,
+            {
+                tags: Array.isArray(obj.tags) ? obj.tags : [],
+            }
         );
     }
 

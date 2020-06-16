@@ -1,12 +1,12 @@
 import isBase64 from "is-base64";
 
-export default {
+export const Base64 = {
     // If successful, will return a base64 string with mime, else false
     Encode: (input, quality = 1.0) => {
         return new Promise((resolve, reject) => {
             try {
                 if(input instanceof HTMLCanvasElement) {
-                    resolve(input.toDataURL("image/png", quality));
+                    return resolve(input.toDataURL("image/png", quality));
                 } else if(input instanceof HTMLImageElement) {
                     const canvas = document.createElement("canvas");
                     const ctx = canvas.getContext("2d");
@@ -16,14 +16,14 @@ export default {
         
                     ctx.drawImage(input, 0, 0);
                     
-                    resolve(Base64.Encode(canvas, quality));
+                    return resolve(Base64.Encode(canvas, quality));
                 } else if(isBase64(input, { mimeRequired: true })) {
-                    resolve(input);
+                    return resolve(input);
                 } else {
-                    resolve(false);
+                    return resolve(false);
                 }
             } catch(e) {
-                reject(e);
+                return reject(e);
             }
         });
     },
@@ -41,7 +41,7 @@ export default {
             
                     ctx.drawImage(input, 0, 0);
     
-                    resolve(canvas);
+                    return resolve(canvas);
                 } else if(isBase64(input, { mimeRequired: true })) {
                     const canvas = document.createElement("canvas");
                     const ctx = canvas.getContext("2d");
@@ -53,15 +53,17 @@ export default {
             
                         ctx.drawImage(img, 0, 0);
             
-                        resolve(canvas);
+                        return resolve(canvas);
                     }
                     img.src = input;
                 } else {
-                    reject(input);
+                    return reject(input);
                 }
             } catch(e) {
-                reject(e);
+                return reject(e);
             }
         });
     }
 };
+
+export default Base64;

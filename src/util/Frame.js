@@ -1,12 +1,27 @@
 import Note from "./Note";
 
 export default class Frame {
-    constructor(row, index, duration, chord = [], tags = []) {
+    constructor(row, index, duration, chord = [], { tags = [] } = {}) {
         this.row = row;
         this.index = index;
         this.duration = duration;
         this.chord = chord;
-        this.tags = tags;
+        this.tags = new Set(tags);
+    }
+
+    addTag(...tags) {
+        for(let tag of tags) {
+            this.tags.add(tag);
+        }
+
+        return this;
+    }
+    removeTag(...tags) {
+        for(let tag of tags) {
+            this.tags.delete(tag);
+        }
+
+        return this;
     }
 
     swap(frame) {
@@ -26,20 +41,6 @@ export default class Frame {
         return false;
     }
 
-    addTag(...tags) {
-        this.tags = [
-            ...this.tags,
-            ...tags
-        ];
-
-        return this;
-    }
-    removeTag(...tags) {
-        this.tags = this.tags.filter(tag => !tags.includes(tag));
-
-        return this;
-    }
-
     addNote(x, y, base64) {
         this.chord.push(new Note(x, y, base64));
 
@@ -51,12 +52,28 @@ export default class Frame {
         return this;
     }
 
-    async toCanvas() {
-        return await Base64.Decode(this.base64);
+    /* TODO ALlow this to expand to multi-Note chords, instead of just 0,0
+     * |---|---|---|    |---------|
+     * |---|-x-|---| -> |----x----|
+     * |---|---|---|    |---------|
+     */
+    toCanvas() {
+        if(this.chord.length) {
+            const [ note ] = this.chord.filter(note => note.x === 0 && note.y === 0);
+
+            if(note instanceof Note) {
+                return note.toCanvas();
+            }
+        }
+
+        return false;
     }
 
+
+
+
     toJson() {
-        return JSON.stringify(this);
+        return JSON.stringify(obj);
     }
     toObject() {
         return JSON.parse(JSON.stringify(this));
@@ -72,11 +89,13 @@ export default class Frame {
         const chord = (obj.chord || []).map(note => Note.FromJson(note));
 
         return new Frame(
-            obj.row,
-            obj.index,
-            obj.duration,
+            ~~obj.row,
+            ~~obj.index,
+            ~~obj.duration,
             chord,
-            obj.tags,
+            {
+                tags: Array.isArray(obj.tags) ? obj.tags : [],
+            },
         );
     }
 
