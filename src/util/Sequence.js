@@ -59,6 +59,23 @@ export default class Sequence {
 
         return this;
     }
+    addFromDecodable(row, index, duration, base64, { x = 0, y = 0, tags = [] } = {}) {
+        let frame = Frame.FromDecodable(
+            row,
+            index,
+            duration,
+            base64,
+            {
+                x: x,
+                y: y,
+                tags: tags
+            }
+        )
+
+        this.addFrame(frame);
+
+        return this;
+    }
 
     async toCanvas() {
         return new Promise((resolve, reject) => {

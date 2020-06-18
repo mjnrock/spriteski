@@ -1,4 +1,6 @@
-import Chord from "./Chord";
+// import Chord from "./Chord";
+import Note from "./Note";
+import Tile from "./Tile";
 
 export default class Frame {
     constructor(row, index, duration, note, { tags = [] } = {}) {
@@ -44,6 +46,45 @@ export default class Frame {
 
     toCanvas() {
         return this.note.toCanvas();
+    }
+
+    
+    static FromDecodable(row, index, duration, base64, { x = 0, y = 0, tags = [] } = {}) {
+        return new Frame(
+            row,
+            index,
+            duration,
+            Note.FromDecodable(base64, x, y),
+            {
+                tags: tags
+            }
+        );
+    }
+    static FromNote(row, index, duration, note, { tags = [] } = {}) {
+        if(note instanceof Note) {
+            return new Frame(
+                row,
+                index,
+                duration,
+                note,
+                {
+                    tags: tags
+                }
+            );
+        }
+    }
+    static FromTile(row, index, duration, tile, { x = 0, y = 0, tags = [] } = {}) {
+        if(tile instanceof Tile) {
+            return new Frame(
+                row,
+                index,
+                duration,
+                Note.FromDecodable(tile.canvas, x, y),
+                {
+                    tags: tags
+                }
+            );
+        }
     }
 
 

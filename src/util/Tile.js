@@ -1,4 +1,6 @@
 import Base64 from "./Base64";
+import { Fragment } from "react";
+import Frame from "./Frame";
 
 export default class Tile {
     constructor(x, y, width, height, { source, tags = [] } = {}) {
@@ -52,6 +54,19 @@ export default class Tile {
 
 
 
+    toFrame(row, index, duration, { x = 0, y = 0, tags = [] } = {}) {
+        return Frame.FromTile(
+            row,
+            index,
+            duration,
+            this,
+            {
+                x: x,
+                y: y,
+                tags: tags,
+            }
+        );
+    }
 
     serialize(type = "image/png", quality = 1.0) {
         const obj = this.toObject();

@@ -71,4 +71,33 @@ export default class Tessellator {
     
         return this;
     }
+
+    /**
+     * This requires a function that should return an array of all of the arguments to the Tile.toFrame() function.
+     * The return array is populated via this.tiles.map, with a frame being generated via tile => tile.toFrame(...fn(tile))
+     * @param {function} fn 
+     */
+    toFrames(fn) {
+        if(typeof fn === "function") {
+            try {
+                const frames = [ ...this.tiles ].map(tile => {
+                    const result = fn(tile);
+
+                    if(!Array.isArray(result)) {
+                        throw new Error("@fn did not return an array.");
+                    }
+
+                    return tile.toFrame(...result);
+                });
+    
+                return frames;
+            } catch(e) {
+                console.warn(e);
+
+                return false;
+            }
+        }
+
+        return false;
+    }
 };
