@@ -1269,10 +1269,11 @@
     "@types/yargs" "^13.0.0"
 
 "@lespantsfancy/hive@^0.1.22":
-  version "0.1.28"
-  resolved "https://registry.yarnpkg.com/@lespantsfancy/hive/-/hive-0.1.28.tgz#bcb9706cb0b6e83a8d683e7c225e3d6d24a8a4a4"
-  integrity sha512-VLiQiT8mZbWQ027aEnjjSOOd4IHF+wKt3LLlt3KQFSLHH3C9Buzk/FKA0NF3z38u8CZQDpMWV4e+ZyfMP4geVg==
+  version "0.1.30"
+  resolved "https://registry.yarnpkg.com/@lespantsfancy/hive/-/hive-0.1.30.tgz#c3972a8abd280cf2a17b18ded2931247a5480c29"
+  integrity sha512-0l07XxfN2JiFkFgKQWgUwom60qH6RITk5c2060GRfa3gBhfd6ksPDILCsmBrct2v4BcJOYa9tBCO6lyo+VKJcw==
   dependencies:
+    is-base64 "^1.1.0"
     uuid "^8.1.0"
 
 "@mrmlnc/readdir-enhanced@^2.2.1":

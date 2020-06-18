@@ -18,31 +18,6 @@ export default class Tessellator {
         }
     }
 
-    _coreActions() {
-        this.imageToCanvas();
-        this.tessellate();
-
-        return this;
-    }
-
-    setImage(img) {
-        if(img instanceof HTMLImageElement) {
-            this.image.onload = () => {
-                this._coreActions();
-            };
-            this.image.src = img.src;
-        }
-
-        return this;
-    }
-
-    resize(width, height) {
-        this.config.width = width;
-        this.config.height = height;
-
-        this._coreActions();
-    }
-
     imageToCanvas() {
         if(this.canvas instanceof HTMLCanvasElement && this.image instanceof HTMLImageElement) {
             const ctx = this.canvas.getContext("2d");

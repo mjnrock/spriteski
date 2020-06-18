@@ -3,46 +3,23 @@ import { Segment } from "semantic-ui-react";
 import { useNodeContext } from "@lespantsfancy/hive";
 
 import { Context } from "../App";
-import { EnumMessageType } from "../reducers";
-import UploadImage from "../components/UploadImage";
-import Canvas from "../components/Canvas";
-import TileSizeMenu from "../modules/TileSizeMenu";
-import DataDisplay from "../modules/DataDisplay";
-import SaveFile from "../components/SaveFile";
+import { EnumMessageType } from "./../state/reducers";
+
+import UploadImage from "./../components/UploadImage";
 
 function Upload() {
     const { node, state } = useNodeContext(Context);
 
-    function selectImage(img) {
-        node.dispatch(EnumMessageType.IMAGE, {
-            image: img,
-            width: img.width,
-            height: img.height
-        });
+    console.log(state.tessellator.image);
+
+    function selectImage(image) {
+        node.dispatch(EnumMessageType.UPLOAD_IMAGE, image);
     }
 
     return (
         <Segment>
             <Segment color="blue">
                 <UploadImage onSelect={ selectImage } />
-                {
-                    state.image.ref && state.tile.width > 0 ? (
-                        <SaveFile />
-                    ) : null
-                }
-            </Segment>
-
-            {
-                state.image.ref ? (
-                    <>
-                        <TileSizeMenu />
-                        <DataDisplay />
-                    </>
-                ) : null
-            }
-
-            <Segment color="blue">
-                <Canvas />
             </Segment>
         </Segment>
     );

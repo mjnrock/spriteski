@@ -7,14 +7,6 @@ export default class Sequence {
         this.tags = new Set(tags);
     }
 
-    reset(fps) {
-        this.fps = fps;
-        this.frames = [];
-        this.tags = new Set();
-
-        return this;
-    }
-
     addTag(...tags) {
         for(let tag of tags) {
             this.tags.add(tag);
@@ -38,7 +30,7 @@ export default class Sequence {
                 rows[ frame.row ] = [];
             }
 
-            rows[ frame.row ].push(frame);
+            row[ frame.row ].push(frame);
         });
 
         Object.values(rows).forEach((row, i) => {
@@ -95,17 +87,11 @@ export default class Sequence {
                 let x = 0,
                     y = 0;
         
-                for(let [ , row ] of Object.entries(rows)) {
+                for(let [ rowNum, row ] of Object.entries(rows)) {
                     for(let frame of row) {
-                        // let c = await frame.toCanvas();
+                        let c = await frame.toCanvas();
         
-                        // ctx.drawImage(c, x * c.width, y * c.height);
-
-                        //TODO Test/Refactor this; might cause errors as it was previously not asynchronous
-                        // eslint-disable-next-line
-                        frame.toCanvas().then(c => {
-                            ctx.drawImage(c, x * c.width, y * c.height );
-                        });
+                        ctx.drawImage(c, x * c.width, y * c.height);
                     }
         
                     y++;
@@ -123,7 +109,7 @@ export default class Sequence {
 
 
     serialize() {
-        return JSON.stringify(this);
+        return JSON.stringify(obj);
     }
     toObject() {
         return JSON.parse(JSON.stringify(this));

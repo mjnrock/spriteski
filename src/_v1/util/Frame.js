@@ -91,7 +91,7 @@ export default class Frame {
 
 
     serialize() {
-        return JSON.stringify(this);
+        return JSON.stringify(obj);
     }
     toObject() {
         return JSON.parse(JSON.stringify(this));

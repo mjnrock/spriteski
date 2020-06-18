@@ -1,4 +1,5 @@
 import Base64 from "./Base64";
+import { Fragment } from "react";
 import Frame from "./Frame";
 
 export default class Tile {
