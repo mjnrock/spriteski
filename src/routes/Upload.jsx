@@ -6,11 +6,10 @@ import { Context } from "../App";
 import { EnumMessageType } from "./../state/reducers";
 
 import UploadImage from "./../components/UploadImage";
+import TessellationTabs from "../components/TessellationTabs";
 
 function Upload() {
-    const { node, state } = useNodeContext(Context);
-
-    console.log(state.tessellator.image);
+    const { node } = useNodeContext(Context);
 
     function selectImage(image) {
         node.dispatch(EnumMessageType.UPLOAD_IMAGE, image);
@@ -20,6 +19,10 @@ function Upload() {
         <Segment>
             <Segment color="blue">
                 <UploadImage onSelect={ selectImage } />
+            </Segment>
+
+            <Segment color="blue">
+                <TessellationTabs />
             </Segment>
         </Segment>
     );

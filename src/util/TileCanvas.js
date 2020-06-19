@@ -3,17 +3,29 @@ import Base64 from "./Base64";
 //TODO Refactor canvas usages to use this wrapper class, when appropriate (e.g. <Tessellator>)
 //* This has an embedded canvas to act as a <canvas> substitute, but will return this.frame for tile windows
 export default class TileCanvas {
-    constructor(source, width, height) {
+    constructor(width, height, source) {
         this.width = width;
         this.height = height;
 
+        if(source) {
+            Base64.Decode(source).then(canvas => {
+                this.canvas = canvas;
+                this.ctx = this.canvas.getContext("2d");
+            });
+        } else {
+            this.canvas = document.createElement("canvas");
+            this.ctx = this.canvas.getContext("2d");
+        }
+
+        this.frame = document.createElement("canvas");
+        this.ftx = this.frame.getContext("2d");
+    }
+
+    draw(source) {
         Base64.Decode(source).then(canvas => {
             this.canvas = canvas;
             this.ctx = this.canvas.getContext("2d");
         });
-
-        this.frame = document.createElement("canvas");
-        this.ftx = this.frame.getContext("2d");
     }
 
     _resetMainCanvas(width, height) {
@@ -55,7 +67,7 @@ export default class TileCanvas {
             this._resetFrameCanvas(width, height);
 
             this.ftx.drawImage(
-                canvas,
+                this.canvas,
                 tx * this.width,
                 ty * this.height,
                 width,
@@ -81,6 +93,20 @@ export default class TileCanvas {
             );
 
             return this.frame;
+        }
+    }
+
+    static DrawTransparency(canvas, tileSize = 16) {
+        const ctx = canvas.getContext("2d");
+
+        let iter = 0;
+        for (let x = 0; x < canvas.width; x += tileSize) {
+            for (let y = 0; y < canvas.height; y += tileSize) {
+                ctx.fillStyle = (iter % 2 === 0) ? "#fff" : "#ddd";
+                ctx.fillRect(x, y, tileSize, tileSize);
+                ++iter;
+            }
+            ++iter;
         }
     }
 }

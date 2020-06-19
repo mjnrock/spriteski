@@ -3,10 +3,10 @@ export const EnumMessageType = {
 };
 
 export const reducers = [
-    [ EnumMessageType.UPLOAD_IMAGE, (state, msg, node) => {
+    [ EnumMessageType.UPLOAD_IMAGE, function(state, msg) {
         const data = msg.payload || {};
         
-        state.tessellator.setImage(data);
+        this.state.tessellator.setImage(data);
 
         return state;
     }]

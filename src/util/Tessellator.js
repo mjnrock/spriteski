@@ -1,10 +1,12 @@
-import Tile from "./Tile";
 import Base64 from "./Base64";
+import Tile from "./Tile";
+import TileCanvas from "./TileCanvas";
 
 export default class Tessellator {
     constructor(width, height, { source } = {}) {
-        this.canvas = document.createElement("canvas");
-        this.image = document.createElement("image");
+        // this.canvas = document.createElement("canvas");
+        this.canvas = new TileCanvas();
+        this.image = document.createElement("img");
         
         this.config = {
             width: width,
@@ -27,10 +29,8 @@ export default class Tessellator {
 
     setImage(img) {
         if(img instanceof HTMLImageElement) {
-            this.image.onload = () => {
-                this._coreActions();
-            };
-            this.image.src = img.src;
+            this.image = img;
+            this._coreActions();
         }
 
         return this;
@@ -46,11 +46,13 @@ export default class Tessellator {
     imageToCanvas() {
         if(this.canvas instanceof HTMLCanvasElement && this.image instanceof HTMLImageElement) {
             const ctx = this.canvas.getContext("2d");
-            ctx.clearRect(0, 0, Math.max(this.canvas.width, this.image.width), Math.max(this.canvas.height, this.image.height));
+
             this.canvas.width = this.image.width;
             this.canvas.height = this.image.height;
-            ctx.drawImage(this.image, 0, 0);
+            ctx.clearRect(0, 0, this.image.width, this.image.height);            
             ctx.imageSmoothingEnabled = false;
+
+            ctx.drawImage(this.image, 0, 0);
 
             return true;
         }
@@ -58,27 +60,8 @@ export default class Tessellator {
         return false;
     }
 
-    draw(input, { type = "image/png", quality = 1.0 } = {}) {
-        return new Promise((resolve, reject) => {
-            Base64.Decode(input).then(canvas => {
-                if(canvas instanceof HTMLCanvasElement) {
-                    this.canvas = canvas;
-                    this.image = new Image();
-                    this.image.src = canvas.toDataURL(type, quality);
-                    
-                    this.tessellate();
-
-                    resolve({
-                        canvas,
-                        tiles: [ ...this.tiles ]
-                    });
-                }
-            });
-        });
-    }
-
     tessellate() {
-        this.tiles = new Set();
+        this.tiles.clear();
 
         for(let x = 0; x < this.canvas.width; x += this.config.width) {
             for(let y = 0; y < this.canvas.height; y += this.config.height) {
@@ -95,6 +78,26 @@ export default class Tessellator {
         }
     
         return this;
+    }
+
+    draw(input, { type = "image/png", quality = 1.0 } = {}) {
+        return new Promise((resolve, reject) => {
+            Base64.Decode(input).then(canvas => {
+                if(canvas instanceof HTMLCanvasElement) {
+                    this.canvas = canvas;
+                    this.canvas = new TileCanvas(canvas.width, canvas.height, canvas);
+                    this.image = new Image();
+                    this.image.src = canvas.toDataURL(type, quality);
+                    
+                    this.tessellate();
+
+                    resolve({
+                        canvas,
+                        tiles: [ ...this.tiles ]
+                    });
+                }
+            });
+        });
     }
 
     /**
