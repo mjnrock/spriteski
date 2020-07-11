@@ -42,7 +42,7 @@ export default class Tessellator {
         this.config.width = width;
         this.config.height = height;
 
-        this.redrawTiles();
+        this._redrawTiles();
     }
 
     copyFrom(input, { type = "image/png", quality = 1.0 } = {}) {

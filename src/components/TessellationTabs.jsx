@@ -1,10 +1,11 @@
 /* eslint-disable */
 import React, { useEffect } from "react";
 import { Segment, Tab } from "semantic-ui-react";
-import { useNodeContext } from "@lespantsfancy/hive";
+import { useNodeContext } from "@lespantsfancy/hive/lib/react";
 
 import { Context } from "../App";
 import PannableContainer from "./PannableContainer";
+import TileContainer from "./TileContainer";
 
 export default function TessellationTabs(props) {
     const { state, node } = useNodeContext(Context);
@@ -41,8 +42,7 @@ export default function TessellationTabs(props) {
             menuItem: "Tiles",
             render: () => (
                 <Tab.Pane textAlign="center">
-                    Kitness
-                    {/* <CollectionEntry /> */}
+                    <TileContainer />
                 </Tab.Pane>
             ),
         },
