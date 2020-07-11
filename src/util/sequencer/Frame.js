@@ -1,21 +1,34 @@
+import crypto from "crypto";
+
 // import Chord from "./Chord";
 import Note from "./Note";
-import Tile from "./Tile";
+import Tile from "../Tile";
 
 export default class Frame {
-    constructor(row, index, duration, note, { tags = [] } = {}) {
-        this.row = row;
-        this.index = index;
-        this.duration = duration;
+    constructor(row, index, note, { tags = [] } = {}) {
+        this.row = row;         // The "z-index" track (i.e. row = 0 draws first, then row = 1, etc.)
+        this.index = index;     // The ordinality of the Note cluster or Chord
+
         // this.chord = new Chord(...notes);
         this.note = note;
         this.tags = new Set(tags);
+
+        this.hash = this.hash();
+    }
+
+    hash() {
+        return crypto.createHash("md5").update(this.serialize()).digest("hex");
+    }
+    rehash() {
+        this.hash = this.hash();
     }
 
     addTag(...tags) {
         for(let tag of tags) {
             this.tags.add(tag);
         }
+
+        this.rehash();
 
         return this;
     }
@@ -24,7 +37,18 @@ export default class Frame {
             this.tags.delete(tag);
         }
 
+        this.rehash();
+
         return this;
+    }
+    hasTag(tag) {
+        for(let t of this.tags) {
+            if(t === tag) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     swap(frame) {
@@ -41,6 +65,8 @@ export default class Frame {
             return true;
         }
 
+        this.rehash();
+
         return false;
     }
 
@@ -49,23 +75,21 @@ export default class Frame {
     }
 
     
-    static FromDecodable(row, index, duration, base64, { x = 0, y = 0, tags = [] } = {}) {
+    static FromDecodable(row, index, base64, duration, { x = 0, y = 0, tags = [] } = {}) {
         return new Frame(
             row,
             index,
-            duration,
-            Note.FromDecodable(base64, x, y),
+            Note.FromDecodable(base64, duration, x, y),
             {
                 tags: tags
             }
         );
     }
-    static FromNote(row, index, duration, note, { tags = [] } = {}) {
+    static FromNote(row, index, note, { tags = [] } = {}) {
         if(note instanceof Note) {
             return new Frame(
                 row,
                 index,
-                duration,
                 note,
                 {
                     tags: tags
@@ -73,13 +97,12 @@ export default class Frame {
             );
         }
     }
-    static FromTile(row, index, duration, tile, { x = 0, y = 0, tags = [] } = {}) {
+    static FromTile(row, index, tile, duration, { x = 0, y = 0, tags = [] } = {}) {
         if(tile instanceof Tile) {
             return new Frame(
                 row,
                 index,
-                duration,
-                Note.FromDecodable(tile.canvas, x, y),
+                Note.FromDecodable(tile.canvas, duration, x, y),
                 {
                     tags: tags
                 }
@@ -110,7 +133,6 @@ export default class Frame {
         return new Frame(
             ~~obj.row,
             ~~obj.index,
-            ~~obj.duration,
             // chord,
             note,
             {
@@ -128,7 +150,6 @@ export default class Frame {
 
         return "row" in obj
             && "index" in obj
-            && "duration" in obj
             // && "chord" in obj
             && "note" in obj
             && "tags" in obj;

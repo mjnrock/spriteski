@@ -13,8 +13,7 @@ export default class Score {
             throw new Error("Score must be given a <Sequence>");
         }
 
-        this._isRunning = false;
-        this._index = 0;
+        this.startTime = null;
 
         //TODO this.sequence MUST be bounced and printed to a private canvas at <Score> instantiation to relieve async issues and optimize calls
     }
@@ -42,18 +41,16 @@ export default class Score {
     get maxIndex() {
         return this.sequence.frames.length - 1;
     }
-
-    reset() {
-        this._index = 0;
-        this._isRunning = false;
+    get duration() {
+        return this.startTime ? Date.now() - this.startTime : 0;
     }
 
     play() {
-        if(!this._isRunning) {
-            this._isRunning = true;
+        if(!this.startTime) {
+            this.startTime = Date.now();
         }
     }
-    pause() {
-        this._isRunning = false;
+    stop() {
+        this.startTime = null;
     }
 }

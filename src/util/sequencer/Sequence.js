@@ -1,3 +1,5 @@
+import crypto from "crypto";
+
 import Frame from "./Frame";
 
 export default class Sequence {
@@ -5,6 +7,15 @@ export default class Sequence {
         this.fps = fps;
         this.frames = frames;
         this.tags = new Set(tags);
+
+        this.hash = this.hash();
+    }
+
+    hash() {
+        return crypto.createHash("md5").update(this.serialize()).digest("hex");
+    }
+    rehash() {
+        this.hash = this.hash();
     }
 
     reset(fps) {
@@ -28,6 +39,15 @@ export default class Sequence {
         }
 
         return this;
+    }
+    hasTag(tag) {
+        for(let t of this.tags) {
+            if(t === tag) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     normalizePositions() {

@@ -1,9 +1,10 @@
-import Base64 from "./Base64";
+import Base64 from "../Base64";
 
 export default class Note {
-    constructor(x, y, base64) {
+    constructor(base64, duration, x, y) {
         this.x = x;
         this.y = y;
+        this.duration = duration;
         this.base64 = Base64.Encode(base64);
     }
 
@@ -11,11 +12,12 @@ export default class Note {
         return Base64.Decode(this.base64);
     }
 
-    static FromDecodable(decodable, x = 0, y = 0) {
+    static FromDecodable(decodable, duration, x = 0, y = 0) {
         return new Note(
+            decodable,
+            duration,
             x,
             y,
-            decodable
         );
     }
 
@@ -36,9 +38,10 @@ export default class Note {
         }
 
         return new Node(
+            obj.base64,
+            ~~obj.duration,
             ~~obj.x,
             ~~obj.y,
-            obj.base64,
         );
     }
 
@@ -51,6 +54,7 @@ export default class Note {
 
         return "x" in obj
             && "y" in obj
+            && "duration" in obj
             && "base64" in obj;
     }
     static JsonConforms(json) {
