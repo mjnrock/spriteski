@@ -4,6 +4,7 @@ export const EnumMessageType = {
     TILE_TAG: "TILE_TAG",
     DELETE_TILE: "DELETE_TILE",
     COLLECTION_TAG: "COLLECTION_TAG",
+    UPDATE_TILES: "UPDATE_TILES",
 };
 
 export const reducers = [
@@ -11,17 +12,26 @@ export const reducers = [
         const data = msg.payload || {};
         
         this.state.tessellator.setImage(data);
-        
-        state.collection.tiles = this.state.tessellator.tessellate()
 
         return state;
     }],
-    [ EnumMessageType.TILE_SIZE, function(state, msg) {
-        const data = msg.payload || {};
+    [ EnumMessageType.UPDATE_TILES, function(state, msg) {
+        const tiles = msg.payload || {};
 
-        this.state.tessellator.resize(data.width, data.height);
+        const collection = state.collection;
         
-        state.collection.tiles = this.state.tessellator.tessellate()
+        collection.tiles = tiles;
+
+        return {
+            ...state,
+            
+            collection
+        };
+    }],
+    [ EnumMessageType.TILE_SIZE, function(state, msg) {
+        const { width, height } = msg.payload || {};
+
+        this.state.tessellator.resize(width, height);
 
         return state;
     }],

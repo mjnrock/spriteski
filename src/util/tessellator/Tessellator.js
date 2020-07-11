@@ -20,9 +20,11 @@ export default class Tessellator {
         return this.tileCanvas.get(tx, ty, txEnd, tyEnd);
     }
 
-    tessellate() {
-        const obj = {}
-        for(let tile of this.toTiles()) {
+    async tessellate() {
+        const obj = {};
+        const tiles = await this.toTiles();
+
+        for(let tile of tiles) {
             obj[ `${ tile.x }.${ tile.y }` ] = tile;
         }
 
@@ -67,7 +69,7 @@ export default class Tessellator {
         });
     }
 
-    toTiles() {
-        return this.tileCanvas.toTiles();
+    async toTiles() {
+        return await this.tileCanvas.toTiles();
     }
 };

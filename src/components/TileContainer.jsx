@@ -29,6 +29,8 @@ function TileContainer() {
         });
     }
 
+    const collection = state.collection;
+
     return (
         <>
             <Segment basic>
@@ -49,9 +51,9 @@ function TileContainer() {
 
                 <Table.Body>
                     {
-                        Object.values(state.collection.tiles).map(({ x, y, width, height, hash, canvas, tags }) => {
+                        Object.values(collection.tiles).map(({ x, y, width, height, hash, canvas, tags }) => {
                             return (                                
-                                <Table.Row key={ `${ x }.${ y }` }>
+                                <Table.Row key={ `${ x }.${ y }.${ hash }` }>
                                     <Table.Cell width={ 5 }>
                                         <Segment basic>
                                             <Image

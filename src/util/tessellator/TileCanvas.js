@@ -103,22 +103,26 @@ export default class TileCanvas {
     }
 
     toTiles() {
-        const tiles = [];
-        for(let x = 0; x < this.canvas.width / this.width; x++) {
-            for(let y = 0; y < this.canvas.height / this.height; y++) {
-                tiles.push(new Tile(
-                    x,
-                    y,
-                    this.width,
-                    this.height,
-                    {
-                        source: this.get(x, y),
-                    }
-                ));
+        return new Promise((resolve, reject) => {
+            const tiles = [];
+            for(let x = 0; x < this.canvas.width / this.width; x++) {
+                for(let y = 0; y < this.canvas.height / this.height; y++) {
+                    tiles.push(new Tile(
+                        x,
+                        y,
+                        this.width,
+                        this.height,
+                        {
+                            source: this.get(x, y),
+                        }
+                    ));
+                }
             }
-        }
-
-        return tiles;
+    
+            resolve(tiles);
+            
+            return tiles;
+        });
     }
 
     static DrawTransparency(canvas, tw = 64, th = 64) {
