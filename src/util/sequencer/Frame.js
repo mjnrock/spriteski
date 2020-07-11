@@ -2,7 +2,7 @@ import crypto from "crypto";
 
 // import Chord from "./Chord";
 import Note from "./Note";
-import Tile from "../Tile";
+import Tile from "../tessellator/Tile";
 
 export default class Frame {
     constructor(row, index, note, { tags = [] } = {}) {

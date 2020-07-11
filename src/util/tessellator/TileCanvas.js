@@ -1,6 +1,5 @@
-import Base64 from "./Base64";
+import Base64 from "../Base64";
 
-//TODO Refactor canvas usages to use this wrapper class, when appropriate (e.g. <Tessellator>)
 //* This has an embedded canvas to act as a <canvas> substitute, but will return this.frame for tile windows
 export default class TileCanvas {
     constructor(width, height, { source } = {}) {

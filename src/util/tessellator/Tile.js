@@ -1,5 +1,5 @@
-import Base64 from "./Base64";
-import Frame from "./Frame";
+import Base64 from "./../Base64";
+import Frame from "./../sequencer/Frame";
 
 export default class Tile {
     constructor(x, y, width, height, { source, tags = [] } = {}) {

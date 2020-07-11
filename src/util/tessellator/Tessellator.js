@@ -1,4 +1,4 @@
-import Base64 from "./Base64";
+import Base64 from "../Base64";
 import TileCanvas from "./TileCanvas";
 
 export default class Tessellator {
@@ -12,7 +12,7 @@ export default class Tessellator {
         };
 
         if(source) {
-            this.draw(source);
+            this.from(source);
         }
     }
 
@@ -45,7 +45,7 @@ export default class Tessellator {
         this.redrawTiles();
     }
 
-    draw(input, { type = "image/png", quality = 1.0 } = {}) {
+    copyFrom(input, { type = "image/png", quality = 1.0 } = {}) {
         return new Promise((resolve, reject) => {
             Base64.Decode(input).then(canvas => {
                 if(canvas instanceof HTMLCanvasElement) {
