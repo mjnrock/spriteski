@@ -23,17 +23,7 @@ export default class Tile {
     load(canvas) {
         const ctx = this.canvas.getContext("2d");
 
-        ctx.drawImage(
-            canvas,
-            this.width * this.x,
-            this.height * this.y,
-            this.width,
-            this.height,
-            0,
-            0,
-            this.width,
-            this.height
-        );
+        ctx.drawImage(canvas, 0, 0);
     }
 
     addTag(...tags) {

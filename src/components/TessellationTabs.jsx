@@ -26,7 +26,6 @@ export default function TessellationTabs(props) {
 
     useEffect(() => {
         redrawCanvas();
-        console.log(1)
     });
 
     const panes = [

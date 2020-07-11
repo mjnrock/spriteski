@@ -3,8 +3,9 @@ import TileCanvas from "./TileCanvas";
 
 export default class Tessellator {
     constructor(width, height, { source } = {}) {
-        this.tileCanvas = new TileCanvas(128, 128);
+        this.tileCanvas = new TileCanvas(width, height);
         this.image = document.createElement("img");
+        this.tiles = [];
         
         this.config = {
             width: width,
@@ -21,20 +22,24 @@ export default class Tessellator {
     }
 
 
-    _redrawTiles() {
+    tessellate() {
+        this.tiles = this.toTiles();
+    }
+
+    redrawTiles() {
         this.tileCanvas.fromImage(this.image, {
             width: this.config.width,
             height: this.config.height
         });
+
+        this.tessellate();
     }
 
     setImage(img) {
         if(img instanceof HTMLImageElement) {
             this.image = img;
-            this.tileCanvas.fromImage(this.image, {
-                width: this.config.width,
-                height: this.config.height
-            });
+
+            this.redrawTiles();
         }
     }
 
@@ -42,7 +47,7 @@ export default class Tessellator {
         this.config.width = width;
         this.config.height = height;
 
-        this._redrawTiles();
+        this.redrawTiles();
     }
 
     copyFrom(input, { type = "image/png", quality = 1.0 } = {}) {
@@ -59,32 +64,7 @@ export default class Tessellator {
         });
     }
 
-    /**
-     * This requires a function that should return an array of all of the arguments to the Tile.toFrame() function.
-     * The return array is populated via this.tiles.map, with a frame being generated via tile => tile.toFrame(...fn(tile))
-     * @param {function} fn 
-     */
-    toFrames(fn) {
-        if(typeof fn === "function") {
-            try {
-                const frames = [ ...this.tiles ].map(tile => {
-                    const result = fn(tile);
-
-                    if(!Array.isArray(result)) {
-                        throw new Error("@fn did not return an array.");
-                    }
-
-                    return tile.toFrame(...result);
-                });
-    
-                return frames;
-            } catch(e) {
-                console.warn(e);
-
-                return false;
-            }
-        }
-
-        return false;
+    toTiles() {
+        return this.tileCanvas.toTiles();
     }
 };

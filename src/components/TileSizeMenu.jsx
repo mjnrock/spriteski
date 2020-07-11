@@ -32,7 +32,7 @@ function TileSizeMenu() {
                     onClick={ e => {
                         setTileSize(n, n);
                         setIsCustomTileSize(false);
-                    } }
+                    }}
                     active={ isMatch.both }
                 >{ n } x { n }</Button>
             );

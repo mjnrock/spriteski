@@ -1,4 +1,5 @@
 import Base64 from "../Base64";
+import Tile from "./Tile";
 
 //* This has an embedded canvas to act as a <canvas> substitute, but will return this.frame for tile windows
 export default class TileCanvas {
@@ -99,6 +100,25 @@ export default class TileCanvas {
         );
 
         return this.frame;
+    }
+
+    toTiles() {
+        const tiles = [];
+        for(let x = 0; x < this.canvas.width / this.width; x++) {
+            for(let y = 0; y < this.canvas.height / this.height; y++) {
+                tiles.push(new Tile(
+                    x,
+                    y,
+                    this.width,
+                    this.height,
+                    {
+                        source: this.get(x, y),
+                    }
+                ));
+            }
+        }
+
+        return tiles;
     }
 
     static DrawTransparency(canvas, tileSize = 16) {

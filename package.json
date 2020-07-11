@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@lespantsfancy/hive": "^0.1.22",
+    "@lespantsfancy/hive": "^0.1.57",
     "color-convert": "^2.0.1",
     "fabric": "^3.6.3",
     "is-base64": "^1.1.0",
