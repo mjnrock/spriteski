@@ -121,14 +121,14 @@ export default class TileCanvas {
         return tiles;
     }
 
-    static DrawTransparency(canvas, tileSize = 16) {
+    static DrawTransparency(canvas, tw = 64, th = 64) {
         const ctx = canvas.getContext("2d");
 
         let iter = 0;
-        for (let x = 0; x < canvas.width; x += tileSize) {
-            for (let y = 0; y < canvas.height; y += tileSize) {
+        for (let x = 0; x < canvas.width; x += tw) {
+            for (let y = 0; y < canvas.height; y += th) {
                 ctx.fillStyle = (iter % 2 === 0) ? "#fff" : "#ddd";
-                ctx.fillRect(x, y, tileSize, tileSize);
+                ctx.fillRect(x, y, tw, th);
                 ++iter;
             }
             ++iter;

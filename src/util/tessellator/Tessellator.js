@@ -5,7 +5,6 @@ export default class Tessellator {
     constructor(width, height, { source } = {}) {
         this.tileCanvas = new TileCanvas(width, height);
         this.image = document.createElement("img");
-        this.tiles = [];
         
         this.config = {
             width: width,
@@ -21,9 +20,13 @@ export default class Tessellator {
         return this.tileCanvas.get(tx, ty, txEnd, tyEnd);
     }
 
-
     tessellate() {
-        this.tiles = this.toTiles();
+        const obj = {}
+        for(let tile of this.toTiles()) {
+            obj[ `${ tile.x }.${ tile.y }` ] = tile;
+        }
+
+        return obj;
     }
 
     redrawTiles() {

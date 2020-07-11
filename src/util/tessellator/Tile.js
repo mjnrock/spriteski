@@ -14,10 +14,14 @@ export default class Tile {
         this.canvas.height = height;
         
         Base64.Decode(source).then(canvas => {
-            if(canvas instanceof HTMLCanvasElement) {
+            if(canvas instanceof HTMLCanvasElement) {                
                 this.load(canvas);
             }
         });
+    }
+
+    get ctx() {
+        return this.canvas.getContext("2d");
     }
 
     load(canvas) {
