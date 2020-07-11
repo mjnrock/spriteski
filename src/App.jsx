@@ -27,6 +27,9 @@ export default function App() {
                         <NavBar />
 
                         <Switch>
+                            <Route path="/sequencer">
+                                <Routes.Sequencer />
+                            </Route>
                             <Route path="/upload">
                                 <Routes.Upload />
                             </Route>

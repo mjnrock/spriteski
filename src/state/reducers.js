@@ -1,13 +1,38 @@
 export const EnumMessageType = {
     UPLOAD_IMAGE: "UPLOAD_IMAGE",
+
     TILE_SIZE: "TILE_SIZE",
     TILE_TAG: "TILE_TAG",
     DELETE_TILE: "DELETE_TILE",
-    COLLECTION_TAG: "COLLECTION_TAG",
     UPDATE_TILES: "UPDATE_TILES",
+
+    COLLECTION_TAG: "COLLECTION_TAG",
+
+    ADD_FRAME: "ADD_FRAME",
+    DELETE_FRAME: "DELETE_FRAME",
+    UPDATE_FRAME: "UPDATE_FRAME",
 };
 
 export const reducers = [
+    [ EnumMessageType.ADD_FRAME, function(state, msg) {
+        const { row, index, tile, duration, opts } = msg.payload || {};
+
+        state.sequencer.addFrame(row, index, tile, duration, opts);
+
+        return state;
+    }],
+    [ EnumMessageType.DELETE_FRAME, function(state, msg) {
+        const { row, index } = msg.payload || {};
+        
+        state.sequencer.removeFrame(row, index);
+
+        return state;
+    }],
+    [ EnumMessageType.UPDATE_FRAME, function(state, msg) {
+        const data = msg.payload || {};
+
+        return state;
+    }],
     [ EnumMessageType.UPLOAD_IMAGE, function(state, msg) {
         const data = msg.payload || {};
         
