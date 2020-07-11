@@ -1,3 +1,5 @@
+import crypto from "crypto";
+
 import Base64 from "./../Base64";
 import Frame from "./../sequencer/Frame";
 
@@ -13,11 +15,18 @@ export default class Tile {
         this.canvas.width = width;
         this.canvas.height = height;
         
+        this.rehash();
         Base64.Decode(source).then(canvas => {
             if(canvas instanceof HTMLCanvasElement) {                
                 this.load(canvas);
+
+                this.rehash();
             }
         });
+    }
+
+    rehash() {
+        this.hash = crypto.createHash("md5").update(this.canvas.toDataURL()).digest("hex");
     }
 
     get ctx() {

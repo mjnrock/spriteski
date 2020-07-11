@@ -39,6 +39,7 @@ function TileContainer() {
                 <Table.Header>
                     <Table.Row>
                         <Table.HeaderCell>Tile</Table.HeaderCell>
+                        <Table.HeaderCell>Hash</Table.HeaderCell>
                         <Table.HeaderCell>Position</Table.HeaderCell>
                         <Table.HeaderCell>Dimensions</Table.HeaderCell>
                         <Table.HeaderCell>Tags</Table.HeaderCell>
@@ -48,10 +49,10 @@ function TileContainer() {
 
                 <Table.Body>
                     {
-                        Object.values(state.collection.tiles).map(({ x, y, width, height, canvas, tags }) => {
+                        Object.values(state.collection.tiles).map(({ x, y, width, height, hash, canvas, tags }) => {
                             return (                                
                                 <Table.Row key={ `${ x }.${ y }` }>
-                                    <Table.Cell width={ 7 }>
+                                    <Table.Cell width={ 5 }>
                                         <Segment basic>
                                             <Image
                                                 centered
@@ -62,6 +63,9 @@ function TileContainer() {
                                                 src={ canvas.toDataURL() }
                                             />
                                         </Segment>
+                                    </Table.Cell>
+                                    <Table.Cell width={ 2 }>
+                                        { hash }
                                     </Table.Cell>
                                     <Table.Cell width={ 2 }>
                                         { x }, { y }

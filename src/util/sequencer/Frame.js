@@ -13,14 +13,11 @@ export default class Frame {
         this.note = note;
         this.tags = new Set(tags);
 
-        this.hash = this.hash();
+        this.rehash();
     }
 
-    hash() {
-        return crypto.createHash("md5").update(this.serialize()).digest("hex");
-    }
     rehash() {
-        this.hash = this.hash();
+        this.hash = crypto.createHash("md5").update(this.serialize()).digest("hex");
     }
 
     addTag(...tags) {

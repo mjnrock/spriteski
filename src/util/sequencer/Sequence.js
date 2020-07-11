@@ -8,14 +8,11 @@ export default class Sequence {
         this.frames = frames;
         this.tags = new Set(tags);
 
-        this.hash = this.hash();
+        this.rehash();
     }
 
-    hash() {
-        return crypto.createHash("md5").update(this.serialize()).digest("hex");
-    }
     rehash() {
-        this.hash = this.hash();
+        this.hash = crypto.createHash("md5").update(this.serialize()).digest("hex");
     }
 
     reset(fps) {
@@ -31,12 +28,16 @@ export default class Sequence {
             this.tags.add(tag);
         }
 
+        this.rehash();
+
         return this;
     }
     removeTag(...tags) {
         for(let tag of tags) {
             this.tags.delete(tag);
         }
+
+        this.rehash();
 
         return this;
     }
@@ -65,6 +66,8 @@ export default class Sequence {
             row.sort((a, b) => a.index - b.index);
             row.forEach(frame => frame.index = i);
         });
+
+        this.rehash();
 
         return rows;
     }
