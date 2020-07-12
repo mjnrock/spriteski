@@ -3,12 +3,10 @@ import { Grid, Image, Segment, Button } from "semantic-ui-react";
 import { useNodeContext } from "@lespantsfancy/hive/lib/react";
 
 import { Context } from "./../App";
-import { EnumMessageType } from "./../state/reducers";
-import TagEntry from "./TagEntry";
 import Slider from "./Slider";
 
-function TileContainer() {
-    const { node, state } = useNodeContext(Context);
+function TileContainer(props) {
+    const { state } = useNodeContext(Context);
     const [ colWidth, setColWidth ] = useState(16);
     const [ selection, setSelection ] = useState([]);
 
@@ -16,25 +14,11 @@ function TileContainer() {
         setSelection([]);
     }, [ colWidth ]);
 
-    // function onTileTag(x, y, tags) {
-    //     node.dispatch(EnumMessageType.TILE_TAG, {
-    //         x,
-    //         y,
-    //         tags,
-    //     });
-    // }
-    function onCollectionTag(tags) {
-        if(tags.toString() !== state.collection.tags.toString()) {
-            node.dispatch(EnumMessageType.COLLECTION_TAG, tags);
+    useEffect(() => {
+        if(typeof props.onSelection === "function") {
+            props.onSelection(selection);
         }
-    }
-
-    // function deleteTile(x, y) {
-    //     node.dispatch(EnumMessageType.DELETE_TILE, {
-    //         x,
-    //         y,
-    //     });
-    // }
+    }, [ props, selection ]);
 
     const collection = state.collection;
 
@@ -103,10 +87,6 @@ function TileContainer() {
 
     return (
         <>
-            <Segment basic>
-                <TagEntry onTag={ onCollectionTag } tags={ state.collection.tags } />
-            </Segment>
-
             <Button.Group fluid style={{ marginBottom: 16 }}>
                 {
                     buttons.map(([ label, value ], i) => (

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment, useState } from "react";
 import { Segment } from "semantic-ui-react";
 import { useNodeContext } from "@lespantsfancy/hive/lib/react";
 
@@ -13,9 +13,12 @@ import TileSizeMenu from "../components/TileSizeMenu";
 
 function Upload() {
     const { node } = useNodeContext(Context);
+    const [ hasImage, setHasImage ] = useState(false);
 
     function selectImage(image) {
         node.dispatch(EnumMessageType.UPLOAD_IMAGE, image);
+        
+        setHasImage(!!image);
     }
 
     return (
@@ -24,14 +27,20 @@ function Upload() {
                 <UploadImage onSelect={ selectImage } />
             </Segment>
 
-            <Segment color="blue">
-                <TessellationTabs />
-            </Segment>
+            {
+                hasImage ? (
+                    <Fragment>
+                        <Segment color="blue">
+                            <TessellationTabs />
+                        </Segment>
 
-            <Segment>
-                <DataDisplay />
-                <TileSizeMenu />
-            </Segment>
+                        <Segment>
+                            <DataDisplay />
+                            <TileSizeMenu />
+                        </Segment>
+                    </Fragment>
+                ) : null
+            }
         </Segment>
     );
 }
