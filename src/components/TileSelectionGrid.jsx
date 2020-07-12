@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Grid, Image, Segment, Button } from "semantic-ui-react";
 import { useNodeContext } from "@lespantsfancy/hive/lib/react";
 
-import { Context } from "./../App";
+import { Context } from "../App";
 import Slider from "./Slider";
 
-function TileContainer(props) {
+function TileSelectionGrid(props) {
     const { state } = useNodeContext(Context);
     const [ colWidth, setColWidth ] = useState(16);
     const [ selection, setSelection ] = useState([]);
@@ -202,4 +202,4 @@ function TileContainer(props) {
     );
 }
 
-export default TileContainer;
+export default TileSelectionGrid;
