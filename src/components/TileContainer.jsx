@@ -11,12 +11,8 @@ function TileContainer() {
     const { node, state } = useNodeContext(Context);
     const [ colWidth, setColWidth ] = useState(16);
     const [ selection, setSelection ] = useState([]);
-    const [ activeRows, setActiveRows ] = useState([]);
-    const [ activeCols, setActiveCols ] = useState([]);
 
     useEffect(() => {
-        setActiveCols([]);
-        setActiveRows([]);
         setSelection([]);
     }, [ colWidth ]);
 
@@ -55,6 +51,11 @@ function TileContainer() {
         inc++;
     });
 
+    const highlights = rows.map(row => row.map(tile => {
+        return selection.includes(tile);
+    }));
+    console.log(highlights);
+
     const buttons = [
         [ "n1", 1 ],
         [ "n2", 2 ],
@@ -67,6 +68,38 @@ function TileContainer() {
         return (
             <Segment>The current Collection is empty</Segment>
         );
+    }
+
+    function updateSelection(typeOrTile, value) {
+        let ret = new Set(selection);
+
+        if(typeOrTile === "row" && value in rows) {
+            const row = rows[ value ];
+
+            if(row.every(tile => ret.has(tile))) {
+                row.forEach(tile => ret.delete(tile));
+            } else {
+                row.forEach(tile => ret.add(tile));
+            }
+        } else if(typeOrTile === "col") {
+            if(rows.every(row => row.some((tile, i) => value === i && ret.has(tile)))) {
+                for(let row of rows) {
+                    row.forEach((tile, i) => value === i ? ret.delete(tile) : null);
+                }
+            } else {                
+                for(let row of rows) {
+                    row.forEach((tile, i) => value === i ? ret.add(tile) : null);
+                }
+            }
+        } else {
+            if(ret.has(typeOrTile)) {
+                ret.delete(typeOrTile);
+            } else {
+                ret.add(typeOrTile);
+            }
+        }
+
+        setSelection([ ...ret ]);
     }
 
     return (
@@ -87,62 +120,25 @@ function TileContainer() {
             <Grid columns={ 2 }>
                 <Grid.Row>
                     <Grid.Column width={ 1 }>
-                        {/* <Button
-                            icon
-                            visible={ activeCols.length || activeRows.length || selection.length }
-                            onClick={ e => {
-                                console.log(activeCols)
-                                console.log(activeRows)
-                                console.log(selection)
-
-                                let tiles = new Set([]);
-                                for(let col of activeCols) {
-                                    for(let row = 0; row < rows.length; row++) {
-                                        tiles.add([ row, col ]);
-                                    }
-                                }
-                                
-                                for(let row of activeRows) {
-                                    for(let col = 0; col < rows[ row ].length; col++) {
-                                        tiles.add([ row, col ]);
-                                    }
-                                }
-                                
-                                for(let [ x, y ] of selection) {
-                                    tiles.add([ x, y ]);
-                                }
-
-                                node.dispatch(EnumMessageType.DELETE_TILE, [ ...tiles ]);
-                            }}
-                        >
-                            <Icon name="trash" />
-                        </Button> */}
+                        <Button
+                            color={ selection.length === Object.keys(collection.tiles).length ? "blue" : null }
+                            onClick={ e => setSelection(selection.length === Object.keys(collection.tiles).length ? [] : Object.values(collection.tiles)) }
+                            style={{ fontSize: 16 }}
+                        >*</Button>
                     </Grid.Column>
                     <Grid.Column width={ 15 }>
                         <Button.Group>
-                            <Button
-                                color={ activeCols.length === (rows[ 0 ] || []).length ? "blue" : "grey" }
-                                onClick={ e => setActiveCols(activeCols.length === (rows[ 0 ] || []).length ? [] : (rows[ 0 ] || []).map((tile, i) => i)) }
-                                style={{ fontSize: 16 }}
-                            >*</Button>
                             {
-                                (rows[ 0 ] || []).map((tile, i) => {
-                                    const index = activeCols.indexOf(i);
+                                (rows[ 0 ] || []).map((val, i) => {
+                                    const isColored = highlights.some(row => row.some((val, j) => val && i === j));
+                                    const isBasic = isColored && !highlights.every(row => row.some((val, j) => val && i === j))
 
                                     return (
                                         <Button
                                             key={ i }
-                                            color={ index >= 0 ? "blue" : null }
-                                            onClick={ e => {
-                                                if(index >= 0) {
-                                                    setActiveCols(activeCols.filter(col => col !== i));
-                                                } else {
-                                                    setActiveCols([
-                                                        ...activeCols,
-                                                        i
-                                                    ]);
-                                                }
-                                            }}
+                                            basic={ isBasic }
+                                            color={ isColored ? "blue" : null }
+                                            onClick={ e => updateSelection("col", i) }
                                         >{ i }</Button>
                                     );
                                 })
@@ -153,29 +149,17 @@ function TileContainer() {
                 <Grid.Row>
                     <Grid.Column width={ 1 }>
                         <Button.Group vertical>
-                            <Button
-                                color={ activeRows.length === rows.length ? "blue" : "grey" }
-                                onClick={ e => setActiveRows(activeRows.length === rows.length ? [] : rows.map((row, i) => i)) }
-                                style={{ fontSize: 16 }}
-                            >*</Button>
                             {
                                 rows.map((row, i) => {
-                                    const index = activeRows.indexOf(i);
+                                    const isColored = highlights[ i ].some(v => v);
+                                    const isBasic = isColored && !highlights[ i ].every(v => v);
 
                                     return (
                                         <Button
                                             key={ i }
-                                            color={ index >= 0 ? "blue" : null }
-                                            onClick={ e => {
-                                                if(index >= 0) {
-                                                    setActiveRows(activeRows.filter(col => col !== i));
-                                                } else {
-                                                    setActiveRows([
-                                                        ...activeRows,
-                                                        i
-                                                    ]);
-                                                }
-                                            }}
+                                            basic={ isBasic }
+                                            color={ isColored ? "blue" : null }
+                                            onClick={ e => updateSelection("row", i) }
                                         >{ i }</Button>
                                     );
                                 })
@@ -193,7 +177,7 @@ function TileContainer() {
                                                     return null;
                                                 }
 
-                                                const isSelected = activeCols.includes(j) || activeRows.includes(i) || selection.some(sel => sel.toString() === [ i, j ].toString());
+                                                const isSelected = selection.includes(tile);
                                                 const label = isSelected ? {
                                                     label: { corner: "left", icon: "check", color: "blue", size: "mini" }
                                                 } : {};
@@ -209,16 +193,7 @@ function TileContainer() {
                                                                 borderRadius: 5,
                                                                 cursor: "pointer"
                                                             }}
-                                                            onClick={ e => {
-                                                                if(selection.some(sel => sel.toString() === [ i, j ].toString())) {
-                                                                    setSelection(selection.filter(row => row.toString() !== [ i, j ].toString()));
-                                                                } else {
-                                                                    setSelection([
-                                                                        ...selection,
-                                                                        [ i, j ]
-                                                                    ]);
-                                                                }
-                                                            }}
+                                                            onClick={ e => updateSelection(tile) }
                                                             src={ tile.canvas.toDataURL() }
                                                             { ...label }
                                                         />
