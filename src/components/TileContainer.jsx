@@ -197,7 +197,7 @@ function TileContainer() {
                                                         <Image
                                                             centered
                                                             style={ {
-                                                                border: isSelected ? `2px solid #1678C2` : `1px solid #000`,
+                                                                border: isSelected ? `4px solid #1678C2` : `1px solid rgba(0, 0, 0, 0.20)`,
                                                                 margin: "auto",
                                                                 boxShadow: "0 1px 2px 0 rgba(34,36,38,.3)",
                                                                 borderRadius: 5,
