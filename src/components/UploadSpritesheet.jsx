@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Button, Icon } from "semantic-ui-react";
 
-export default function UploadImage(props) {
+export default function UploadSpritesheet(props) {
     const photoRef = React.createRef();
     const [ photo, setPhoto ] = useState();
 
@@ -32,7 +32,7 @@ export default function UploadImage(props) {
         <>
             <Button icon labelPosition="left" color="blue" size="large" onClick={ e => photoRef.current.click() }>
                 <Icon name="file image outline" />
-                Choose Image
+                Select Spritesheet
             </Button>
 
             <input ref={ photoRef } type="file" accept="image/*;capture=camera" hidden onChange={ selectPhoto } />

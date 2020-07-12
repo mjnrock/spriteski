@@ -8,6 +8,9 @@ import PannableContainer from "./PannableContainer";
 import TileSelectionGrid from "./TileSelectionGrid";
 import CollectionTagEntry from "./CollectionTagEntry";
 
+import DataDisplay from "../components/TileImageDetail";
+import TileSizeMenu from "../components/TileSizeMenu";
+
 export default function TessellationTabs(props) {
     const { state, node } = useNodeContext(Context);
     const canvasRef = React.createRef();
@@ -42,11 +45,15 @@ export default function TessellationTabs(props) {
             menuItem: "Tiles",
             render: () => (
                 <Tab.Pane textAlign="center">
-                    <CollectionTagEntry />
+                    <TileSizeMenu />
 
                     <Segment color="blue">
                         <TileSelectionGrid />
                     </Segment>
+
+                    <CollectionTagEntry />
+                        
+                    <DataDisplay />
                 </Tab.Pane>
             ),
         },

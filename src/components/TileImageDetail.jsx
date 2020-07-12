@@ -4,7 +4,7 @@ import { useNodeContext } from "@lespantsfancy/hive/lib/react";
 
 import { Context } from "../App";
 
-export default function Canvas(props) {
+export default function TileImageDetail(props) {
     const { state } = useNodeContext(Context);
 
     const divisible = {

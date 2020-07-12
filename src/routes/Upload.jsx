@@ -5,11 +5,8 @@ import { useNodeContext } from "@lespantsfancy/hive/lib/react";
 import { Context } from "../App";
 import { EnumMessageType } from "./../state/reducers";
 
-import UploadImage from "./../components/UploadImage";
+import UploadSpritesheet from "../components/UploadSpritesheet";
 import TessellationTabs from "../components/TessellationTabs";
-
-import DataDisplay from "./../components/DataDisplay";
-import TileSizeMenu from "../components/TileSizeMenu";
 
 function Upload() {
     const { node } = useNodeContext(Context);
@@ -22,9 +19,9 @@ function Upload() {
     }
 
     return (
-        <Segment>
+        <Fragment>
             <Segment color="blue">
-                <UploadImage onSelect={ selectImage } />
+                <UploadSpritesheet onSelect={ selectImage } />
             </Segment>
 
             {
@@ -33,15 +30,10 @@ function Upload() {
                         <Segment color="blue">
                             <TessellationTabs />
                         </Segment>
-
-                        <Segment>
-                            <DataDisplay />
-                            <TileSizeMenu />
-                        </Segment>
                     </Fragment>
                 ) : null
             }
-        </Segment>
+        </Fragment>
     );
 }
 
