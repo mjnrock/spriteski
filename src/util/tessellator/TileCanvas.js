@@ -102,20 +102,37 @@ export default class TileCanvas {
         return this.frame;
     }
 
-    toTiles() {
+    toTiles(transpose = false) {
         return new Promise((resolve, reject) => {
             const tiles = [];
-            for(let x = 0; x < this.canvas.width / this.width; x++) {
+            
+            if(transpose === true) {
+                for(let x = 0; x < this.canvas.width / this.width; x++) {
+                    for(let y = 0; y < this.canvas.height / this.height; y++) {
+                        tiles.push(new Tile(
+                            x,
+                            y,
+                            this.width,
+                            this.height,
+                            {
+                                source: this.get(x, y),
+                            }
+                        ));
+                    }
+                }
+            } else {
                 for(let y = 0; y < this.canvas.height / this.height; y++) {
-                    tiles.push(new Tile(
-                        x,
-                        y,
-                        this.width,
-                        this.height,
-                        {
-                            source: this.get(x, y),
-                        }
-                    ));
+                    for(let x = 0; x < this.canvas.width / this.width; x++) {
+                        tiles.push(new Tile(
+                            x,
+                            y,
+                            this.width,
+                            this.height,
+                            {
+                                source: this.get(x, y),
+                            }
+                        ));
+                    }
                 }
             }
     

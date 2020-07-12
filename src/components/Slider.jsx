@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Grid, Input } from "semantic-ui-react";
 
 export default function Slider(props) {    
-    const [ value, setValue ] = useState(props.value || 0);
-    const val = props.value === void 0 || props.value === null ? value : props.value;
+    const [ value, setValue ] = useState(props.value || props.defaultValue || 0);
+    const val = props.value === void 0 || props.value === null ? value : props.value || props.defaultValue ;
 
     useEffect(() => {
         if(typeof props.onChange === "function") {
@@ -14,7 +14,7 @@ export default function Slider(props) {
 
     if(props.label) {
         return (
-            <Grid>
+            <Grid style={ props.style || {} }>
                 <Grid.Row textAlign="center" verticalAlign="middle">
                     <Grid.Column width={ 3 }>
                         { props.label }
@@ -33,7 +33,7 @@ export default function Slider(props) {
     }
 
     return (
-        <Grid>
+        <Grid style={ props.style || {} }>
             <Grid.Row>
                 <Grid.Column width={ 10 }>
                     <input className="slider" type="range" min={ props.min } max={ props.max } value={ val } onChange={ e => setValue(~~e.target.value) } />

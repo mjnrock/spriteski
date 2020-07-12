@@ -29,7 +29,7 @@ export const reducers = [
         return state;
     }],
     [ EnumMessageType.UPDATE_FRAME, function(state, msg) {
-        const data = msg.payload || {};
+        // const data = msg.payload || {};
 
         return state;
     }],
@@ -75,9 +75,16 @@ export const reducers = [
         return state;
     }],
     [ EnumMessageType.DELETE_TILE, function(state, msg) {
-        const { x, y } = msg.payload || {};
+        const data = msg.payload || {};
 
-        state.collection.delete(x, y);
+        console.log(data)
+        if("x" in data && "y" in data) {
+            state.collection.delete(data.x, data.y);
+        } else if(Array.isArray(data)) {
+            for(let [ x, y ] of data) {
+                state.collection.delete(x, y);
+            }
+        }
 
         return state;
     }]
