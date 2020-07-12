@@ -184,9 +184,9 @@ function TileContainer() {
                                                         color: isSelected ? "blue" : null,
                                                         content: (
                                                             <div>
-                                                                <span>{ tile.x }</span>
+                                                                <span>{ j }</span>
                                                                 <br />
-                                                                <span>{ tile.y }</span>
+                                                                <span>{ i }</span>
                                                             </div>
                                                         )
                                                     }
