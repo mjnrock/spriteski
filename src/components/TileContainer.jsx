@@ -54,7 +54,6 @@ function TileContainer() {
     const highlights = rows.map(row => row.map(tile => {
         return selection.includes(tile);
     }));
-    console.log(highlights);
 
     const buttons = [
         [ "n1", 1 ],
@@ -126,7 +125,7 @@ function TileContainer() {
                             style={{ fontSize: 16 }}
                         >*</Button>
                     </Grid.Column>
-                    <Grid.Column width={ 15 }>
+                    <Grid.Column width={ 15 } textAlign="left">
                         <Button.Group>
                             {
                                 (rows[ 0 ] || []).map((val, i) => {
@@ -178,12 +177,23 @@ function TileContainer() {
                                                 }
 
                                                 const isSelected = selection.includes(tile);
-                                                const label = isSelected ? {
-                                                    label: { corner: "left", icon: "check", color: "blue", size: "mini" }
-                                                } : {};
+                                                const label = {
+                                                    label: {
+                                                        basic: true,
+                                                        floating: true,
+                                                        color: isSelected ? "blue" : null,
+                                                        content: (
+                                                            <div>
+                                                                <span>{ tile.x }</span>
+                                                                <br />
+                                                                <span>{ tile.y }</span>
+                                                            </div>
+                                                        )
+                                                    }
+                                                };
 
                                                 return (
-                                                    <Grid.Column key={ `${ tile.x }.${ tile.y }`}>
+                                                    <Grid.Column key={ `${ tile.x }.${ tile.y }` }>
                                                         <Image
                                                             centered
                                                             style={ {
