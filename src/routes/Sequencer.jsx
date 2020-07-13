@@ -1,69 +1,63 @@
 /* eslint-disable */
 import React, { useState } from "react";
-import { Segment, Table, Icon, Input, Grid } from "semantic-ui-react";
+import { Segment } from "semantic-ui-react";
 import { useNodeContext } from "@lespantsfancy/hive/lib/react";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
 import { Context } from "./../App";
-import { EnumMessageType } from "./../state/reducers";
-// import SequencePreview from "./../components/SequencePreview";
 
 export default function Sequencer() {
     const { node, state } = useNodeContext(Context);
-    const [ fps, setFps ] = useState(1);
+    const [ list, setList ] = useState([ { id: "0", content: "A" }, { id: "1", content: "B" }, { id: "2", content: "C" }, { id: "3", content: "D" } ]);
 
-    function adjustFps(e) {
-        const value = ~~e.target.value;
+    function onDragEnd(result) {
+        const { source, destination } = result;
 
-        if(Number.isInteger(value)) {
-            // node.dispatch(EnumMessageType.UPDATE_SEQUENCE_FPS, value);
-            setFps(value);
+        if(!destination) {
+            return;
+        }
+
+        if(source.droppableId === destination.droppableId) {
+            let tempList = [ ...list ];
+
+            const [ removed ] = tempList.splice(source.index, 1);
+            tempList.splice(destination.index, 0, removed);
+
+            setList(tempList);
+        } else {
+            //  Different droppable
         }
     }
 
     return (
         <Segment>
-            {/* <SequencePreview /> */}
-
-            <Grid columns="equal">
-                <Grid.Row>
-                    <Grid.Column textAlign="center">
-                        <Input label="FPS" color="teal" type="number" fluid min={ 1 } max={ 60 } value={ fps } onChange={ adjustFps } style={{ textAlign: "center" }} />
-                    </Grid.Column>
-                    <Grid.Column>
-                        <Input label="ms" labelPosition="right" readOnly={ true } value={ (1000 / fps).toFixed(2) } fluid style={{ textAlign: "center" }} />
-                    </Grid.Column>
-                </Grid.Row>
-            </Grid>
-
-            <Table color="blue">
-                <Table.Header>
-                    <Table.Row textAlign="center">
-                        <Table.HeaderCell width={ 1 }>
-                            <Icon name="adjust" />
-                        </Table.HeaderCell>
-
-                        <Table.HeaderCell width={ 7 }>
-                            <Icon name="image" />
-                        </Table.HeaderCell>
-
-                        <Table.HeaderCell width={ 7 }>
-                            <Icon name="clock outline" />
-                        </Table.HeaderCell>
-
-                        <Table.HeaderCell width={ 1 }>
-                            <Icon name="bars" />
-                        </Table.HeaderCell>
-                    </Table.Row>
-                </Table.Header>
-
-                <Table.Body>
-                    <Table.Row textAlign="center">
-                        <Table.Cell>
-                            TODO
-                        </Table.Cell>
-                    </Table.Row>
-                </Table.Body>
-            </Table>
+            <DragDropContext onDragEnd={ onDragEnd }>
+                <Droppable droppableId={ "drop-0" }>
+                    { (provided, snapshot) => (
+                        <div
+                            ref={ provided.innerRef }
+                        >
+                            { list.map((item, index) => (
+                                <Draggable
+                                    key={ item.id }
+                                    draggableId={ item.id }
+                                    index={ index }>
+                                    { (provided, snapshot) => (
+                                        <div
+                                            ref={ provided.innerRef }
+                                            { ...provided.draggableProps }
+                                            { ...provided.dragHandleProps }
+                                        >
+                                            { item.content }
+                                        </div>
+                                    ) }
+                                </Draggable>
+                            )) }
+                            { provided.placeholder }
+                        </div>
+                    ) }
+                </Droppable>
+            </DragDropContext>
         </Segment>
     );
 };
