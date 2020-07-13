@@ -17,8 +17,23 @@ export default class Track {
         return 1000 / this.fps;
     }
 
-    get length() {
+    get duration() {
         return this.frames.reduce((acc, frame) => acc + (this.fps * (1 / frame.duration)), 0) / this.fps * 1000;
+    }
+
+    get pixels() {
+        const obj = {
+            frame: {
+                width: (this.frames.get(0).columns * this.tile.width),
+                height: (this.frames.get(0).rows * this.tile.height),
+            }
+        };
+
+        return {
+            ...obj,
+            width: this.frames.size * frame.width,
+            height: frame.height,
+        };
     }
 
     resize(tw = 128, th = 128) {

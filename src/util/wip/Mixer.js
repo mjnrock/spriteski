@@ -18,6 +18,21 @@ export default class Mixer {
         }
     }
 
+    get pixels() {
+        let width = 0,
+            height = 0;
+
+        mixer.tracks.each(track => {
+            width = Math.max(width, track.pixels.width);
+            height += track.pixels.height;
+        });
+
+        return {
+            width,
+            height,
+        };
+    }
+
     add(track, weight = 1) {
         this.tracks.add(track);
         this.weights.set(track, weight);

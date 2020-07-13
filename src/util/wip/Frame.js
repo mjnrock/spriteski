@@ -7,6 +7,10 @@ export default class Frame {
         this.set(source, 0, 0);
     }
 
+    get size() {
+        return [ this.rows, this.columns ];
+    }
+
     dec(amount = 0) {
         this.duration += amount;
 
@@ -41,11 +45,11 @@ export default class Frame {
         this.columns = Math.max(cols, 1);
 
         const oldSource = this.get(0, 0);
-        this.canvas = [];
+        this.cells = [];
         for(let r = 0; r < this.rows; i++) {
-            this.canvas.push([]);
+            this.cells.push([]);
 
-            let current = this.canvas[ i ];
+            let current = this.cells[ i ];
             for(let c = 0; c < this.columns; i++) {
                 current.push(null);
             }
@@ -55,16 +59,16 @@ export default class Frame {
     }
 
     get(row = 0, col = 0) {
-        return this.canvas[ row ][ col ];
+        return this.cells[ row ][ col ];
     }
     set(source, row = 0, col = 0) {
         if(source) {
             if(source instanceof HTMLCanvasElement) {
-                this.canvas[ row ][ col ] = source;
+                this.cells[ row ][ col ] = source;
             } else {
                 Base64.Decode(source).then(canvas => {
                     if(canvas instanceof HTMLCanvasElement) {
-                        this.canvas[ row ][ col ] = canvas;
+                        this.cells[ row ][ col ] = canvas;
                     }
                 });
             }
@@ -73,7 +77,7 @@ export default class Frame {
         return this;
     }
     delete(row = 0, col = 0) {
-        this.canvas[ row ][ col ] = null;
+        this.cells[ row ][ col ] = null;
 
         return this;
     }
@@ -86,6 +90,21 @@ export default class Frame {
         this.set(e0, r1, c1);
 
         return this;
+    }
+
+    each(fn) {
+        let acc = [];
+        if(typeof fn === "function") {
+            for(let row = 0; row < this.rows; row++) {
+                for(let col = 0; col < this.columns; col++) {
+                    const canvas = this.get(row, col);
+
+                    acc.push(fn(canvas, row, col));
+                }
+            }
+        }
+
+        return acc;
     }
 
     static SwapBetweenFrames(f0, r0, c0, f1, r1, c1) {
