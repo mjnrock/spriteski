@@ -9,22 +9,30 @@ export default class Score {
             const ctx = canvas.getContext("2d");
 
             canvas.width = mixer.pixels.width;
-            canvas.height = mixer.pixels.height;
+            canvas.height = mixer.pixels.height + mixer.pixels.track.height;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
             mixer.tracks.each((track, i) => {
                 track.frames.each((frame, j) => {
                     frame.each((kanvas, x, y) => {
+                        //  Bounced image
                         ctx.drawImage(
                             kanvas,
                             (j * track.pixels.frame.width) + (x * track.tile.width),
-                            (i * track.pixels.frame.height) + (y * track.tile.height),
+                            y * track.tile.height,
+                        );
+
+                        //  Original image
+                        ctx.drawImage(
+                            kanvas,
+                            (j * track.pixels.frame.width) + (x * track.tile.width),
+                            ((i + 1) * track.pixels.frame.height) + (y * track.tile.height),
                         );
                     });
                 });
             });
 
-            this.canvas = canvas;
+            this.source = canvas;
         }
     }
 };

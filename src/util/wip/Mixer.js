@@ -20,16 +20,26 @@ export default class Mixer {
 
     get pixels() {
         let width = 0,
-            height = 0;
+            height = 0,
+            trackWidth = 0,
+            trackHeight = 0;
 
         mixer.tracks.each(track => {
             width = Math.max(width, track.pixels.width);
             height += track.pixels.height;
+
+            trackWidth = Math.max(track.pixels.width, trackWidth);
+            trackHeight = Math.max(track.pixels.height, trackHeight);
         });
 
         return {
             width,
             height,
+            
+            track: {
+                width: trackWidth,
+                height: trackHeight,
+            }
         };
     }
 
