@@ -1,8 +1,11 @@
+import { v4 as uuidv4 } from "uuid";
 import TwinMap from "../TwinMap";
 import Track from "./Track";
 
 export default class Mixer {
     constructor({ tracks = [], weights = [] } = {}) {
+        this.id = uuidv4();
+
         this.tracks = new TwinMap(tracks);
         this.weights = new Map();
 

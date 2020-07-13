@@ -1,7 +1,10 @@
+import { v4 as uuidv4 } from "uuid";
 import Base64 from "./../Base64";
 
 export default class Frame {
     constructor({ duration = 1, source, rows = 1, cols = 1 } = {}) {
+        this.id = uuidv4();
+        
         this.duration = duration;   // Duration will be interpreted as seconds = (1 / duration) * fps
         this.resize(rows, cols);
         this.set(source, 0, 0);

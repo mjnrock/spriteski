@@ -1,9 +1,12 @@
+import { v4 as uuidv4 } from "uuid";
 import Base64 from "../Base64";
 import TwinMap from "./../TwinMap";
 import Frame from "../sequencer/Frame";
 
 export default class Track {
     constructor({ fps, frames = [], tw = 128, th = 128 } = {}) {
+        this.id = uuidv4();
+
         this.frames = new TwinMap(frames);
         this.fps = fps;
 

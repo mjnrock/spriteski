@@ -1,7 +1,10 @@
+import { v4 as uuidv4 } from "uuid";
 import Mixer from "./Mixer";
 
 export default class Score {
     constructor(mixer, { weight = 1 } = {}) {
+        this.id = uuidv4();
+        
         this.weight = weight;
 
         if(mixer instanceof Mixer) {
