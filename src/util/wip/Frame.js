@@ -21,10 +21,10 @@ export default class Frame {
         }
     }
 
-    get(row, col) {
+    get(row = 0, col = 0) {
         return this.canvas[ row ][ col ];
     }
-    set(row, col, source) {
+    set(source, row = 0, col = 0) {
         Base64.Decode(source).then(canvas => {
             if(canvas instanceof HTMLCanvasElement) {
                 this.canvas[ row ][ col ] = canvas;
@@ -33,7 +33,7 @@ export default class Frame {
 
         return this;
     }
-    delete(row, col) {
+    delete(row = 0, col = 0) {
         this.canvas[ row ][ col ] = null;
 
         return this;
