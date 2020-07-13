@@ -12,21 +12,21 @@ export default class Score {
             canvas.height = mixer.pixels.height + mixer.pixels.track.height;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            mixer.tracks.each((track, i) => {
-                track.frames.each((frame, j) => {
+            mixer.tracks.each((track, row) => {
+                track.frames.each((frame, col) => {
                     frame.each((kanvas, x, y) => {
                         //  Bounced image
                         ctx.drawImage(
                             kanvas,
-                            (j * track.pixels.frame.width) + (x * track.tile.width),
+                            (col * track.pixels.frame.width) + (x * track.tile.width),
                             y * track.tile.height,
                         );
 
                         //  Original image
                         ctx.drawImage(
                             kanvas,
-                            (j * track.pixels.frame.width) + (x * track.tile.width),
-                            ((i + 1) * track.pixels.frame.height) + (y * track.tile.height),
+                            (col * track.pixels.frame.width) + (x * track.tile.width),
+                            ((row + 1) * track.pixels.frame.height) + (y * track.tile.height),
                         );
                     });
                 });
