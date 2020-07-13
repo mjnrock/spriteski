@@ -6,10 +6,9 @@ import { useNodeContext } from "@lespantsfancy/hive/lib/react";
 import { Context } from "../App";
 import PannableContainer from "./PannableContainer";
 import TileSelectionGrid from "./TileSelectionGrid";
-import CollectionTagEntry from "./CollectionTagEntry";
-
-import DataDisplay from "../components/TileImageDetail";
 import TileSizeMenu from "../components/TileSizeMenu";
+import CollectionTagEntry from "../components/CollectionTagEntry";
+import DataDisplay from "../components/TileImageDetail";
 
 export default function TessellationTabs(props) {
     const { state, node } = useNodeContext(Context);
@@ -34,7 +33,7 @@ export default function TessellationTabs(props) {
 
     const panes = [
         {
-            menuItem: "Canvas",
+            menuItem: "Spritesheet",
             render: () => (
                 <Tab.Pane textAlign="center" as={ PannableContainer }>
                     <canvas ref={ canvasRef } style={{ margin: "auto" }} />
@@ -42,18 +41,22 @@ export default function TessellationTabs(props) {
             ),
         },
         {
-            menuItem: "Tiles",
+            menuItem: "Detail",
             render: () => (
                 <Tab.Pane textAlign="center">
-                    <TileSizeMenu />
-
-                    <Segment color="blue">
-                        <TileSelectionGrid />
-                    </Segment>
-
                     <CollectionTagEntry />
+
+                    <TileSizeMenu />
                         
                     <DataDisplay />
+                </Tab.Pane>
+            ),
+        },
+        {
+            menuItem: "Collection",
+            render: () => (
+                <Tab.Pane textAlign="center">
+                    <TileSelectionGrid />
                 </Tab.Pane>
             ),
         },
