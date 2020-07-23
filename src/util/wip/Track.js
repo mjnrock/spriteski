@@ -34,8 +34,8 @@ export default class Track {
 
         return {
             ...obj,
-            width: this.frames.size * frame.width,
-            height: frame.height,
+            width: this.frames.size * obj.frame.width,
+            height: obj.frame.height,
         };
     }
 

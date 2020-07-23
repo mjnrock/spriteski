@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Grid, Image, Segment, Button, Icon } from "semantic-ui-react";
+import { Grid, Image, Segment, Button, Icon, Form } from "semantic-ui-react";
 import { useNodeContext } from "@lespantsfancy/hive/lib/react";
 
 import { Context } from "../App";
@@ -101,6 +101,35 @@ function TileSelectionGrid(props) {
             {
                 selection.length ? (
                     <Segment color="blue">
+                        <Form>
+                            <Form.Dropdown
+                                label="Directions"
+                                labeled={ true }
+                                options={[
+                                    { key: 1, text: "One [1]", value: 1 },
+                                    { key: 4, text: "Four [4]", value: 4 },
+                                    { key: 8, text: "Eight [8]", value: 8 },
+                                ]}
+                                defaultValue={ 8 }
+                            />
+                            <Form.Dropdown
+                                label="Start Direction"
+                                labeled={ true }
+                                options={[
+                                    { key: 0, text: "North [0°]", value: 0 },
+                                    { key: 45, text: "Northeast [45°]", value: 45 },
+                                    { key: 90, text: "East [90°]", value: 90 },
+                                    { key: 135, text: "Southeast [135°]", value: 135 },
+                                    { key: 180, text: "South [180°]", value: 180 },
+                                    { key: 225, text: "Southwest [225°]", value: 225 },
+                                    { key: 270, text: "West [270°]", value: 270 },
+                                    { key: 315, text: "Northwest [315°]", value: 315 },
+                                ]}
+                                defaultValue={ 0 }
+                            />
+                            <Form.Checkbox label="Counter Clockwise" />
+                        </Form>
+
                         <Button.Group>
                             <Button icon labelPosition="left" color="blue">
                                 <Icon name="add" />

@@ -3,9 +3,10 @@ import TwinMap from "../TwinMap";
 import Track from "./Track";
 
 export default class Mixer {
-    constructor({ tracks = [], weights = [] } = {}) {
+    constructor({ tracks = [], weights = [], stack } = {}) {
         this.id = uuidv4();
 
+        this.stack = stack;
         this.tracks = new TwinMap(tracks);
         this.weights = new Map();
 
@@ -16,7 +17,7 @@ export default class Mixer {
 
                 this.weights.set(track, weight);
             }
-        } else {
+        } else if(!weights.length && tracks.length) {
             throw new Error("Every track must has a weight, if you use weights.");
         }
     }
@@ -27,7 +28,7 @@ export default class Mixer {
             trackWidth = 0,
             trackHeight = 0;
 
-        mixer.tracks.each(track => {
+        this.tracks.each(track => {
             width = Math.max(width, track.pixels.width);
             height += track.pixels.height;
 
@@ -77,7 +78,7 @@ export default class Mixer {
     reweigh(input, weight) {
         if(typeof input === "function") {
             for(let [ track, lbs ] of this.weights.entries()) {
-                const newWeight = Number.parseInt(fn(track, lbs, ~~weight));
+                const newWeight = Number.parseInt(input(track, lbs, ~~weight));
 
                 this.weights.set(track, Math.max(newWeight, 1));
             }
