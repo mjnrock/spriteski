@@ -32,7 +32,7 @@ const dim = new Dimension({
 // dim.set(2, 1, "cat");
 // dim.swap(2, 1, 2, 0);
 console.log(dim.cells);
-console.log(dim.range([ 1, 0 ], [ 2, 2 ], {
+console.log(dim.range([ 0 ], 2, {
     extractor(input) {
         if(input instanceof Cell) {
             return input.data;

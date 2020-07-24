@@ -1,16 +1,16 @@
 import EventEmitter from "events";
 
-export function initialize(cells, dimension, size, setter, depth = []) {
+export function initialize(cells, cardinality, size, setter, depth = []) {
     if(!Array.isArray(cells)) {
         cells = [];
     }
     
     for(let i = 0; i < size; i++) {
-        if(dimension - 1 > 0) {
-            cells.push(initialize.call(this, cells[ i ], dimension - 1, size, setter, [ ...depth, i ]));
+        if(cardinality - 1 > 0) {
+            cells.push(initialize.call(this, cells[ i ], cardinality - 1, size, setter, [ ...depth, i ]));
         } else {
             if(typeof setter === "function") {
-                cells.push(setter.call(this, i, [ ...depth, i ], dimension, size, setter));
+                cells.push(setter.call(this, i, [ ...depth, i ], cardinality, size, setter));
             } else {
                 cells.push(null);
             }
@@ -21,16 +21,16 @@ export function initialize(cells, dimension, size, setter, depth = []) {
 }
 
 export default class Dimension extends EventEmitter {
-    constructor({ dimensionality = 2, size, setter } = {}) {
+    constructor({ cardinality = 2, size, setter } = {}) {
         super();
         
-        this.dimensionality = dimensionality;
+        this.cardinality = cardinality;
         this.size = size;
 
         this.setter = setter;
         this.cells = [];
 
-        initialize.call(this, this.cells, this.dimensionality, this.size, this.setter);
+        initialize.call(this, this.cells, this.cardinality, this.size, this.setter);
     }
     
     dive(dims, lengths, { accumulator, target, extractor } = {}) {
@@ -65,7 +65,7 @@ export default class Dimension extends EventEmitter {
     set() {
         const args = [ ...arguments ];
 
-        if(args.length === this.dimensionality + 1) {
+        if(args.length === this.cardinality + 1) {
             const value = args[ args.length - 1 ];
             
             let result = this.cells;
@@ -107,6 +107,9 @@ export default class Dimension extends EventEmitter {
         return cell === void 0 || cell === null;
     }
 
+    /**
+     * The cardinality of @coords must be equal to this.cardinality (i.e. leaf-level only)
+     */
     range(coords = [], lengths = [], opts = {}) {
         if(typeof lengths === "number") {
             return this.dive(coords, coords.map(() => lengths, opts));
