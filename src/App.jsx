@@ -21,7 +21,7 @@ const dim = new Dimension({
     seed: (i, depth) => new Cell({
         dimension: this,
         coords: depth,
-        data: 2,
+        data: depth.join("."),
     })
 });
 
