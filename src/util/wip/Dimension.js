@@ -21,7 +21,7 @@ export function initialize(cells, cardinality, size, setter, depth = []) {
 }
 
 export default class Dimension extends EventEmitter {
-    constructor({ cardinality = 2, size, setter } = {}) {
+    constructor({ cardinality = 2, size, setter, seed } = {}) {
         super();
         
         this.cardinality = cardinality;
@@ -30,7 +30,7 @@ export default class Dimension extends EventEmitter {
         this.setter = setter;
         this.cells = [];
 
-        initialize.call(this, this.cells, this.cardinality, this.size, this.setter);
+        initialize.call(this, this.cells, this.cardinality, this.size, seed || this.setter);
     }
     
     dive(dims, lengths, { accumulator, target, extractor } = {}) {
