@@ -1,13 +1,13 @@
 import EventEmitter from "events";
 
-export function recurse(cells, dimension, size, setter, depth = []) {
+export function initialize(cells, dimension, size, setter, depth = []) {
     if(!Array.isArray(cells)) {
         cells = [];
     }
     
     for(let i = 0; i < size; i++) {
         if(dimension - 1 > 0) {
-            cells.push(recurse.call(this, cells[ i ], dimension - 1, size, setter, [ ...depth, i ]));
+            cells.push(initialize.call(this, cells[ i ], dimension - 1, size, setter, [ ...depth, i ]));
         } else {
             if(typeof setter === "function") {
                 cells.push(setter.call(this, i, [ ...depth, i ], dimension, size, setter));
@@ -30,7 +30,27 @@ export default class Dimension extends EventEmitter {
         this.setter = setter;
         this.cells = [];
 
-        recurse.call(this, this.cells, this.dimensionality, this.size, this.setter);
+        initialize.call(this, this.cells, this.dimensionality, this.size, this.setter);
+    }
+    
+    dive(dims, lengths, { accumulator, target, extractor } = {}) {
+        if(!Array.isArray(accumulator)) {
+            accumulator = [];
+        }
+
+        for(let i = dims[ 0 ]; i < dims[ 0 ] + lengths[ 0 ]; i++) {
+            if(target) {
+                if(typeof extractor === "function") {
+                    accumulator.push(extractor.call(this, target[ i ]));
+                } else {
+                    accumulator.push(target[ i ]);
+                }
+            } else {
+                accumulator.push(this.dive(dims.slice(1), lengths.slice(1), { accumulator: accumulator[ i ], target: this.cells[ i ], extractor }));
+            }
+        }
+
+        return accumulator;
     }
 
     get(...coords) {
@@ -80,18 +100,20 @@ export default class Dimension extends EventEmitter {
 
         return this;
     }
-    
+
     isEmpty() {
         const cell = this.get(...arguments);
 
         return cell === void 0 || cell === null;
     }
 
-    // range(coords = [], lengths = []) {
-    //     if(typeof lengths === "number") {
+    range(coords = [], lengths = [], opts = {}) {
+        if(typeof lengths === "number") {
+            return this.dive(coords, coords.map(() => lengths, opts));
+        }
 
-    //     }
-    // }
+        return this.dive(coords, lengths, opts);
+    }
     all() {
         return this.cells;
     }

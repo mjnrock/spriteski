@@ -16,21 +16,31 @@ import Dimension from "./util/wip/Dimension";
 import Cell from "./util/wip/Cell";
 
 const dim = new Dimension({
-    dimensionality: 3,
-    size: 3,
+    dimensionality: 2,
+    size: 5,
     setter: function(i, depth, dimension, size, setter) {
         return new Cell({
+            data: depth.join("."),
             dimension: this,
             coords: depth,
         });
     }
 });
 
-dim.set(0, 0, 2, "cat");
-dim.set(1, 0, 0, "cat");
-dim.set(2, 1, 2, "cat");
-dim.swap(2, 1, 2, 2, 0, 2);
+// dim.set(0, 0, "cat");
+// dim.set(1, 0, "cat");
+// dim.set(2, 1, "cat");
+// dim.swap(2, 1, 2, 0);
 console.log(dim.cells);
+console.log(dim.range([ 1, 0 ], [ 2, 2 ], {
+    extractor(input) {
+        if(input instanceof Cell) {
+            return input.data;
+        }
+        
+        return input;
+    }
+}));
 
 export const Context = React.createContext(initStateNode);
 
