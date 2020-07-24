@@ -1,6 +1,6 @@
 import EventEmitter from "events";
 
-export function recurse(cells, dimension, size, setter) {
+export function recurse(cells, dimension, size, setter, depth = []) {
     if(!Array.isArray(cells)) {
         cells = [];
     }
@@ -8,15 +8,17 @@ export function recurse(cells, dimension, size, setter) {
     //TODO Make the recurser and the setter aware of the current "depth" via coords
     for(let i = 0; i < size; i++) {
         if(dimension - 1 > 0) {
-            cells.push(recurse(cells[ i ], dimension - 1, size, setter));
+            cells.push(recurse(cells[ i ], dimension - 1, size, setter, [ ...depth, i ]));
         } else {
             if(typeof setter === "function") {
-                cells.push(setter(i, dimension, size, setter));
+                cells.push(setter(i, dimension, size, setter, [ ...depth, i ]));
             } else {
                 cells.push(null);
             }
         }
     }
+
+    console.log(depth)
 
     return cells;
 }
