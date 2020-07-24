@@ -12,6 +12,22 @@ import NavBar from "./NavBar";
 
 import initStateNode from "./state/stateNode";
 
+import Dimension from "./util/wip/Dimension";
+
+const dim = new Dimension({
+    dimensionality: 3,
+    size: 3,
+    setter: (i, dimension, size) => {
+        return `${ dimension }.${ i }`;
+    }
+});
+
+console.log(JSON.parse(JSON.stringify(dim.cells)));
+dim.set("cat", 0, 0, 2);
+dim.set("cat", 1, 0, 0);
+dim.set("cat", 2, 1, 2);
+console.log(dim.cells);
+
 export const Context = React.createContext(initStateNode);
 
 export default function App() {

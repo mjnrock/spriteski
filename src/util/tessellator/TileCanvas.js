@@ -107,6 +107,7 @@ export default class TileCanvas {
             const tiles = [];
             
             if(transpose === true) {
+                //! Unverified: quick copy and paste
                 for(let x = 0; x < this.canvas.width / this.width; x++) {
                     for(let y = 0; y < this.canvas.height / this.height; y++) {
                         tiles.push(new Tile(

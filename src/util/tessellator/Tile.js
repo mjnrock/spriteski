@@ -1,7 +1,6 @@
 import crypto from "crypto";
 
 import Base64 from "./../Base64";
-import Frame from "./../sequencer/Frame";
 
 export default class Tile {
     constructor(x, y, width, height, { source, tags = [] } = {}) {
@@ -25,6 +24,9 @@ export default class Tile {
         });
     }
 
+    /**
+     * The hash only takes into account the actual contents of the Canvas, as the hash is intended to be used as a persistence natural key
+     */
     rehash() {
         this.hash = crypto.createHash("md5").update(this.canvas.toDataURL()).digest("hex");
     }
@@ -36,7 +38,10 @@ export default class Tile {
     load(canvas) {
         const ctx = this.canvas.getContext("2d");
 
+        ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         ctx.drawImage(canvas, 0, 0);
+
+        this.rehash();
     }
 
     addTag(...tags) {
@@ -52,22 +57,6 @@ export default class Tile {
         }
 
         return this;
-    }
-
-
-
-    toFrame(row, index, duration, { x = 0, y = 0, tags = [] } = {}) {
-        return Frame.FromTile(
-            row,
-            index,
-            duration,
-            this,
-            {
-                x: x,
-                y: y,
-                tags: tags,
-            }
-        );
     }
 
     serialize(type = "image/png", quality = 1.0) {

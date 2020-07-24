@@ -38,4 +38,8 @@ export default class Score {
             this.source = canvas;
         }
     }
+
+    toImage(type = "image/png", quality = 1.0) {
+        return this.source.toDataURL(type, quality);
+    }
 };
