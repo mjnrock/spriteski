@@ -4,21 +4,18 @@ export function recurse(cells, dimension, size, setter, depth = []) {
     if(!Array.isArray(cells)) {
         cells = [];
     }
-
-    //TODO Make the recurser and the setter aware of the current "depth" via coords
+    
     for(let i = 0; i < size; i++) {
         if(dimension - 1 > 0) {
             cells.push(recurse(cells[ i ], dimension - 1, size, setter, [ ...depth, i ]));
         } else {
             if(typeof setter === "function") {
-                cells.push(setter(i, dimension, size, setter, [ ...depth, i ]));
+                cells.push(setter(i, [ ...depth, i ], dimension, size, setter));
             } else {
                 cells.push(null);
             }
         }
     }
-
-    console.log(depth)
 
     return cells;
 }

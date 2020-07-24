@@ -17,7 +17,7 @@ import Dimension from "./util/wip/Dimension";
 const dim = new Dimension({
     dimensionality: 3,
     size: 3,
-    setter: (i, dimension, size, setter, depth) => {
+    setter: (i, depth, dimension, size, setter) => {
         return depth.join(".");
     }
 });
