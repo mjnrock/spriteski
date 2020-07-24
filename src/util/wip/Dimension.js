@@ -1,4 +1,5 @@
 import EventEmitter from "events";
+import Cell from "./Cell";
 
 export function initialize(cells, cardinality, size, setter, depth = []) {
     if(!Array.isArray(cells)) {
@@ -12,7 +13,10 @@ export function initialize(cells, cardinality, size, setter, depth = []) {
             if(typeof setter === "function") {
                 cells.push(setter.call(this, i, [ ...depth, i ], cardinality, size, setter));
             } else {
-                cells.push(null);
+                cells.push(new Cell({
+                    dimension: this,
+                    coords: [ ...depth, i ],
+                }));
             }
         }
     }
@@ -112,7 +116,7 @@ export default class Dimension extends EventEmitter {
      */
     range(coords = [], lengths = [], opts = {}) {
         if(typeof lengths === "number") {
-            return this.dive(coords, coords.map(() => lengths, opts));
+            return this.dive(coords, coords.map(() => lengths), opts);
         }
 
         return this.dive(coords, lengths, opts);

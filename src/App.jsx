@@ -18,13 +18,6 @@ import Cell from "./util/wip/Cell";
 const dim = new Dimension({
     dimensionality: 2,
     size: 5,
-    setter: function(i, depth, dimension, size, setter) {
-        return new Cell({
-            data: depth.join("."),
-            dimension: this,
-            coords: depth,
-        });
-    }
 });
 
 // dim.set(0, 0, "cat");
@@ -32,10 +25,10 @@ const dim = new Dimension({
 // dim.set(2, 1, "cat");
 // dim.swap(2, 1, 2, 0);
 console.log(dim.cells);
-console.log(dim.range([ 0 ], 2, {
-    extractor(input) {
+console.log(dim.range([ 0, 0 ], 2, {
+    extractor: function(input) {
         if(input instanceof Cell) {
-            return input.data;
+            return input.coords.join(".");
         }
         
         return input;
