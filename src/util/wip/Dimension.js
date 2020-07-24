@@ -1,38 +1,6 @@
 import EventEmitter from "events";
 import Cell from "./Cell";
 
-export function initialize(cells, cardinality, size, setter, depth = []) {
-    if(typeof size === "number") {
-        const lens = [];
-        for(let i = 0; i < cardinality; i++) {
-            lens.push(size);
-        }
-
-        size = lens;
-    }
-
-    if(!Array.isArray(cells)) {
-        cells = [];
-    }
-    
-    for(let i = 0; i < size[ 0 ]; i++) {
-        if(cardinality - 1 > 0) {
-            cells.push(initialize.call(this, cells[ i ], cardinality - 1, size.slice(1), setter, [ ...depth, i ]));
-        } else {
-            if(typeof setter === "function") {
-                cells.push(setter.call(this, i, [ ...depth, i ], cardinality, size.slice(1), setter));
-            } else {
-                cells.push(new Cell({
-                    dimension: this,
-                    coords: [ ...depth, i ],
-                }));
-            }
-        }
-    }
-
-    return cells;
-}
-
 export default class Dimension extends EventEmitter {
     constructor({ cardinality = 2, size, setter, seed } = {}) {
         super();
@@ -47,7 +15,44 @@ export default class Dimension extends EventEmitter {
         this.setter = setter;
         this.cells = [];
 
-        initialize.call(this, this.cells, this.cardinality, this.size, seed || this.setter);
+        Dimension.InitializeCells.call(this, this.cells, this.cardinality, this.size, seed || this.setter);
+    }
+
+    /**
+     * This function, though static, requires a "this" binding, such as via .call()
+     */
+    static InitializeCells(cells, cardinality, size, setter, depth = []) {
+        if(typeof size === "number") {
+            const lens = [];
+            for(let i = 0; i < cardinality; i++) {
+                lens.push(size);
+            }
+    
+            size = lens;
+        }
+    
+        if(!Array.isArray(cells)) {
+            cells = [];
+        }
+        
+        for(let i = 0; i < size[ 0 ]; i++) {
+            if(cardinality - 1 > 0) {
+                cells.push(Dimension.InitializeCells.call(this, cells[ i ], cardinality - 1, size.slice(1), setter, [ ...depth, i ]));
+            } else {
+                const cell = new Cell({
+                    dimension: this,
+                    coords: [ ...depth, i ],
+                });
+
+                if(typeof setter === "function") {
+                    cell.data = setter.call(this, i, [ ...depth, i ], cardinality, size.slice(1), setter)
+                }
+                
+                cells.push(cell);
+            }
+        }
+    
+        return cells;
     }
     
     /**
@@ -156,5 +161,8 @@ export default class Dimension extends EventEmitter {
         }
 
         return this.dive(arr, lens, { extractor: extractor || (cell => cell.data) });
+    }
+    toMeta(extractor) {
+        return this.toData(extractor || (cell => cell.meta));
     }
 }

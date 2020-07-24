@@ -32,6 +32,7 @@ const dim = new Dimension({
 console.log(dim.cells);
 console.log(dim.range([ 0, 0, 0, 0 ], [ 2, 2, 3, 1 ]));
 console.log(dim.toData());
+console.log(dim.toMeta());
 
 export const Context = React.createContext(initStateNode);
 
