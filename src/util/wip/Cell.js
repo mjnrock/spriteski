@@ -17,7 +17,11 @@ export default class Cell {
         return this._data;
     }
     set data(data) {
-        this._data = data;
+        if(typeof data !== "object") {
+            this._data = { _value: data };
+        } else {
+            this._data = data;
+        }
 
         return this;
     }
