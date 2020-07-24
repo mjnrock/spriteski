@@ -13,19 +13,23 @@ import NavBar from "./NavBar";
 import initStateNode from "./state/stateNode";
 
 import Dimension from "./util/wip/Dimension";
+import Cell from "./util/wip/Cell";
 
 const dim = new Dimension({
     dimensionality: 3,
     size: 3,
-    setter: (i, depth, dimension, size, setter) => {
-        return depth.join(".");
+    setter: function(i, depth, dimension, size, setter) {
+        return new Cell({
+            dimension: this,
+            coords: depth,
+        });
     }
 });
 
-console.log(JSON.parse(JSON.stringify(dim.cells)));
-dim.set("cat", 0, 0, 2);
-dim.set("cat", 1, 0, 0);
-dim.set("cat", 2, 1, 2);
+dim.set(0, 0, 2, "cat");
+dim.set(1, 0, 0, "cat");
+dim.set(2, 1, 2, "cat");
+dim.swap(2, 1, 2, 2, 0, 2);
 console.log(dim.cells);
 
 export const Context = React.createContext(initStateNode);

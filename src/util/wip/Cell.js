@@ -1,11 +1,12 @@
 export default class Cell {
     constructor({ data = {}, meta = {}, dimension, coords = [] } = {}) {
-        this._data = typeof data !== "object" ? { _value: data } : data;
         this._meta = {
             _dimension: dimension,
             _coords: coords,
+
             ...meta
         };
+        this._data = typeof data !== "object" ? { _value: data } : data;
     }
 
     get data() {
