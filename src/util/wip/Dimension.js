@@ -2,16 +2,25 @@ import EventEmitter from "events";
 import Cell from "./Cell";
 
 export function initialize(cells, cardinality, size, setter, depth = []) {
+    if(typeof size === "number") {
+        const lens = [];
+        for(let i = 0; i < cardinality; i++) {
+            lens.push(size);
+        }
+
+        size = lens;
+    }
+
     if(!Array.isArray(cells)) {
         cells = [];
     }
     
-    for(let i = 0; i < size; i++) {
+    for(let i = 0; i < size[ 0 ]; i++) {
         if(cardinality - 1 > 0) {
-            cells.push(initialize.call(this, cells[ i ], cardinality - 1, size, setter, [ ...depth, i ]));
+            cells.push(initialize.call(this, cells[ i ], cardinality - 1, size.slice(1), setter, [ ...depth, i ]));
         } else {
             if(typeof setter === "function") {
-                cells.push(setter.call(this, i, [ ...depth, i ], cardinality, size, setter));
+                cells.push(setter.call(this, i, [ ...depth, i ], cardinality, size.slice(1), setter));
             } else {
                 cells.push(new Cell({
                     dimension: this,
@@ -31,26 +40,35 @@ export default class Dimension extends EventEmitter {
         this.cardinality = cardinality;
         this.size = size;
 
+        if(Array.isArray(size) && size.length !== cardinality) {
+            throw new Error("@size must have same cardinality as Dimension when not cubic.");
+        }
+
         this.setter = setter;
         this.cells = [];
 
         initialize.call(this, this.cells, this.cardinality, this.size, seed || this.setter);
     }
     
+    /**
+     * @dims should be the "starting" coordinates, while @lengths is the "width" of that dimension
+     */
     dive(dims, lengths, { accumulator, target, extractor } = {}) {
         if(!Array.isArray(accumulator)) {
             accumulator = [];
         }
 
+        target = target || this.cells;
+
         for(let i = dims[ 0 ]; i < dims[ 0 ] + lengths[ 0 ]; i++) {
-            if(target) {
+            if(dims.length > 1) {
+                accumulator.push(this.dive(dims.slice(1), lengths.slice(1), { accumulator: accumulator[ i ], target: target[ i ], extractor }));
+            } else {
                 if(typeof extractor === "function") {
                     accumulator.push(extractor.call(this, target[ i ]));
                 } else {
                     accumulator.push(target[ i ]);
                 }
-            } else {
-                accumulator.push(this.dive(dims.slice(1), lengths.slice(1), { accumulator: accumulator[ i ], target: this.cells[ i ], extractor }));
             }
         }
 
@@ -115,6 +133,10 @@ export default class Dimension extends EventEmitter {
      * The cardinality of @coords must be equal to this.cardinality (i.e. leaf-level only)
      */
     range(coords = [], lengths = [], opts = {}) {
+        if(coords.length !== this.cardinality) {
+            throw new Error(".range() must have cardinality equal to the Dimension; it is a leaf-level only function.");
+        }
+
         if(typeof lengths === "number") {
             return this.dive(coords, coords.map(() => lengths), opts);
         }
@@ -123,5 +145,16 @@ export default class Dimension extends EventEmitter {
     }
     all() {
         return this.cells;
+    }
+
+    toData(extractor) {
+        const arr = [];
+        const lens = [];
+        for(let i = 0; i < this.cardinality; i++) {
+            arr.push(0);
+            lens.push(this.size[ i ]);
+        }
+
+        return this.dive(arr, lens, { extractor: extractor || (cell => cell.data) });
     }
 }
