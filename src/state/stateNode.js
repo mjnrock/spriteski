@@ -9,8 +9,9 @@ import Mixer from "./../util/wip/Mixer";
 
 const StateNode = spawnStateNode({
     tessellator: new Tessellator(128, 128),
-    sequence: new Sequence(),
     collection: new Collection(),
+    
+    sequence: new Sequence(),
     mixer: new Mixer(),
 }, reducers, effects);
 

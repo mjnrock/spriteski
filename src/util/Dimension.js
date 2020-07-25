@@ -134,6 +134,19 @@ export default class Dimension extends EventEmitter {
         return cell === void 0 || cell === null;
     }
 
+    each(fn) {
+        if(typeof fn === "function") {            
+            const arr = [];
+            const lens = [];
+            for(let i = 0; i < this.cardinality; i++) {
+                arr.push(0);
+                lens.push(this.size[ i ]);
+            }
+
+            return this.dive(arr, lens, { extractor: fn });
+        }
+    }
+
     /**
      * The cardinality of @coords must be equal to this.cardinality (i.e. leaf-level only)
      */

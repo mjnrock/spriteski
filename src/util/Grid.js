@@ -26,10 +26,18 @@ export default class Grid extends Dimension {
     cell(x, y) {
         return this.cells[ x ][ y ];
     }
-    data(x, y) {
+    data(x, y, data) {
+        if(data !== void 0) {
+            this.cells[ x ][ y ].data = data;
+        }
+
         return this.cells[ x ][ y ].data;
     }
-    meta(x, y) {
+    meta(x, y, meta) {
+        if(meta !== void 0) {
+            this.cells[ x ][ y ].meta = meta;
+        }
+
         return this.cells[ x ][ y ].meta;
     }
 }

@@ -25,17 +25,9 @@ export default class Track {
     }
 
     get pixels() {
-        const obj = {
-            frame: {
-                width: (this.frames.get(0).columns * this.tile.width),
-                height: (this.frames.get(0).rows * this.tile.height),
-            }
-        };
-
         return {
-            ...obj,
-            width: this.frames.size * obj.frame.width,
-            height: obj.frame.height,
+            width: this.frames.size * this.tile.width,
+            height: this.tile.height,
         };
     }
 

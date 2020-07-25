@@ -1,25 +1,11 @@
 import { v4 as uuidv4 } from "uuid";
 import TwinMap from "../TwinMap";
-import Track from "./Track";
 
 export default class Mixer {
-    constructor({ tracks = [], weights = [], stack } = {}) {
+    constructor({ tracks = [] } = {}) {
         this.id = uuidv4();
 
-        this.stack = stack;
         this.tracks = new TwinMap(tracks);
-        this.weights = new Map();
-
-        if(tracks.length && weights.length && tracks.length === weights.length) {
-            for(let i = 0; i < tracks.length; i++ ) {
-                const track = tracks[ i ];
-                const weight = weights[ i ];
-
-                this.weights.set(track, weight);
-            }
-        } else if(!weights.length && tracks.length) {
-            throw new Error("Every track must has a weight, if you use weights.");
-        }
     }
 
     get pixels() {
@@ -47,57 +33,17 @@ export default class Mixer {
         };
     }
 
-    add(track, weight = 1) {
+    add(track) {
         this.tracks.add(track);
-        this.weights.set(track, weight);
 
         return this;
     }
     remove(input) {
         this.tracks.delete(input);
-
-        const trackOrIndex = this.tracks.get(input);
-        if(trackOrIndex instanceof Track) {
-            this.weights.delete(trackOrIndex);
-
-            return true;
-        } else if(input instanceof Track) {
-            this.weights.delete(input);
-
-            return true;
-        };
-
-        return false;
     }
     swap(input0, input1) {
         this.tracks.swap(input0, input1);
 
         return this;
-    }
-
-    reweigh(input, weight) {
-        if(typeof input === "function") {
-            for(let [ track, lbs ] of this.weights.entries()) {
-                const newWeight = Number.parseInt(input(track, lbs, ~~weight));
-
-                this.weights.set(track, Math.max(newWeight, 1));
-            }
-
-            return true;
-        } else {
-            const trackOrIndex = this.tracks.get(input);
-    
-            if(input instanceof Track) {
-                this.weights.set(input, ~~weight);
-    
-                return true;
-            } else if(trackOrIndex instanceof Track) {
-                this.weights.set(trackOrIndex, ~~weight);
-    
-                return true;
-            }
-        }
-
-        return false;
     }
 };

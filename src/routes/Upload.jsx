@@ -9,19 +9,21 @@ import UploadSpritesheet from "../components/UploadSpritesheet";
 import TessellationTabs from "../components/TessellationTabs";
 
 function Upload() {
-    const { node } = useNodeContext(Context);
-    const [ hasImage, setHasImage ] = useState(false);
+    const { node, state } = useNodeContext(Context);
+    const [ hasImage, setHasImage ] = useState(!!state.tessellator.image);
 
     function selectImage(image) {
-        node.dispatch(EnumMessageType.UPLOAD_IMAGE, image);
-        
-        setHasImage(!!image);
+        if(!!image) {
+            node.dispatch(EnumMessageType.UPLOAD_IMAGE, image);
+            
+            setHasImage(true);
+        }
     }
 
     return (
         <Fragment>
             <Segment color="blue">
-                <UploadSpritesheet onSelect={ selectImage } />
+                <UploadSpritesheet onSelect={ selectImage } image={ state.tessellator.image } />
             </Segment>
 
             {

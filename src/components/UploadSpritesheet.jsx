@@ -3,7 +3,7 @@ import { Button, Icon } from "semantic-ui-react";
 
 export default function UploadSpritesheet(props) {
     const photoRef = React.createRef();
-    const [ photo, setPhoto ] = useState();
+    const [ photo, setPhoto ] = useState(props.image);
 
     useEffect(() => {
         if(photo) {
