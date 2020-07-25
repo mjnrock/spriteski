@@ -2,7 +2,7 @@
 export default class TwinMap {
     constructor({ entries = [] } = {}) {
         this.entries = new Map();
-        this.indexes = new WeakMap();
+        this.indexes = new Map();
 
         for(let i = 0; i < entries.length; i++) {
             const entry = entries[ i ];
@@ -10,6 +10,17 @@ export default class TwinMap {
             this.entries.set(entry, i);
             this.indexes.set(i, entry);
         }
+    }
+
+    normalize() {
+        const entries = this.entries.entries().sort(([ e0, i0 ], [ e1, i1 ]) => i0 - i1);
+
+        this.entries = new Map();
+        this.indexes = new Map();
+        entries.forEach((entry, i) => {
+            this.entries.set(entry, i);
+            this.indexes.set(i, entry);
+        });
     }
 
     get size() {
@@ -30,6 +41,8 @@ export default class TwinMap {
         return index;
     }
     set(index, frame) {
+
+        console.log(index, frame)
         this.entries.set(frame, index);
         this.indexes.set(index, frame);
 
@@ -53,6 +66,8 @@ export default class TwinMap {
             this.entries.delete(i);
             this.indexes.delete(input);
         }
+
+        this.normalize();
 
         return this;
     }

@@ -1,13 +1,12 @@
 import { v4 as uuidv4 } from "uuid";
 import Base64 from "../Base64";
-import TwinMap from "./../TwinMap";
 import Frame from "../sequencer/Frame";
 
 export default class Track {
     constructor({ fps, frames = [], tw = 128, th = 128 } = {}) {
         this.id = uuidv4();
 
-        this.frames = new TwinMap(frames);
+        this.frames = new Map(frames);
         this.fps = fps;
 
         this.tile = {
@@ -21,7 +20,7 @@ export default class Track {
     }
 
     get duration() {
-        return this.frames.reduce((acc, frame) => acc + (this.fps * (1 / frame.duration)), 0) / this.fps * 1000;
+        return [ ...this.frames ].reduce((acc, frame) => acc + (this.fps * (1 / frame.duration)), 0) / this.fps * 1000;
     }
 
     get pixels() {
@@ -55,8 +54,28 @@ export default class Track {
     remove(input) {
         this.frames.delete(input);
     }
-    swap(input0, input1) {
-        this.frames.swap(input0, input1);
+
+    reorder(index, newIndex) {
+        let frames = [ ...this.frames ];
+        const [ frame ] = frames.splice(index, 1) || [];
+
+        if(frame) {
+            frames.splice(newIndex, 0, frame);
+
+            this.frames = new Set(frames);
+        }
+
+        return this;
+    }
+    swap(i0, i1) {
+        let frames = [ ...this.frames ];
+
+        const f0 = frames[ i0 ];
+        const f1 = frames[ i1 ];
+        frames[ i0 ] = f1;
+        frames[ i1 ] = f0;
+
+        this.frames = new Set(frames);
 
         return this;
     }

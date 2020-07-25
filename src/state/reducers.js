@@ -6,6 +6,9 @@ export const EnumMessageType = {
     TILE_TAG: "TILE_TAG",
 
     COLLECTION_TAG: "COLLECTION_TAG",
+
+    ADD_TRACK: "ADD_TRACK",
+    REORDER_TRACK: "SWAP_TRACK",
 };
 
 export const reducers = [
@@ -48,6 +51,25 @@ export const reducers = [
 
         state.collection.setTileTags(x, y, ...tags);
 
+        return state;
+    }],
+    [ EnumMessageType.ADD_TRACK, function(state, msg) {
+        state.mixer.newTrack();
+
+        return state;
+    }],
+    [ EnumMessageType.REORDER_TRACK, function(state, msg) {
+        const { left, right } = msg.payload || {};
+
+        state.mixer.reorder(left, right);
+
+        return state;
+    }],
+    [ EnumMessageType.ADD_FRAME, function(state, msg) {
+        const { track } = msg.payload || {};
+        
+        track.frames.set(Date.now(), { id: Date.now(), cat: 1 })
+        
         return state;
     }],
 ];

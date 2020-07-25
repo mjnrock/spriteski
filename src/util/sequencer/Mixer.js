@@ -1,11 +1,11 @@
 import { v4 as uuidv4 } from "uuid";
-import TwinMap from "../TwinMap";
+import Track from "./Track";
 
 export default class Mixer {
     constructor({ tracks = [] } = {}) {
         this.id = uuidv4();
 
-        this.tracks = new TwinMap(tracks);
+        this.tracks = new Set(tracks);
     }
 
     get pixels() {
@@ -33,16 +33,44 @@ export default class Mixer {
         };
     }
 
+    newTrack({ fps, frames = [], tw = 128, th = 128 } = {}) {
+        this.add(new Track({ fps, frames, tw, th }));
+
+        return this;
+    }
+
     add(track) {
         this.tracks.add(track);
 
         return this;
     }
-    remove(input) {
-        this.tracks.delete(input);
+    remove(track) {
+        this.tracks.delete(track);
+
+        return this;
     }
-    swap(input0, input1) {
-        this.tracks.swap(input0, input1);
+
+    reorder(index, newIndex) {
+        let tracks = [ ...this.tracks ];
+        const [ track ] = tracks.splice(index, 1) || [];
+
+        if(track) {
+            tracks.splice(newIndex, 0, track);
+
+            this.tracks = new Set(tracks);
+        }
+
+        return this;
+    }
+    swap(i0, i1) {
+        let tracks = [ ...this.tracks ];
+
+        const t0 = tracks[ i0 ];
+        const t1 = tracks[ i1 ];
+        tracks[ i0 ] = t1;
+        tracks[ i1 ] = t0;
+
+        this.tracks = new Set(tracks);
 
         return this;
     }
