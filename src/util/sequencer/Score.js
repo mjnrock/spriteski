@@ -1,56 +1,45 @@
-import Sequence from "./Sequence";
-
-//TODO Type 1: .run() sets the timestamp, and a .draw() retrieves the appropriate frame; a precalculated, "time difference array" determines which frame is appropriate based on the number of elapsed milliseconds ([ 200, 640, 350, 100, ... ])
-//TODO Type 2: .run() creates a .setTimeout self-invoking version, with controls ("play", "pause", etc.)
+import { v4 as uuidv4 } from "uuid";
+import Mixer from "./Mixer";
 
 export default class Score {
-    constructor(sequence) {
-        if(sequence instanceof Sequence) {
-            this.sequence = sequence;
-        } else if(Sequence.JsonConforms(sequence)) {
-            this.sequence = Sequence.Deserialize(sequence);
-        } else {
-            throw new Error("Score must be given a <Sequence>");
-        }
+    constructor(mixer, { weight = 1 } = {}) {
+        this.id = uuidv4();
+        
+        this.weight = weight;
 
-        this.startTime = null;
+        if(mixer instanceof Mixer) {
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
 
-        //TODO this.sequence MUST be bounced and printed to a private canvas at <Score> instantiation to relieve async issues and optimize calls
-    }
+            canvas.width = mixer.pixels.width;
+            canvas.height = mixer.pixels.height + mixer.pixels.track.height;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            mixer.tracks.each((track, row) => {
+                track.frames.each((frame, col) => {
+                    frame.each((kanvas, x, y) => {
+                        //  Bounced image
+                        ctx.drawImage(
+                            kanvas,
+                            (col * track.pixels.frame.width) + (x * track.tile.width),
+                            y * track.tile.height,
+                        );
 
-    /**
-     * @tile expects { x, y, width, height }
-     */
-    paint(canvas, { x, y, tile } = {}) {
-        //? This is kind of pseudo-code at time of writing
-        // if(canvas instanceof HTMLCanvasElement) {
-        //     const ctx = canvas.getContext("2d");
-        //     const frame = this.currentFrame;
+                        //  Original image
+                        ctx.drawImage(
+                            kanvas,
+                            (col * track.pixels.frame.width) + (x * track.tile.width),
+                            ((row + 1) * track.pixels.frame.height) + (y * track.tile.height),
+                        );
+                    });
+                });
+            });
 
-        //     if(x !== void 0 && y !== void 0) {
-        //         ctx.drawImage(frame, x, y);
-        //     } else if(tile.x !== void 0 && tile.y !== void 0) {
-        //         let cx = tile.x * tile.width,
-        //             cy = tile.y * tile.height;
-                    
-        //         ctx.drawImage(frame, cx, cy);
-        //     }
-        // }
-    }
-
-    get maxIndex() {
-        return this.sequence.frames.length - 1;
-    }
-    get duration() {
-        return this.startTime ? Date.now() - this.startTime : 0;
-    }
-
-    play() {
-        if(!this.startTime) {
-            this.startTime = Date.now();
+            this.source = canvas;
         }
     }
-    stop() {
-        this.startTime = null;
+
+    toImage(type = "image/png", quality = 1.0) {
+        return this.source.toDataURL(type, quality);
     }
-}
+};
