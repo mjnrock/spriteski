@@ -4,7 +4,7 @@ import { Segment, } from "semantic-ui-react";
 
 export default function Frame(props) {
     return (
-        <Segment tertiary>
+        <Segment tertiary style={{ marginBottom: 4 }}>
             { props.children }
         </Segment>
     );
