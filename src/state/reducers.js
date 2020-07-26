@@ -35,15 +35,9 @@ export const reducers = [
     [ EnumMessageType.UPDATE_TILES, function(state, msg) {
         const tiles = msg.payload || {};
 
-        const collection = state.collection;
-        
-        collection.tiles = tiles;
+        state.collection.tiles = tiles;
 
-        return {
-            ...state,
-            
-            collection
-        };
+        return state;
     }],
     [ EnumMessageType.TILE_SIZE, function(state, msg) {
         const { width, height } = msg.payload || {};

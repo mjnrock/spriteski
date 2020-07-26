@@ -41,12 +41,12 @@ export default function NavBar(props) {
             </Menu.Item>
             
             <Menu.Item as={ Link } to={ `/collection` } active={ pathname === "/collection" }>
-                <Icon name="images outline" />
+                <Icon name="object group outline" />
                 Collection
             </Menu.Item>
             
             <Menu.Item as={ Link } to={ `/sequencer` } active={ pathname === "/sequencer" }>
-                <Icon name="camera retro" />
+                <Icon name="play circle outline" />
                 Sequencer
             </Menu.Item>
         </Menu>
