@@ -7,6 +7,8 @@ export default function Frame(props) {
         <Segment tertiary style={{ marginBottom: 4 }}>
             <Icon name="content" { ...props.dragHandleProps } />
 
+            <img src={ props.frame.source } />
+
             { props.children }
         </Segment>
     );
