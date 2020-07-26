@@ -53,10 +53,19 @@ export default function Track(props) {
             </Menu>
             
             {/* <Droppable droppableId={ props.track.id } direction="horizontal"> //TODO Convert this to horizontal list */}
-            <Droppable droppableId={ props.track.id }>
+            <Droppable droppableId={ props.track.id } direction="horizontal">
                 { (provided, snapshot) => (
                     <div
                         ref={ provided.innerRef }
+                        style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            flexWrap: "nowrap",
+                            justifyContent: "flex-start",
+                            alignItems: "flex-start",
+                            // padding: "grid",
+                            // overflow: "auto",
+                        }}
                     >
                         { frames.map((frame, index) => (
                             <Draggable
@@ -68,7 +77,7 @@ export default function Track(props) {
                                         ref={ provided.innerRef }
                                         { ...provided.draggableProps }
                                     >
-                                        <Frame frame={ frame } dragHandleProps={ provided.dragHandleProps }>{ frame.id }</Frame>                                            
+                                        <Frame frame={ frame } fps={ 16 } height={ 128 } width={ 128 } dragHandleProps={ provided.dragHandleProps }>{ frame.id }</Frame>                                            
                                     </div>
                                 ) }
                             </Draggable>

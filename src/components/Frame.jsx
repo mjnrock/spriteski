@@ -1,15 +1,71 @@
 /* eslint-disable */
-import React from "react";
-import { Segment, Icon } from "semantic-ui-react";
+import React, { useState } from "react";
+import { Icon } from "semantic-ui-react";
+
+//TODO The mouse events need to be put at window, so the MouseNode should take over the event processing
+//  The current "frame" needs to be kept in context state then, to abstract the mouse events
+//TODO Create "Sequencer" class that holds a Mixer and a Collection and facilitates creation/modification and bakes out Scores and Compositions
+//  Frame.jsx should dispatch a "Hover Start" and "Hover Finish" event to programmtically dictact the "current frame" (i.e. to which the resize should be applied)
 
 export default function Frame(props) {
-    return (
-        <Segment tertiary style={{ marginBottom: 4 }}>
-            <Icon name="content" { ...props.dragHandleProps } />
+    const [ pos, setPos ] = useState({
+        x: null,
+        y: null,
+        width: null,
+    });
+    const [ width, setWidth ] = useState(props.width);
 
-            <img src={ props.frame.source } />
+    function onDragStart(e) {
+        setPos({
+            x: e.clientX,
+            y: e.clientY,
+            width: width,
+        });
+    }
+    function onDrag(e) {
+        if(pos.x !== null && pos.y !== null) {
+            const w = pos.width + Math.floor((e.clientX - pos.x) / props.fps) * props.fps;
+    
+            setWidth(w);
+        }
+    }
+    function onDragEnd(e) {
+        setPos({
+            x: null,
+            y: null,
+            width: null,
+        });
+    }
+
+    return (
+        <div
+            onMouseDown={ onDragStart }
+            onMouseMove={ onDrag }
+            onMouseUp={ onDragEnd }
+            style={{
+                marginBottom: 4,
+                width: width,
+            }}
+        >
+            <div style={{
+                backgroundColor: "rgba(0, 0, 0, 0.05)",
+                border: "1px solid #000",
+                borderRadius: 6,
+            }}>
+                <Icon name="content" { ...props.dragHandleProps } />
+            </div>
+
+            <div style={{
+                height: props.height,
+                width: props.width,
+                border: "1px solid rgba(0, 0, 0, 0.15)",
+                borderRadius: 6,
+            }}>
+
+                <img src={ props.frame.source } />
+            </div>
 
             { props.children }
-        </Segment>
+        </div>
     );
 }
