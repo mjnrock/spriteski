@@ -40,32 +40,31 @@ export default function Track(props) {
                 <Button onClick={ () => node.dispatch(EnumMessageType.ADD_FRAME, { track: props.track }) }>Add Frame</Button>
             </Segment>
             
-            {/* <DragDropContext onDragEnd={ onDragEnd }> */}
-                <Droppable droppableId={ props.track.id }>
-                    { (provided, snapshot) => (
-                        <div
-                            ref={ provided.innerRef }
-                        >
-                            { frames.map((frame, index) => { console.log(frame.id); return (
-                                <Draggable
-                                    key={ frame.id }
-                                    draggableId={ frame.id }
-                                    index={ index }>
-                                    { (provided, snapshot) => (
-                                        <div
-                                            ref={ provided.innerRef }
-                                            { ...provided.draggableProps }
-                                        >
-                                            <Frame frame={ frame } dragHandleProps={ provided.dragHandleProps }>{ frame.id }</Frame>                                            
-                                        </div>
-                                    ) }
-                                </Draggable>
-                            )}) }
-                            { provided.placeholder }
-                        </div>
-                    ) }
-                </Droppable>
-            {/* </DragDropContext> */}
+            {/* <Droppable droppableId={ props.track.id } direction="horizontal"> //TODO Convert this to horizontal list */}
+            <Droppable droppableId={ props.track.id }>
+                { (provided, snapshot) => (
+                    <div
+                        ref={ provided.innerRef }
+                    >
+                        { frames.map((frame, index) => (
+                            <Draggable
+                                key={ frame.id }
+                                draggableId={ frame.id }
+                                index={ index }>
+                                { (provided, snapshot) => (
+                                    <div
+                                        ref={ provided.innerRef }
+                                        { ...provided.draggableProps }
+                                    >
+                                        <Frame frame={ frame } dragHandleProps={ provided.dragHandleProps }>{ frame.id }</Frame>                                            
+                                    </div>
+                                ) }
+                            </Draggable>
+                        )) }
+                        { provided.placeholder }
+                    </div>
+                ) }
+            </Droppable>
 
             { props.children }
         </Segment>
