@@ -1,13 +1,11 @@
 /* eslint-disable */
 import React, { useEffect } from "react";
-import { Segment, Tab } from "semantic-ui-react";
+import { Tab } from "semantic-ui-react";
 import { useNodeContext } from "@lespantsfancy/hive/lib/react";
 
 import { Context } from "../App";
 import PannableContainer from "./PannableContainer";
-import TileSelectionGrid from "./TileSelectionGrid";
 import TileSizeMenu from "../components/TileSizeMenu";
-import CollectionTagEntry from "../components/CollectionTagEntry";
 import DataDisplay from "../components/TileImageDetail";
 
 export default function TessellationTabs(props) {
@@ -44,19 +42,9 @@ export default function TessellationTabs(props) {
             menuItem: "Detail",
             render: () => (
                 <Tab.Pane textAlign="center">
-                    <CollectionTagEntry />
-
                     <TileSizeMenu />
                         
                     <DataDisplay />
-                </Tab.Pane>
-            ),
-        },
-        {
-            menuItem: "Collection",
-            render: () => (
-                <Tab.Pane textAlign="center">
-                    <TileSelectionGrid />
                 </Tab.Pane>
             ),
         },

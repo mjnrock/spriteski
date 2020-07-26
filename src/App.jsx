@@ -30,6 +30,9 @@ export default function App() {
                             <Route path="/sequencer">
                                 <Routes.Sequencer />
                             </Route>
+                            <Route path="/collection">
+                                <Routes.Collection />
+                            </Route>
                             <Route path="/upload">
                                 <Routes.Upload />
                             </Route>

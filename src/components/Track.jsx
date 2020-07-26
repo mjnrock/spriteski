@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React from "react";
-import { Segment, Button, Icon } from "semantic-ui-react";
+import { Segment, Button, Icon, Menu } from "semantic-ui-react";
 import { useNodeContext } from "@lespantsfancy/hive/lib/react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
@@ -34,11 +34,23 @@ export default function Track(props) {
 
     return (
         <Segment secondary style={{ marginBottom: 8 }}>
-            <Icon name="content" { ...props.dragHandleProps } />
-            
-            <Segment>
-                <Button onClick={ () => node.dispatch(EnumMessageType.ADD_FRAME, { track: props.track }) }>Add Frame</Button>
-            </Segment>
+            <Menu secondary>
+                <Menu.Item>
+                    <Icon color="grey" name="content" { ...props.dragHandleProps } />
+                </Menu.Item>
+                <Menu.Item>
+                    <Button icon labelPosition="left" onClick={ () => node.dispatch(EnumMessageType.ADD_FRAME, { track: props.track }) }>
+                        <Icon name="add" />
+                        Add Frame
+                    </Button>
+                </Menu.Item>
+                
+                <Menu.Menu position="right">
+                    <Menu.Item>
+                        <Icon name="x" color="grey" style={{ cursor: "pointer" }} />
+                    </Menu.Item>
+                </Menu.Menu>
+            </Menu>
             
             {/* <Droppable droppableId={ props.track.id } direction="horizontal"> //TODO Convert this to horizontal list */}
             <Droppable droppableId={ props.track.id }>

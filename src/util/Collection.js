@@ -4,6 +4,14 @@ export default class Collection {
         this.tags = tags;
     }
 
+    get size() {
+        if(Array.isArray(this.tiles)) {
+            return this.tiles.length;
+        }
+
+        return Object.keys(this.tiles).length;
+    }
+
     get(x, y) {
         return this.tiles[ `${ x }.${ y }` ];
     }

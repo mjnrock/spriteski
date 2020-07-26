@@ -40,6 +40,11 @@ export default function NavBar(props) {
                 Upload
             </Menu.Item>
             
+            <Menu.Item as={ Link } to={ `/collection` } active={ pathname === "/collection" }>
+                <Icon name="images outline" />
+                Collection
+            </Menu.Item>
+            
             <Menu.Item as={ Link } to={ `/sequencer` } active={ pathname === "/sequencer" }>
                 <Icon name="camera retro" />
                 Sequencer
