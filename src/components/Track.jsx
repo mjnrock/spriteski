@@ -55,9 +55,8 @@ export default function Track(props) {
                                         <div
                                             ref={ provided.innerRef }
                                             { ...provided.draggableProps }
-                                            { ...provided.dragHandleProps }
                                         >
-                                            <Frame frame={ frame }>{ frame.id }</Frame>                                            
+                                            <Frame frame={ frame } dragHandleProps={ provided.dragHandleProps }>{ frame.id }</Frame>                                            
                                         </div>
                                     ) }
                                 </Draggable>
