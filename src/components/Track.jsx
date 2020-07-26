@@ -11,22 +11,26 @@ import Frame from "./Frame";
 export default function Track(props) {
     const { node, state } = useNodeContext(Context);
 
-    function onDragEnd(result) {
-        const { source, destination } = result;
+    // function onDragEnd(result) {
+    //     const { source, destination } = result;
 
-        if(!destination) {
-            return;
-        }
+    //     if(!destination) {
+    //         return;
+    //     }
 
-        if(source.droppableId === destination.droppableId) {
-            // node.dispatch(EnumMessageType.REORDER_TRACK, {
-            //     left: source.index,
-            //     right: destination.index,
-            // });
-        } else {
-            //  Different droppable
-        }
-    }
+    //     if(source.droppableId === destination.droppableId) {
+    //         node.dispatch(EnumMessageType.REORDER_FRAME, {
+    //             track: props.track,
+    //             left: source.index,
+    //             right: destination.index,
+    //         });
+    //     } else {
+    //         //  Different droppable
+    //     }
+    // }
+
+
+    const frames = [ ...props.track.frames.values() ] || [];
 
     return (
         <Segment secondary style={{ marginBottom: 8 }}>
@@ -36,13 +40,13 @@ export default function Track(props) {
                 <Button onClick={ () => node.dispatch(EnumMessageType.ADD_FRAME, { track: props.track }) }>Add Frame</Button>
             </Segment>
             
-            <DragDropContext onDragEnd={ onDragEnd }>
+            {/* <DragDropContext onDragEnd={ onDragEnd }> */}
                 <Droppable droppableId={ props.track.id }>
                     { (provided, snapshot) => (
                         <div
                             ref={ provided.innerRef }
                         >
-                            { [ ...((props.track || {}).frames || []) ].map((frame, index) => (
+                            { frames.map((frame, index) => { console.log(frame.id); return (
                                 <Draggable
                                     key={ frame.id }
                                     draggableId={ frame.id }
@@ -53,16 +57,16 @@ export default function Track(props) {
                                             { ...provided.draggableProps }
                                             { ...provided.dragHandleProps }
                                         >
-                                            <Frame frame={ frame }>{ JSON.stringify(frame, null, 2) }</Frame>                                            
+                                            <Frame frame={ frame }>{ frame.id }</Frame>                                            
                                         </div>
                                     ) }
                                 </Draggable>
-                            )) }
+                            )}) }
                             { provided.placeholder }
                         </div>
                     ) }
                 </Droppable>
-            </DragDropContext>
+            {/* </DragDropContext> */}
 
             { props.children }
         </Segment>

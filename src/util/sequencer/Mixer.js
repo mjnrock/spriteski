@@ -5,7 +5,7 @@ export default class Mixer {
     constructor({ tracks = [] } = {}) {
         this.id = uuidv4();
 
-        this.tracks = new Set(tracks);
+        this.tracks = new Map(tracks);
     }
 
     get pixels() {
@@ -39,8 +39,14 @@ export default class Mixer {
         return this;
     }
 
+    get(index) {
+        return [ ...this.tracks.values() ][ index ];
+    }
+
     add(track) {
-        this.tracks.add(track);
+        if(track instanceof Track) {
+            this.tracks.set(track.id, track);
+        }
 
         return this;
     }
@@ -51,27 +57,31 @@ export default class Mixer {
     }
 
     reorder(index, newIndex) {
-        let tracks = [ ...this.tracks ];
+        let tracks = [ ...this.tracks.entries() ];
         const [ track ] = tracks.splice(index, 1) || [];
 
         if(track) {
             tracks.splice(newIndex, 0, track);
 
-            this.tracks = new Set(tracks);
+            this.tracks = new Map(tracks);
         }
 
         return this;
     }
     swap(i0, i1) {
-        let tracks = [ ...this.tracks ];
+        let tracks = [ ...this.tracks.entries() ];
 
         const t0 = tracks[ i0 ];
         const t1 = tracks[ i1 ];
         tracks[ i0 ] = t1;
         tracks[ i1 ] = t0;
 
-        this.tracks = new Set(tracks);
+        this.tracks = new Map(tracks);
 
         return this;
+    }
+
+    getTrackById(id) {
+        return [ ...this.tracks.values() ].reduce((a, track) => (track.id === id ? track : null) || a);
     }
 };

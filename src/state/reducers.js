@@ -1,3 +1,5 @@
+import Frame from "./../util/sequencer/Frame";
+
 export const EnumMessageType = {
     UPLOAD_IMAGE: "UPLOAD_IMAGE",
 
@@ -8,7 +10,11 @@ export const EnumMessageType = {
     COLLECTION_TAG: "COLLECTION_TAG",
 
     ADD_TRACK: "ADD_TRACK",
-    REORDER_TRACK: "SWAP_TRACK",
+    REORDER_TRACK: "REORDER_TRACK",
+
+    ADD_FRAME: "ADD_FRAME",
+    REORDER_FRAME: "REORDER_FRAME",
+    RETRACK_FRAME: "RETRACK_FRAME",
 };
 
 export const reducers = [
@@ -68,8 +74,27 @@ export const reducers = [
     [ EnumMessageType.ADD_FRAME, function(state, msg) {
         const { track } = msg.payload || {};
         
-        track.frames.set(Date.now(), { id: Date.now(), cat: 1 })
+        const frame = new Frame();
+        track.frames.set(frame.id, frame);
         
+        return state;
+    }],
+    [ EnumMessageType.REORDER_FRAME, function(state, msg) {
+        const { track, left, right } = msg.payload || {};
+
+        if(track) {
+            track.reorder(left, right);
+        }
+
+        return state;
+    }],
+    [ EnumMessageType.RETRACK_FRAME, function(state, msg) {
+        const { frame, from, to, index } = msg.payload || {};
+
+        if(from && to) {
+            from.sendToTrack(frame, to, index);
+        }
+
         return state;
     }],
 ];
