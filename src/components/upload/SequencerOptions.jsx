@@ -64,7 +64,7 @@ function SequencerOptions() {
                                                 value: v,
                                             }))
                                         }
-                                        defaultValue={ state.config.options[ key ][ 0 ] }
+                                        defaultValue={ state.config.first(key) }
                                     />
                                 );
                             } else if(typeof value === "object") {
