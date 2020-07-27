@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from "uuid";
 
 //? "Filters" are expected to give fn(elapsedTime, frame, ...args)
 export default class Frame {
-    constructor({ duration = 1, source, filters } = {}) {
+    constructor({ duration = 1, source, filters = [] } = {}) {
         this.id = uuidv4();
         
         this._source = source;

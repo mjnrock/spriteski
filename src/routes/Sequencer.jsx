@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React from "react";
-import { Segment, Button } from "semantic-ui-react";
+import { Segment, Button, Icon } from "semantic-ui-react";
 import { useNodeContext } from "@lespantsfancy/hive/lib/react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 

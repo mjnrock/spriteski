@@ -35,3 +35,16 @@ div.ui.slider-value > input {
     background: #1678C2;
     cursor: pointer;
 }
+
+
+
+.frame-resizer {
+    display: inline-block;
+    background: #ccc;
+    border: 1px solid #000;
+    text-align: center;
+    overflow: hidden;
+    position: relative;
+    border-radius: 4px;
+    margin-right: 2px;
+}

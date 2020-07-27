@@ -2,6 +2,8 @@
 import React, { useState } from "react";
 import { Icon } from "semantic-ui-react";
 
+import { ResizableBox } from 'react-resizable';
+
 //TODO The mouse events need to be put at window, so the MouseNode should take over the event processing
 //  The current "frame" needs to be kept in context state then, to abstract the mouse events
 //TODO Create "Sequencer" class that holds a Mixer and a Collection and facilitates creation/modification and bakes out Scores and Compositions
@@ -10,64 +12,52 @@ import { Icon } from "semantic-ui-react";
 //TODO Visually make the "base unit" minimum width be 1/2 of the tile width, while the max should be 2x the tile width, via a desginated "zoom" slider (e.g. 1 unit = 1/8 note, 1/2 note, etc.)
 
 export default function Frame(props) {
-    const [ pos, setPos ] = useState({
-        x: null,
-        y: null,
-        width: null,
-    });
-    const [ width, setWidth ] = useState(props.width);
+    const [ duration, setDuration ] = useState([ (props.frame.duration / props.fps) * 512, 136 ]);
 
-    function onDragStart(e) {
-        setPos({
-            x: e.clientX,
-            y: e.clientY,
-            width: width,
-        });
-    }
-    function onDrag(e) {
-        if(pos.x !== null && pos.y !== null) {
-            const w = pos.width + Math.floor((e.clientX - pos.x) / props.fps) * props.fps;
-    
-            setWidth(w);
-        }
-    }
-    function onDragEnd(e) {
-        setPos({
-            x: null,
-            y: null,
-            width: null,
-        });
-    }
+    console.log(duration);
 
     return (
-        <div
-            onMouseDown={ onDragStart }
-            onMouseMove={ onDrag }
-            onMouseUp={ onDragEnd }
-            style={{
-                marginBottom: 4,
-                width: width,
-            }}
+        <ResizableBox
+            className="frame-resizer"
+            axis="x"
+            width={ (props.frame.duration / props.fps) * 512 }
+            height={ 136 }
+            minConstraints={ [ 512 / props.fps, 136 ]}
+            maxConstraints={ [ 512, 136 ]}
+            handle={
+                <Icon
+                    name="ellipsis vertical"                
+                    color="grey"
+                    style={ {
+                        position: "absolute",
+                        top: "50%",
+                        right: -4,
+                        marginTop: -4,
+                        cursor: "ew-resize",
+                    } }
+                />
+            }
+            handleSize={ [ 8, 8 ] }
+            draggableOpts={{ grid: [ 512 / props.fps, 512 / props.fps ] }}
+            onResize={ (e, { size }) => setDuration(size.width / (512 / props.fps)) }
         >
-            <div style={{
-                backgroundColor: "rgba(0, 0, 0, 0.05)",
-                border: "1px solid #000",
-                borderRadius: 6,
-            }}>
-                <Icon name="content" { ...props.dragHandleProps } />
-            </div>
+            <Icon
+                name="content"
+                color="grey"
+                style={ {
+                        position: "absolute",
+                        top: "50%",
+                        left: 4,
+                        marginTop: -4,
+                    } }
+                { ...props.dragHandleProps }
+            />
 
-            <div style={{
-                height: props.height,
-                width: props.width,
-                border: "1px solid rgba(0, 0, 0, 0.15)",
-                borderRadius: 6,
-            }}>
-
-                <img src={ props.frame.source } />
-            </div>
-
-            { props.children }
-        </div>
+            <img 
+                width={ 128 }
+                height={ 128 }
+                src={ props.frame.source }
+            />
+        </ResizableBox>
     );
 }
