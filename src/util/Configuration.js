@@ -5,7 +5,8 @@ export const EnumEventType = {
 };
 
 /**
- * ! A basic assumption of this class is that ALL Options should be ONLY [] or {}
+ * ! A basic assumption of this class is that ALL Options should be ONLY [] or {}, as any normal situation should have more than 1 choice
+ * If a configuration setting only has 1 option, wrap it in an array (e.g. 1 = [ 1 ])
  * [] will be treated as singular entry systems (i.e. key = index, value = arr[ index ])
  * {} will be trated as key-value pair systems (i.e. key = key, value = obj[ key ])
  */
