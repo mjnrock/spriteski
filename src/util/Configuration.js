@@ -26,19 +26,64 @@ export default class Configuration extends EventEmitter {
         }
     }
 
-    isValid(option, key) {
+    isValidKey(option, key) {
         const entries = this.options[ option ] || [];
 
         if(entries.length) {
-            const choice = entries.reduce((a, v, i) => {
+            const falsey = (value) => ({
+                __value: value,
+            });
+
+            let choice = entries.reduce((a, v, i) => {
                 if(typeof v === "object" && (typeof key === "string" || key instanceof String)) {
-                    return (v[ key ] !== void 0 ? v[ key ] : void 0) || a;
+                    const entry = v[ key ];
+                    if(entry === 0 || entry === false) {
+                        return (entry !== void 0 ? falsey(entry) : void 0) || a;
+                    }
+
+                    return (entry !== void 0 ? entry : void 0) || a;
+                }
+
+                if(v === 0 || v === false) {
+                    return (key === i ? falsey(v) : void 0) || a;
                 }
 
                 return (key === i ? v : void 0) || a;
-            });
+            }, void 0);
 
             if(choice !== void 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    isValidValue(option, value) {
+        const entries = this.options[ option ] || [];
+
+        if(entries.length) {
+            let key;
+            const choice = entries.reduce((a, v, i) => {
+                if(typeof v === "object") {
+                    const k = Object.keys(v)[ 0 ];
+
+                    if(v[ k ] === value) {
+                        key = k;
+    
+                        return v[ k ];
+                    }
+                } else {
+                    if(v === value) {
+                        key = i;    
+    
+                        return v;
+                    }
+                }
+
+                return a;
+            }, void 0);
+
+            if(choice !== void 0 && key !== void 0) {
                 return true;
             }
         }
@@ -111,7 +156,6 @@ export default class Configuration extends EventEmitter {
 
         return false;
     }
-
     setByValue(option, value, { suppress = false } = {}) {
         const entries = this.options[ option ] || [];
 
