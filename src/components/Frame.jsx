@@ -28,29 +28,40 @@ export default function Frame(props) {
                 <Icon
                     name="ellipsis vertical"                
                     color="grey"
-                    style={ {
+                    style={{
                         position: "absolute",
                         top: "50%",
                         right: -4,
                         marginTop: -4,
                         cursor: "ew-resize",
-                    } }
+                    }}
                 />
             }
             handleSize={ [ 8, 8 ] }
             draggableOpts={{ grid: [ 512 / props.fps, 512 / props.fps ] }}
             onResize={ (e, { size }) => setDuration(size.width / (512 / props.fps)) }
-        >
+            >
             <Icon
                 name="content"
                 color="grey"
-                style={ {
-                        position: "absolute",
-                        top: "50%",
-                        left: 4,
-                        marginTop: -4,
-                    } }
+                style={{
+                    position: "absolute",
+                    top: "50%",
+                    left: 4,
+                    marginTop: -4,
+                }}
                 { ...props.dragHandleProps }
+            />
+            
+            <Icon
+                name="x"
+                color="grey"
+                style={{
+                    position: "absolute",
+                    top: -2,
+                    right: -4,
+                    cursor: "pointer",
+                }}
             />
 
             <img 

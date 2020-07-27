@@ -21,9 +21,14 @@ export default function Track(props) {
                     <Icon color="grey" name="content" { ...props.dragHandleProps } />
                 </Menu.Item>
                 <Menu.Item>
-                    <Button icon labelPosition="left" onClick={ () => node.dispatch(EnumMessageType.ADD_FRAME, { track: props.track }) }>
+                    <Button icon onClick={ () => node.dispatch(EnumMessageType.ADD_FRAME, { track: props.track }) }>
                         <Icon name="add" />
-                        Add Frame
+                        <span style={{ marginLeft: 10 }}>Add Frame</span>      
+                    </Button>
+
+                    <Button icon color="red" inverted onClick={ () => node.dispatch(EnumMessageType.ADD_FRAME, { track: props.track }) }>
+                        <Icon name="minus" />
+                        <span style={{ marginLeft: 10 }}>Remove Frame</span>                        
                     </Button>
                 </Menu.Item>
 
