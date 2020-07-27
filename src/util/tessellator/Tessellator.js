@@ -12,8 +12,12 @@ export default class Tessellator {
         };
 
         if(source) {
-            this.from(source);
+            this.copyFrom(source);
         }
+    }
+
+    get hash() {
+        return this.tileCanvas.hash;
     }
 
     tile(tx, ty, txEnd, tyEnd) {
@@ -36,23 +40,17 @@ export default class Tessellator {
             width: this.config.width,
             height: this.config.height
         });
-
-        this.tessellate();
     }
 
     setImage(img) {
         if(img instanceof HTMLImageElement) {
             this.image = img;
-
-            this.redrawTiles();
         }
     }
 
     resize(width, height) {
         this.config.width = width;
         this.config.height = height;
-
-        this.redrawTiles();
     }
 
     copyFrom(input, { type = "image/png", quality = 1.0 } = {}) {

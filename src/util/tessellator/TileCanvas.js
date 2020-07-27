@@ -1,3 +1,5 @@
+import crypto from "crypto";
+
 import Base64 from "../Base64";
 import Tile from "./Tile";
 
@@ -17,8 +19,16 @@ export default class TileCanvas {
             Base64.Decode(source).then(canvas => {
                 this.canvas = canvas;
                 this.ctx = this.canvas.getContext("2d");
+
+                this.rehash();
             });
         }
+
+        this.rehash();
+    }
+
+    rehash() {
+        this.hash = crypto.createHash("md5").update(this.canvas.toDataURL()).digest("hex");
     }
 
     resize(width, height) {
@@ -37,6 +47,8 @@ export default class TileCanvas {
             if(Number.isInteger(width) && Number.isInteger(height)) {
                 this.resize(width, height);
             }
+
+            this.rehash();
         }
     }
 
@@ -49,6 +61,8 @@ export default class TileCanvas {
                 if(Number.isInteger(width) && Number.isInteger(height)) {
                     this.resize(width, height);
                 }
+
+                this.rehash();
             });
         });
     }
@@ -62,6 +76,9 @@ export default class TileCanvas {
         } else {
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         }
+
+        this._resetFrameCanvas();
+        this.rehash();
     }
     _resetFrameCanvas(width, height) {
         if(Number.isInteger(width) && Number.isInteger(height)) {

@@ -1,14 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, Fragment } from "react";
 import { Segment, Header, Button } from "semantic-ui-react";
 import { useNodeContext } from "@lespantsfancy/hive/lib/react";
 
-import { Context } from "../App";
-import { EnumMessageType } from "./../state/reducers";
-import Slider from "./Slider";
+import { Context } from "./../../App";
+import { EnumMessageType } from "./../../state/reducers";
+import Slider from "./../Slider";
 
 function TileSizeMenu() {
     const { node, state } = useNodeContext(Context);
-
     const [ isCustomTileSize, setIsCustomTileSize ] = useState(false);
 
     function makeButtons() {
@@ -49,24 +48,10 @@ function TileSizeMenu() {
     }
 
     return (
-        <Segment color="blue">
+        <Fragment>
             <Header as="h4" color="grey" textAlign="center">
                 <Header.Content>Tile Dimensions</Header.Content>
             </Header>
-
-            {/* //TODO WIP */}
-            {/* <Segment basic>
-                <input
-                    type="color"
-                    value={ state.config.tileLineColor }
-                    onChange={ console.log }
-                />
-                <Button onClick={ e => dispatch({
-                    type: EnumMessageType.TOGGLE_TILE_LINES
-                })}>
-                    <Icon name={ state.config.showTileLines ? "hide" : "unhide" } />
-                </Button>
-            </Segment> */}
 
             <Button.Group fluid>
                 {
@@ -83,12 +68,12 @@ function TileSizeMenu() {
             {
                 isCustomTileSize ? (
                     <Segment basic>
-                        <Slider label={ <span className="input-label">Tile Width</span> } min={ 1 } max={ 512 } value={ state.tessellator.config.width } onChange={ value => setTileSize(value, state.tessellator.config.height) } />
-                        <Slider label={ <span className="input-label">Tile Height</span> } min={ 1 } max={ 512 } value={ state.tessellator.config.height } onChange={ value => setTileSize(state.tessellator.config.width, value) } />
+                        <Slider label={ <span className="input-label">Tile Width</span> } min={ 1 } max={ 8192 } value={ state.tessellator.config.width } onChange={ value => setTileSize(value, state.tessellator.config.height) } />
+                        <Slider label={ <span className="input-label">Tile Height</span> } min={ 1 } max={ 8192 } value={ state.tessellator.config.height } onChange={ value => setTileSize(state.tessellator.config.width, value) } />
                     </Segment>
                 ) : null
             }
-        </Segment>
+        </Fragment>
     );
 }
 

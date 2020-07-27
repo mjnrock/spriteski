@@ -20,6 +20,10 @@ export default function PannableContainer(props) {
             }}
             onMouseUp={ e => {
                 setIsDown(false); 
+                setStart({
+                    x: 0,
+                    y: 0,
+                });
             }}
             onMouseMove={ e => {
                 if(isDown && e.buttons === 1) {

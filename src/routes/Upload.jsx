@@ -1,16 +1,32 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { Segment } from "semantic-ui-react";
 import { useNodeContext } from "@lespantsfancy/hive/lib/react";
 
 import { Context } from "../App";
 import { EnumMessageType } from "./../state/reducers";
 
-import UploadSpritesheet from "../components/UploadSpritesheet";
-import TessellationTabs from "../components/TessellationTabs";
+import UploadImageFile from "../components/UploadImageFile";
+import PannableContainer from "./../components/PannableContainer";
+
+import UploadComponents from "./../components/upload/package";
 
 function Upload() {
     const { node, state } = useNodeContext(Context);
-    const [ hasImage, setHasImage ] = useState(!!state.tessellator.image);
+    const [ hasImage, setHasImage ] = useState();
+    const canvasRef = React.createRef();
+
+    useEffect(() => {        
+        const canvas = canvasRef.current;
+
+        if(canvas && hasImage) {
+            const ctx = canvas.getContext("2d");
+    
+            canvas.width = state.tessellator.image.width;
+            canvas.height = state.tessellator.image.height;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(state.tessellator.image, 0, 0);
+        }
+    });
 
     function selectImage(image) {
         if(!!image) {
@@ -20,21 +36,37 @@ function Upload() {
         }
     }
 
+    // if(!hasImage) {
+    //     return (
+    //         <Fragment>
+    //             <Segment color="blue">
+    //                 <UploadImageFile onSelect={ selectImage } text="Select Spritesheet" />
+    //             </Segment>
+    //         </Fragment>
+    //     );
+    // }
+    
     return (
         <Fragment>
-            <Segment color="blue">
-                <UploadSpritesheet onSelect={ selectImage } image={ state.tessellator.image } />
+            <Segment color="blue" textAlign="center">
+                <PannableContainer>
+                    <canvas ref={ canvasRef } style={{ margin: "auto" }} />
+                </PannableContainer>
+
+                <UploadImageFile onSelect={ selectImage } text="Change Spritesheet" buttonProps={{ color: "red" }} />
             </Segment>
 
-            {
-                hasImage ? (
-                    <Fragment>
-                        <Segment color="blue">
-                            <TessellationTabs />
-                        </Segment>
-                    </Fragment>
-                ) : null
-            }
+            <Segment color="blue">
+                <UploadComponents.TileSizeMenu />
+            </Segment>
+
+            <Segment color="blue">
+                <UploadComponents.SequencerAlgorithms />
+            </Segment>
+
+            <Segment color="blue">
+                <UploadComponents.SequencerOptions />
+            </Segment>
         </Fragment>
     );
 }
