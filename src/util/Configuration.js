@@ -104,10 +104,12 @@ export default class Configuration extends EventEmitter {
                         current: this.state[ option ],
                     });
                 }
+
+                return true;
             }
         }
 
-        return this;
+        return false;
     }
 
     setByValue(option, value, { suppress = false } = {}) {
@@ -146,7 +148,11 @@ export default class Configuration extends EventEmitter {
                         current: this.state[ option ],
                     });
                 }
+
+                return true;
             }
         }
+
+        return false;
     }
 }
