@@ -5,7 +5,7 @@ import { useNodeContext } from "@lespantsfancy/hive/lib/react";
 import { Context } from "../../App";
 
 function ALG_EntityState(collection, opts = {}) {
-
+    return true;
 }
 
 function SequencerAlgorithms() {
@@ -23,13 +23,13 @@ function SequencerAlgorithms() {
                 <Form.Dropdown
                     label="Algorithms"
                     placeholder="Choose an algorithm..."
-                    options={[
-                        {
-                            key: "Entity.State",
-                            text: "Entity.State",
-                            value: ALG_EntityState,
-                        }
-                    ]}
+                    // options={[
+                    //     {
+                    //         key: "Entity.State",
+                    //         text: "Entity.State",
+                    //         value: ALG_EntityState,
+                    //     }
+                    // ]}
                 />
 
                 <Modal
