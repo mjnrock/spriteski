@@ -4,6 +4,11 @@ export const EnumEventType = {
     UPDATE: "Configuration.Update",
 };
 
+/**
+ * ! A basic assumption of this class is that ALL Options should be ONLY [] or {}
+ * [] will be treated as singular entry systems (i.e. key = index, value = arr[ index ])
+ * {} will be trated as key-value pair systems (i.e. key = key, value = obj[ key ])
+ */
 export default class Configuration extends EventEmitter {
     constructor(options, { state = {}, defaultsByKey = {}, defaultsByValue = {} } = {}) {
         super();

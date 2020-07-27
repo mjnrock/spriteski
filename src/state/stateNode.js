@@ -4,13 +4,13 @@ import { effects } from "./effects";
 
 import Tessellator from "./../util/tessellator/Tessellator";
 import TileCollection from "../util/TileCollection";
-import Mixer from "../util/sequencer/Mixer";
+import Sequencer from "../util/sequencer/Sequencer";
 import Configuration, { EnumEventType as EnumConfigEventType } from "./../util/Configuration";
 
 const StateNode = spawnStateNode({
     tessellator: new Tessellator(128, 128),
     collection: new TileCollection(),
-    mixer: new Mixer(),
+    sequencer: new Sequencer(),
     config: new Configuration({
         DirectionCount: [ 1, 4, 8 ],
         FirstRowDirection: {
