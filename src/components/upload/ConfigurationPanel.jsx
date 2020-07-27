@@ -67,6 +67,8 @@ function ConfigurationPanel() {
                                 />
                             );
                         }
+
+                        return null;
                     })
                 }
             </Form.Group>

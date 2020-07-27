@@ -1,4 +1,4 @@
-import Frame from "./../util/sequencer/Frame";
+// import Frame from "./../util/sequencer/Frame";
 
 export const EnumMessageType = {
     UPLOAD_IMAGE: "UPLOAD_IMAGE",

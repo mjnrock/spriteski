@@ -46,6 +46,7 @@ export default class Configuration extends EventEmitter {
             if(Array.isArray(entries)) {
                 return entries.indexOf(value) >= 0;
             } else {
+                // eslint-disable-next-line
                 for(let [ k, v ] of Object.entries(entries)) {
                     if(v === value) {
                         return true;

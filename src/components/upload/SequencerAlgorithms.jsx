@@ -4,9 +4,9 @@ import { useNodeContext } from "@lespantsfancy/hive/lib/react";
 
 import { Context } from "../../App";
 
-function ALG_EntityState(collection, opts = {}) {
-    return true;
-}
+// function ALG_EntityState(collection, opts = {}) {
+//     return true;
+// }
 
 function SequencerAlgorithms() {
     // eslint-disable-next-line
