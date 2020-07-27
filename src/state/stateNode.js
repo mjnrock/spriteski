@@ -23,7 +23,7 @@ const StateNode = spawnStateNode({
             "West [270°]": 270,
             "Northwest [315°]": 315,
         },
-        CounterClockwise: [ true, false ]
+        CounterClockwise: [ true, false ],
     }, {
         defaultsByKey: {
             FirstRowDirection: "Southeast [135°]",

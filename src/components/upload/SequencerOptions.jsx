@@ -34,7 +34,7 @@ function SequencerOptions() {
                                             key={ key }
                                             label={ key }
                                             checked={ !!state.config.value(key) }
-                                            onChange={ (e, { value }) => updateConfigByValue(key, value) }
+                                            onChange={ (e, { checked }) => updateConfigByValue(key, checked) }
                                         />
                                     );
                                 }
