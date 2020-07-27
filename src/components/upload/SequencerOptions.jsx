@@ -17,7 +17,7 @@ function SequencerOptions() {
             <Form>
                 <Form.Group>
                     {/* //TODO The options presented here should be seede from a higher abstraction so that the entire "options package" is stateable, with these as dispatches */}
-                    <Form.Dropdown
+                    {/* <Form.Dropdown
                         label="DirectionCount"
                         labeled={ true }
                         options={[
@@ -42,7 +42,60 @@ function SequencerOptions() {
                         ]}
                         defaultValue={ 0 }
                     />
-                    <Form.Checkbox label="CounterClockwise" />
+                    <Form.Checkbox label="CounterClockwise" /> */}
+                    {
+                        Object.entries(state.config.options).map(([ key, value ]) => {
+                            if(Array.isArray(value)) {
+                                if(value.length === 2 && value.every(v => typeof v === "boolean")) {
+                                    return (
+                                        <Form.Checkbox key={ key } label={ key } defaultChecked={ !!value[ 1 ] } onChange={ console.log } />
+                                    );
+                                }
+
+                                return (
+                                    <Form.Dropdown
+                                        key={ key }
+                                        label={ key }
+                                        labeled={ true }
+                                        options={
+                                            value.map((v, i) => {
+                                                if(typeof v === "object") {
+                                                    return {
+                                                        key: Object.keys(v)[ 0 ],
+                                                        text: Object.keys(v)[ 0 ],
+                                                        value: v,
+                                                    }
+                                                }
+                
+                                                return {
+                                                    key: i,
+                                                    text: v,
+                                                    value: v,
+                                                }
+                                            })
+                                        }
+                                        defaultValue={ state.config.options[ key ][ 0 ] }
+                                    />
+                                );
+                            } else if(typeof value === "object") {
+                                return (
+                                    <Form.Dropdown
+                                        key={ key }
+                                        label={ key }
+                                        labeled={ true }
+                                        options={
+                                            Object.entries(value).map(([ k, v ]) => ({
+                                                key: k,
+                                                text: k,
+                                                value: v,
+                                            }))
+                                        }
+                                        defaultValue={ state.config.first(key)[ 1 ] }
+                                    />
+                                );
+                            }
+                        })
+                    }
                 </Form.Group>
             </Form>
         </Fragment>

@@ -25,29 +25,34 @@ export default class Configuration extends EventEmitter {
     }
 
     isValidKey(option, key) {
-        const entries = this.options[ option ] || [];
+        let entries = this.options[ option ];
 
-        if(entries.length) {
+        if(entries) {
             const falsey = (value) => ({
                 __value: value,
             });
 
-            let choice = entries.reduce((a, v, i) => {
-                if(typeof v === "object" && (typeof key === "string" || key instanceof String)) {
-                    const entry = v[ key ];
-                    if(entry === 0 || entry === false) {
-                        return (entry !== void 0 ? falsey(entry) : void 0) || a;
+            let choice;
+            if(!Array.isArray(entries) && typeof entries === "object") {
+                choice = entries[ key ];
+            } else {
+                choice = entries.reduce((a, v, i) => {
+                    if(typeof v === "object" && (typeof key === "string" || key instanceof String)) {
+                        const entry = v[ key ];
+                        if(entry === 0 || entry === false) {
+                            return (entry !== void 0 ? falsey(entry) : void 0) || a;
+                        }
+    
+                        return (entry !== void 0 ? entry : void 0) || a;
                     }
-
-                    return (entry !== void 0 ? entry : void 0) || a;
-                }
-
-                if(v === 0 || v === false) {
-                    return (key === i ? falsey(v) : void 0) || a;
-                }
-
-                return (key === i ? v : void 0) || a;
-            }, void 0);
+    
+                    if(v === 0 || v === false) {
+                        return (key === i ? falsey(v) : void 0) || a;
+                    }
+    
+                    return (key === i ? v : void 0) || a;
+                }, void 0);
+            }
 
             if(choice !== void 0) {
                 return true;
@@ -57,11 +62,17 @@ export default class Configuration extends EventEmitter {
         return false;
     }
     isValidValue(option, value) {
-        const entries = this.options[ option ] || [];
+        let entries = this.options[ option ];
 
-        if(entries.length) {
+        if(entries) {
+            if(!Array.isArray(entries) && typeof entries === "object") {
+                entries = Object.entries(entries).map(([ k, v ]) => ({
+                    [ k ]: v,
+                }));
+            }
+            
             let key;
-            const choice = entries.reduce((a, v, i) => {
+            let choice = entries.reduce((a, v, i) => {
                 if(typeof v === "object") {
                     const k = Object.keys(v)[ 0 ];
 
@@ -110,31 +121,54 @@ export default class Configuration extends EventEmitter {
     choices(option) {
         return this.options[ option ];
     }
+    first(option) {
+        const entry = this.options[ option ];
+
+        if(Array.isArray(entry)) {
+            return entry[ 0 ];
+        } else if(typeof entry === "object") {
+            return Object.entries(entry)[ 0 ];
+        }
+    }
+    last(option) {
+        const entry = this.options[ option ];
+
+        if(Array.isArray(entry)) {
+            return entry[ entry.length - 1 ];
+        } else if(typeof entry === "object") {
+            return Object.entries(entry)[ entry.length - 1 ];
+        }
+    }
 
     setByKey(option, key, { suppress = false } = {}) {
-        const entries = this.options[ option ] || [];
+        let entries = this.options[ option ];
 
-        if(entries.length) {
+        if(entries) {
             const falsey = (value) => ({
                 __value: value,
             });
 
-            let choice = entries.reduce((a, v, i) => {
-                if(typeof v === "object" && (typeof key === "string" || key instanceof String)) {
-                    const entry = v[ key ];
-                    if(entry === 0 || entry === false) {
-                        return (entry !== void 0 ? falsey(entry) : void 0) || a;
+            let choice;
+            if(!Array.isArray(entries) && typeof entries === "object") {
+                choice = entries[ key ];
+            } else {
+                choice = entries.reduce((a, v, i) => {
+                    if(typeof v === "object" && (typeof key === "string" || key instanceof String)) {
+                        const entry = v[ key ];
+                        if(entry === 0 || entry === false) {
+                            return (entry !== void 0 ? falsey(entry) : void 0) || a;
+                        }
+    
+                        return (entry !== void 0 ? entry : void 0) || a;
                     }
-
-                    return (entry !== void 0 ? entry : void 0) || a;
-                }
-
-                if(v === 0 || v === false) {
-                    return (key === i ? falsey(v) : void 0) || a;
-                }
-
-                return (key === i ? v : void 0) || a;
-            }, void 0);
+    
+                    if(v === 0 || v === false) {
+                        return (key === i ? falsey(v) : void 0) || a;
+                    }
+    
+                    return (key === i ? v : void 0) || a;
+                }, void 0);
+            }
 
             if(choice !== void 0) {
                 const oldValue = this.state[ option ];
@@ -161,11 +195,17 @@ export default class Configuration extends EventEmitter {
         return false;
     }
     setByValue(option, value, { suppress = false } = {}) {
-        const entries = this.options[ option ] || [];
+        let entries = this.options[ option ];
 
-        if(entries.length) {
+        if(entries) {
+            if(!Array.isArray(entries) && typeof entries === "object") {
+                entries = Object.entries(entries).map(([ k, v ]) => ({
+                    [ k ]: v,
+                }));
+            }
+            
             let key;
-            const choice = entries.reduce((a, v, i) => {
+            let choice = entries.reduce((a, v, i) => {
                 if(typeof v === "object") {
                     const k = Object.keys(v)[ 0 ];
 
@@ -207,7 +247,6 @@ export default class Configuration extends EventEmitter {
     }
 
 
-    
 
     toObject() {
         return JSON.parse(JSON.stringify(this));

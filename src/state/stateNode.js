@@ -13,16 +13,16 @@ const StateNode = spawnStateNode({
     mixer: new Mixer(),
     config: new Configuration({
         DirectionCount: [ 1, 4, 8 ],
-        FirstRowDirection: [
-            { "North [0°]": 0 },
-            { "Northeast [45°]": 45 },
-            { "East [90°]": 90 },
-            { "Southeast [135°]": 135 },
-            { "South [180°]": 180 },
-            { "Southwest [225°]": 225 },
-            { "West [270°]": 270 },
-            { "Northwest [315°]": 315 },
-        ],
+        FirstRowDirection: {
+            "North [0°]": 0,
+            "Northeast [45°]": 45,
+            "East [90°]": 90,
+            "Southeast [135°]": 135,
+            "South [180°]": 180,
+            "Southwest [225°]": 225,
+            "West [270°]": 270,
+            "Northwest [315°]": 315,
+        },
         CounterClockwise: [ true, false ]
     }, {
         defaultsByKey: {
@@ -34,8 +34,8 @@ const StateNode = spawnStateNode({
     }),
 }, reducers, effects);
 
-StateNode.state.config.on(EnumConfigEventType.UPDATE, console.log)
-console.log(StateNode.state.config.setByKey("DirectionCount", 2));          //ASSERT: true (key=2 is a valid option)
-console.log(StateNode.state.config.setByValue("CounterClockwise", 19));     //ASSERT: false (value=19 is not a valid option)
+// StateNode.state.config.on(EnumConfigEventType.UPDATE, console.log)
+// console.log(StateNode.state.config.setByKey("DirectionCount", 2));          //ASSERT: true (key=2 is a valid option)
+// console.log(StateNode.state.config.setByValue("CounterClockwise", 19));     //ASSERT: false (value=19 is not a valid option)
 
 export default StateNode;
