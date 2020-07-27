@@ -1,10 +1,10 @@
 import React, { Fragment } from "react";
-import { Form, Header } from "semantic-ui-react";
+import { Header } from "semantic-ui-react";
 import { useNodeContext } from "@lespantsfancy/hive/lib/react";
 
 import { Context } from "../../App";
 import { EnumMessageType } from "./../../state/reducers";
-import ConfigurationPanel from "./../ConfigurationPanel";
+import ConfigurationPanel from "./ConfigurationPanel";
 
 function SequencerOptions() {
     // eslint-disable-next-line

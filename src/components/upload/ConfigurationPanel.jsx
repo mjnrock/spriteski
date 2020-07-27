@@ -2,8 +2,8 @@ import React from "react";
 import { Form } from "semantic-ui-react";
 import { useNodeContext } from "@lespantsfancy/hive/lib/react";
 
-import { Context } from "../App";
-import { EnumMessageType } from "./../state/reducers";
+import { Context } from "../../App";
+import { EnumMessageType } from "./../../state/reducers";
 
 function ConfigurationPanel() {
     const { node, state } = useNodeContext(Context);
