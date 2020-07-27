@@ -29,13 +29,13 @@ const StateNode = spawnStateNode({
             FirstRowDirection: "Southeast [135°]",
         },
         defaultsByValue: {
+            DirectionCount: 8,
             CounterClockwise: false,
         }
     }),
 }, reducers, effects);
 
-// StateNode.state.config.on(EnumConfigEventType.UPDATE, console.log)
-// console.log(StateNode.state.config.setByKey("DirectionCount", 2));          //ASSERT: true (key=2 is a valid option)
-// console.log(StateNode.state.config.setByValue("CounterClockwise", 19));     //ASSERT: false (value=19 is not a valid option)
+//  STUB
+StateNode.state.config.on(EnumConfigEventType.UPDATE, console.log)
 
 export default StateNode;

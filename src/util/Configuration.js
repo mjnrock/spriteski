@@ -140,6 +140,15 @@ export default class Configuration extends EventEmitter {
         }
     }
 
+    set(method, option, input, { suppress = false } = {}) {
+        if(method === "key") {
+            return this.setByKey(option, input, { suppress });
+        } else if(method === "value") {
+            return this.setByValue(option, input, { suppress });
+        }
+
+        return false;
+    }
     setByKey(option, key, { suppress = false } = {}) {
         let entries = this.options[ option ];
 

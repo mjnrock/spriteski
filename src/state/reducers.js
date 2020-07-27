@@ -2,26 +2,34 @@ import Frame from "./../util/sequencer/Frame";
 
 export const EnumMessageType = {
     UPLOAD_IMAGE: "UPLOAD_IMAGE",
-
-    UPDATE_TILES: "UPDATE_TILES",
     TILE_SIZE: "TILE_SIZE",
-    TILE_TAG: "TILE_TAG",
+    UPDATE_CONFIGURATION: "UPDATE_CONFIGURATION",
 
-    COLLECTION_TAG: "COLLECTION_TAG",
+    // UPDATE_TILES: "UPDATE_TILES",
+    // TILE_TAG: "TILE_TAG",
 
-    ADD_TRACK: "ADD_TRACK",
-    REORDER_TRACK: "REORDER_TRACK",
+    // COLLECTION_TAG: "COLLECTION_TAG",
 
-    ADD_FRAME: "ADD_FRAME",
-    REORDER_FRAME: "REORDER_FRAME",
-    RETRACK_FRAME: "RETRACK_FRAME",
+    // ADD_TRACK: "ADD_TRACK",
+    // REORDER_TRACK: "REORDER_TRACK",
+
+    // ADD_FRAME: "ADD_FRAME",
+    // REORDER_FRAME: "REORDER_FRAME",
+    // RETRACK_FRAME: "RETRACK_FRAME",
 };
 
 export const reducers = [
     [ EnumMessageType.UPLOAD_IMAGE, function(state, msg) {
         const data = msg.payload || {};
         
-        this.state.tessellator.setImage(data);
+        state.tessellator.setImage(data);
+
+        return state;
+    }],
+    [ EnumMessageType.UPDATE_CONFIGURATION, function(state, msg) {
+        const { method, option, input } = msg.payload || {};
+        
+        state.config.set(method, option, input);
 
         return state;
     }],
