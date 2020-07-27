@@ -58,21 +58,11 @@ function SequencerOptions() {
                                         label={ key }
                                         labeled={ true }
                                         options={
-                                            value.map((v, i) => {
-                                                if(typeof v === "object") {
-                                                    return {
-                                                        key: Object.keys(v)[ 0 ],
-                                                        text: Object.keys(v)[ 0 ],
-                                                        value: v,
-                                                    }
-                                                }
-                
-                                                return {
-                                                    key: i,
-                                                    text: v,
-                                                    value: v,
-                                                }
-                                            })
+                                            value.map((v, i) => ({
+                                                key: i,
+                                                text: v,
+                                                value: v,
+                                            }))
                                         }
                                         defaultValue={ state.config.options[ key ][ 0 ] }
                                     />
