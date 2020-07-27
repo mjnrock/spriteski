@@ -1,4 +1,4 @@
-export default class Collection {
+export default class TileCollection {
     constructor(tiles = [], { tags = [] } = {}) {
         this.tiles = tiles;
         this.tags = tags;

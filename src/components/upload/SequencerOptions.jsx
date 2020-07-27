@@ -18,7 +18,7 @@ function SequencerOptions() {
                 <Form.Group>
                     {/* //TODO The options presented here should be seede from a higher abstraction so that the entire "options package" is stateable, with these as dispatches */}
                     <Form.Dropdown
-                        label="Directions"
+                        label="DirectionCount"
                         labeled={ true }
                         options={[
                             { key: 1, text: "One [1]", value: 1 },
@@ -28,7 +28,7 @@ function SequencerOptions() {
                         defaultValue={ 8 }
                     />
                     <Form.Dropdown
-                        label="Start Direction"
+                        label="FirstRowDirection"
                         labeled={ true }
                         options={[
                             { key: 0, text: "North [0°]", value: 0 },
@@ -42,7 +42,7 @@ function SequencerOptions() {
                         ]}
                         defaultValue={ 0 }
                     />
-                    <Form.Checkbox label="Counter Clockwise" />
+                    <Form.Checkbox label="CounterClockwise" />
                 </Form.Group>
             </Form>
         </Fragment>

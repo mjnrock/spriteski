@@ -38,7 +38,7 @@ function SequencerAlgorithms() {
                     onClose={ () => setModalOpen(false) }
                     trigger={(
                         <Button onClick={ e => setModalOpen(true) }>
-                            <Icon name="edit outline" /> Edit
+                            <Icon name="code" /> Modify Algorithm
                         </Button>
                     )}
                 >
@@ -60,7 +60,7 @@ function SequencerAlgorithms() {
                 </Modal>
 
                 <Button color="blue">
-                    <Icon name="grid layout" /> Tessellate
+                    <Icon name="film" /> Create Sequence
                 </Button>
             </Form>
         </Fragment>
