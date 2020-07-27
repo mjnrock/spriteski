@@ -26,15 +26,17 @@ const StateNode = spawnStateNode({
             ],
             CounterClockwise: [ true, false ]
         },
-        state: {
+        defaultsByKey: {
             FirstRowDirection: "Southeast [135°]",
-            CounterClockwise: 1,    //STUB  This won't assign properly until Configuration.set is updated, due to falsiness reasons
+        },
+        defaultsByValue: {
+            CounterClockwise: false,
         }
     }),
 }, reducers, effects);
 
-StateNode.state.config.set("DirectionCount", 2);
-// StateNode.state.config.set("FirstRowDirection", "Northeast [45°]");
+StateNode.state.config.setByKey("DirectionCount", 2);
+// StateNode.state.config.setByValue("CounterClockwise", false);
 console.log(StateNode.state.config)
 console.log(StateNode.state.config.state)
 

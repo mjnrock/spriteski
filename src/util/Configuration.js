@@ -9,15 +9,17 @@ export default class Configuration extends EventEmitter {
     /**
      * @state expects { option: optionsKey, ... } construction
      */
-    constructor({ options, state = {} } = {}) {
+    constructor({ options, defaultsByKey = {}, defaultsByValue = {} } = {}) {
         super();
 
         this.state = {};
         this.options = options;
 
         for(let option in this.options) {
-            if(option in state) {
-                this.set(option, state[ option ], { suppress: true });
+            if(option in defaultsByKey) {
+                this.setByKey(option, defaultsByKey[ option ], { suppress: true });
+            } else if(option in defaultsByValue) {
+                this.setByValue(option, defaultsByValue[ option ], { suppress: true });
             } else {
                 this.state[ option ] = null;
             }
@@ -62,15 +64,26 @@ export default class Configuration extends EventEmitter {
         return this.state[ option ] || [];
     }
 
-    set(option, key, { suppress = false } = {}) {
+    setByKey(option, key, { suppress = false } = {}) {
         const entries = this.options[ option ] || [];
 
         if(entries.length) {
-            //TODO This shorthand doesn't work on Booleans, and probably all implicit booleans
-            const choice = entries.reduce((a, v, i) => {
-                console.log(option, key, i, key === i, v)
+            const falsey = (value) => ({
+                __value: value,
+            });
+
+            let choice = entries.reduce((a, v, i) => {
                 if(typeof v === "object" && (typeof key === "string" || key instanceof String)) {
-                    return (v[ key ] !== void 0 ? v[ key ] : void 0) || a;
+                    const entry = v[ key ];
+                    if(entry === 0 || entry === false) {
+                        return (entry !== void 0 ? falsey(entry) : void 0) || a;
+                    }
+
+                    return (entry !== void 0 ? entry : void 0) || a;
+                }
+
+                if(v === 0 || v === false) {
+                    return (key === i ? falsey(v) : void 0) || a;
                 }
 
                 return (key === i ? v : void 0) || a;
@@ -78,6 +91,10 @@ export default class Configuration extends EventEmitter {
 
             if(choice !== void 0) {
                 const oldValue = this.state[ option ];
+
+                if(typeof choice === "object" && "__value" in choice) {
+                    choice = choice.__value;
+                }
 
                 this.state[ option ] = [ key, choice ];
 
@@ -91,5 +108,45 @@ export default class Configuration extends EventEmitter {
         }
 
         return this;
+    }
+
+    setByValue(option, value, { suppress = false } = {}) {
+        const entries = this.options[ option ] || [];
+
+        if(entries.length) {
+            let key;
+            const choice = entries.reduce((a, v, i) => {
+                if(typeof v === "object") {
+                    const k = Object.keys(v)[ 0 ];
+
+                    if(v[ k ] === value) {
+                        key = k;
+    
+                        return v[ k ];
+                    }
+                } else {
+                    if(v === value) {
+                        key = i;    
+    
+                        return v;
+                    }
+                }
+
+                return a;
+            }, void 0);
+
+            if(choice !== void 0 && key !== void 0) {
+                const oldValue = this.state[ option ];
+
+                this.state[ option ] = [ key, choice ];
+
+                if(!suppress) {
+                    this.emit(EnumEventType.UPDATE, {
+                        previous: oldValue,
+                        current: this.state[ option ],
+                    });
+                }
+            }
+        }
     }
 }
