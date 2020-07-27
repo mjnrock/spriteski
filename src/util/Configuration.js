@@ -4,24 +4,22 @@ export const EnumEventType = {
     UPDATE: "Configuration.Update",
 };
 
-//TODO Expand this to utilize something similar to the PTO tags, but lighter weight
 export default class Configuration extends EventEmitter {
-    /**
-     * @state expects { option: optionsKey, ... } construction
-     */
-    constructor({ options, defaultsByKey = {}, defaultsByValue = {} } = {}) {
+    constructor(options, { state = {}, defaultsByKey = {}, defaultsByValue = {} } = {}) {
         super();
 
-        this.state = {};
+        this.state = state;
         this.options = options;
 
-        for(let option in this.options) {
-            if(option in defaultsByKey) {
-                this.setByKey(option, defaultsByKey[ option ], { suppress: true });
-            } else if(option in defaultsByValue) {
-                this.setByValue(option, defaultsByValue[ option ], { suppress: true });
-            } else {
-                this.state[ option ] = null;
+        if(!Object.keys(state).length) {
+            for(let option in this.options) {
+                if(option in defaultsByKey) {
+                    this.setByKey(option, defaultsByKey[ option ], { suppress: true });
+                } else if(option in defaultsByValue) {
+                    this.setByValue(option, defaultsByValue[ option ], { suppress: true });
+                } else {
+                    this.state[ option ] = null;
+                }
             }
         }
     }
@@ -149,6 +147,8 @@ export default class Configuration extends EventEmitter {
 
                 if(!suppress) {
                     this.emit(EnumEventType.UPDATE, {
+                        method: "key",
+                        args: [ ...arguments ],
                         previous: oldValue,
                         current: this.state[ option ],
                     });
@@ -192,6 +192,8 @@ export default class Configuration extends EventEmitter {
 
                 if(!suppress) {
                     this.emit(EnumEventType.UPDATE, {
+                        method: "value",
+                        args: [ ...arguments ],
                         previous: oldValue,
                         current: this.state[ option ],
                     });
@@ -202,5 +204,55 @@ export default class Configuration extends EventEmitter {
         }
 
         return false;
+    }
+
+
+    
+
+    toObject() {
+        return JSON.parse(JSON.stringify(this));
+    }
+    toJson(beautify = false) {
+        if(beautify === true) {
+            return JSON.stringify(this, null, 2);
+        }
+
+        return JSON.stringify(this);
+    }
+
+    static FromJson(json) {
+        let obj = json;
+
+        while(typeof obj === "string" || obj instanceof String) {
+            obj = JSON.parse(obj);
+        }
+
+        return new Configuration(obj.options, {
+            state: obj.state,
+        });
+    }
+
+    toData({ flag = "both" } = {}) {
+        if(flag === "both") {
+            return this.state;
+        }
+
+        let obj = {};
+
+        for(let option in this.state) {
+            if(flag === "keys") {
+                obj[ option ] = this.state[ option ][ 0 ];
+            } else {
+                obj[ option ] = this.state[ option ][ 1 ];
+            }
+        }
+
+        return obj;
+    }
+    toKeys() {
+        return this.toData({ flag: "keys" });
+    }
+    toValues() {
+        return this.toData({ flag: "values" });
     }
 }
