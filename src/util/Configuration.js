@@ -109,6 +109,10 @@ export default class Configuration extends EventEmitter {
         return this.state[ option ] || [];
     }
 
+    choices(option) {
+        return this.options[ option ];
+    }
+
     setByKey(option, key, { suppress = false } = {}) {
         const entries = this.options[ option ] || [];
 
