@@ -4,9 +4,9 @@ import { useNodeContext } from "@lespantsfancy/hive/lib/react";
 
 import { Context } from "../../App";
 
-// function ALG_EntityState(collection, opts = {}) {
-//     return true;
-// }
+function ALG_EntityState(collection, opts = {}) {
+    return true;
+}
 
 function SequencerAlgorithms() {
     // eslint-disable-next-line
@@ -20,18 +20,6 @@ function SequencerAlgorithms() {
             </Header>
 
             <Form>
-                <Form.Dropdown
-                    label="Algorithms"
-                    placeholder="Choose an algorithm..."
-                    // options={[
-                    //     {
-                    //         key: "Entity.State",
-                    //         text: "Entity.State",
-                    //         value: ALG_EntityState,
-                    //     }
-                    // ]}
-                />
-
                 <Modal
                     basic
                     open={ modalOpen }

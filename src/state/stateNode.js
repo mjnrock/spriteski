@@ -24,13 +24,17 @@ const StateNode = spawnStateNode({
             "Northwest [315°]": 315,
         },
         CounterClockwise: [ true, false ],
+        Algorithm: [
+            "Entity.State",
+        ]
     }, {
         defaultsByKey: {
-            FirstRowDirection: "Southeast [135°]",
+            FirstRowDirection: "North [0°]",
         },
         defaultsByValue: {
             DirectionCount: 8,
             CounterClockwise: false,
+            Algorithm: "Entity.State",
         }
     }),
 }, reducers, effects);
