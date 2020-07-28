@@ -25,5 +25,5 @@ export default class TypeMap extends Type {
     }
     
     //TODO  Use the native Map to replace this.options, and rework accessor functions to accommodate accordingly
-    //* The useage should feel like an Object, but opaquely utilize Map under the hood
+    //* The usage should feel like an Object, but opaquely utilize Map under the hood
 };
