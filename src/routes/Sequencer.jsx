@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React from "react";
-import { Segment, Button, Icon } from "semantic-ui-react";
+import { Segment, Button, Icon, Image } from "semantic-ui-react";
 import { useNodeContext } from "@lespantsfancy/hive/lib/react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
@@ -56,6 +56,25 @@ export default function Sequencer() {
         <Segment>
             <Segment>
                 <Button onClick={ () => node.dispatch(EnumMessageType.ADD_TRACK) }>New Track</Button>
+            </Segment>
+
+            <Segment textAlign="center" inverted>
+                <Image centered width={ 128 } height={ 128 } src="" />
+
+                <Button.Group icon style={{ marginTop: 8 }}>
+                    <Button basic inverted>
+                        <Icon name="step backward" />
+                    </Button>
+                    <Button basic inverted>
+                        <Icon name="play" />
+                    </Button>
+                    <Button basic inverted>
+                        <Icon name="stop" color="red" />
+                    </Button>
+                    <Button basic inverted>
+                        <Icon name="step forward" />
+                    </Button>
+                </Button.Group>
             </Segment>
 
             <DragDropContext onDragEnd={ onDragEnd }>

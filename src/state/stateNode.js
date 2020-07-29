@@ -28,7 +28,8 @@ const StateNode = spawnStateNode({
         FPS: Configuration.Seed.Number.Range(1, 60, 1),
         Algorithm: [
             "Entity.State",
-        ]
+        ],
+        TrackParadigm: [ "Z-Index", "Weighted Variation", "New Sequence" ]
     }, {
         defaultsByKey: {
             FirstRowDirection: "North [0°]",
@@ -38,6 +39,7 @@ const StateNode = spawnStateNode({
             CounterClockwise: false,
             Algorithm: "Entity.State",
             FPS: 16,
+            TrackParadigm: "Z-Index"
         }
     }),
 }, reducers, effects);

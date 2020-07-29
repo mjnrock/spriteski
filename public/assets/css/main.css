@@ -58,3 +58,7 @@ div.ui.slider-value > input {
     border-radius: 4px;
     margin-right: 2px;
 }
+
+div.input.text-center > input {
+    text-align: center;
+}
