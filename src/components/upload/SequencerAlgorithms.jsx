@@ -5,10 +5,6 @@ import { useNodeContext } from "@lespantsfancy/hive/lib/react";
 import { Context } from "../../App";
 import { EnumMessageType } from "./../../state/reducers";
 
-function ALG_EntityState(collection, opts = {}) {
-    return true;
-}
-
 function SequencerAlgorithms() {
     // eslint-disable-next-line
     const { node, state } = useNodeContext(Context);

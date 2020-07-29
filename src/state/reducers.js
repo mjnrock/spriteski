@@ -19,9 +19,13 @@ export const EnumMessageType = {
     // RETRACK_FRAME: "RETRACK_FRAME",
 };
 
+//TODO Eventually move this to whatever class becomes the "Sequencer facilitator" wrapper
 export const SequenceAlgorithms = {
     "Entity.State": (state, config) => {
-        console.log(state);
+        console.log(state, config);
+
+        //TODO Perform the calculations and send to the Sequence GUI
+        
     }
 }
 
@@ -41,8 +45,6 @@ export const reducers = [
         return state;
     }],
     [ EnumMessageType.AUTO_SEQUENCER, function(state, msg) {
-        const data = msg.payload || {};
-
         const fn = SequenceAlgorithms[ state.config.value("Algorithm") ];
 
         if(typeof fn === "function") {
