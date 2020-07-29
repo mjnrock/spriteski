@@ -4,13 +4,14 @@ import { effects } from "./effects";
 
 import Tessellator from "./../util/tessellator/Tessellator";
 import TileCollection from "../util/TileCollection";
-import Sequencer from "../util/sequencer/Sequencer";
+// // import Sequencer from "../util/sequencer/Sequencer";
+import Mixer from "../util/sequencer/Mixer";
 import Configuration, { EnumEventType as EnumConfigEventType } from "./../util/Configuration";
 
 const StateNode = spawnStateNode({
     tessellator: new Tessellator(128, 128),
     collection: new TileCollection(),
-    sequencer: new Sequencer(),
+    mixer: new Mixer(),
     config: new Configuration({
         DirectionCount: [ 1, 4, 8 ],
         FirstRowDirection: {
@@ -24,6 +25,7 @@ const StateNode = spawnStateNode({
             "Northwest [315°]": 315,
         },
         CounterClockwise: [ true, false ],
+        FPS: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30 ],
         Algorithm: [
             "Entity.State",
         ]
@@ -35,6 +37,7 @@ const StateNode = spawnStateNode({
             DirectionCount: 8,
             CounterClockwise: false,
             Algorithm: "Entity.State",
+            FPS: 16,
         }
     }),
 }, reducers, effects);

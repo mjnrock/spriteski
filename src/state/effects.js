@@ -1,11 +1,10 @@
-// import { EnumMessageType } from "./reducers";
+import { EnumMessageType } from "./reducers";
+import { history } from "./../App";
 
 export const effects = [
     function(state, msg) {
-        // if(msg.type === EnumMessageType.TILE_SIZE || msg.type === EnumMessageType.UPLOAD_IMAGE) {
-        //     this.state.tessellator.tessellate().then(tiles => {
-        //         this.dispatch(EnumMessageType.UPDATE_TILES, tiles);
-        //     });
-        // }
+        if(msg.type === EnumMessageType.AUTO_SEQUENCER_COMPLETE) {
+            history.push("/sequencer");
+        }
     }
 ];

@@ -27,6 +27,15 @@ export default class TileCanvas {
         this.rehash();
     }
 
+    get bounds() {
+        return {
+            x: 0,
+            y: 0,
+            w: this.canvas.width / this.width,
+            h: this.canvas.height / this.height,
+        };
+    }
+
     rehash() {
         this.hash = crypto.createHash("md5").update(this.canvas.toDataURL()).digest("hex");
     }

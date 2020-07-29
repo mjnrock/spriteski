@@ -20,6 +20,10 @@ export default class Tessellator {
         return this.tileCanvas.hash;
     }
 
+    get bounds() {
+        return this.tileCanvas.bounds;
+    }
+
     tile(tx, ty, txEnd, tyEnd) {
         return this.tileCanvas.get(tx, ty, txEnd, tyEnd);
     }
@@ -35,6 +39,10 @@ export default class Tessellator {
         return obj;
     }
 
+    get(tx, ty, tw = 1, th = 1) {
+        return this.tileCanvas.get(tx, ty, tw, th);
+    }
+
     redrawTiles() {
         this.tileCanvas.fromImage(this.image, {
             width: this.config.width,
@@ -45,6 +53,7 @@ export default class Tessellator {
     setImage(img) {
         if(img instanceof HTMLImageElement) {
             this.image = img;
+            this.redrawTiles();
         }
     }
 

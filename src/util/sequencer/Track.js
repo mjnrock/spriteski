@@ -47,7 +47,7 @@ export default class Track {
                 if(canvas instanceof HTMLCanvasElement) {
                     const frame = new Frame({
                         duration,
-                        source: canvas,
+                        source: canvas.toDataURL(),
                     });
 
                     this.frames.set(frame.id, frame);

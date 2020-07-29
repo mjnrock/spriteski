@@ -34,9 +34,11 @@ export default class Mixer {
     }
 
     newTrack({ fps, frames = [], tw = 128, th = 128 } = {}) {
-        this.add(new Track({ fps, frames, tw, th }));
+        const track = new Track({ fps, frames, tw, th });
 
-        return this;
+        this.add(track);
+
+        return track;
     }
 
     get(index) {

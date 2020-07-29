@@ -4,7 +4,8 @@ export const EnumMessageType = {
     UPLOAD_IMAGE: "UPLOAD_IMAGE",
     TILE_SIZE: "TILE_SIZE",
     UPDATE_CONFIGURATION: "UPDATE_CONFIGURATION",
-    AUTO_SEQUENCER: "AUTO_SEQUENCER",
+    AUTO_SEQUENCER_BEGIN: "AUTO_SEQUENCER_BEGIN",
+    AUTO_SEQUENCER_COMPLETE: "AUTO_SEQUENCER_COMPLETE",
 
     // UPDATE_TILES: "UPDATE_TILES",
     // TILE_TAG: "TILE_TAG",
@@ -21,11 +22,24 @@ export const EnumMessageType = {
 
 //TODO Eventually move this to whatever class becomes the "Sequencer facilitator" wrapper
 export const SequenceAlgorithms = {
-    "Entity.State": (state, config) => {
-        console.log(state, config);
-
+    "Entity.State": function(state, config) {
         //TODO Perform the calculations and send to the Sequence GUI
-        
+        state.tessellator.tessellate().then(tiles => {
+            state.collection.tiles = tiles;
+
+            const bounds = state.tessellator.bounds;
+            if(config.value("DirectionCount") === (bounds.y + bounds.h)) {
+                for(let i = bounds.y; i < bounds.h; i++) {
+                    const track = state.mixer.newTrack({ fps: config.value("FPS"), tw: state.tessellator.config.width, th: state.tessellator.config.height });
+
+                    for(let j = bounds.x; j < bounds.w; j++) {
+                        track.add(state.tessellator.get(j, i).toDataURL(), 4);  //  STUB:   4 is a test value, should be 1/FPS, but Sequencer.jsx is not built for syntax yet
+                    }
+                }
+            }
+
+            this.dispatch(EnumMessageType.AUTO_SEQUENCER_COMPLETE);
+        });
     }
 }
 
@@ -44,13 +58,16 @@ export const reducers = [
 
         return state;
     }],
-    [ EnumMessageType.AUTO_SEQUENCER, function(state, msg) {
+    [ EnumMessageType.AUTO_SEQUENCER_BEGIN, function(state, msg) {
         const fn = SequenceAlgorithms[ state.config.value("Algorithm") ];
 
         if(typeof fn === "function") {
-            fn(state, state.config);
+            fn.call(this, state, state.config);
         }
 
+        return state;
+    }],
+    [ EnumMessageType.AUTO_SEQUENCER_COMPLETE, function(state, msg) {
         return state;
     }],
     // [ EnumMessageType.COLLECTION_TAG, function(state, msg) {

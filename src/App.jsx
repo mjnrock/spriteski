@@ -4,6 +4,7 @@ import {
     Switch,
     Route,
 } from "react-router-dom";
+import { createBrowserHistory } from "history";
 import { Header, Segment } from "semantic-ui-react";
 
 import Routes from "./routes/package";
@@ -12,11 +13,13 @@ import NavBar from "./NavBar";
 
 import initStateNode from "./state/stateNode";
 
+export const history = createBrowserHistory();
+
 export const Context = React.createContext(initStateNode);
 
 export default function App() {
     return (
-        <Router>
+        <Router history={ history }>
             <ScrollToTop>
                 <Context.Provider value={{ node: initStateNode }}>
                     <Segment>

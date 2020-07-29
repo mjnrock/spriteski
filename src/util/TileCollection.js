@@ -4,6 +4,31 @@ export default class TileCollection {
         this.tags = tags;
     }
 
+    get bounds() {
+        const bounds = {
+            width: {
+                min: Number.MAX_SAFE_INTEGER,
+                max: Number.MIN_SAFE_INTEGER,
+            },
+            height: {
+                min: Number.MAX_SAFE_INTEGER,
+                max: Number.MIN_SAFE_INTEGER,
+            },
+        };
+
+        // eslint-disable-next-line
+        for(let [ key, tile ] of Object.entries(this.tiles)) {
+            const { x, y } = key.split(".").map(v => ~~v);
+
+            bounds.width.min = Math.min(bounds.width.min, x);
+            bounds.width.max = Math.max(bounds.width.max, x);
+            bounds.height.min = Math.min(bounds.height.min, y);
+            bounds.height.max = Math.max(bounds.height.max, y);
+        }
+
+        return bounds;
+    }
+
     get size() {
         if(Array.isArray(this.tiles)) {
             return this.tiles.length;

@@ -224,4 +224,22 @@ export default class Configuration extends EventEmitter {
     toValues() {
         return this.toData({ flag: "values" });
     }
+
+    static FromFile(path) {
+        new Promise((resolve, reject) => {
+            const fs = new FileReader();
+            
+            fs.addEventListener("load", function () {
+                try {
+                    const json = JSON.parse(fs.result);
+
+                    resolve(new Configuration(...json));
+                } catch(e) {
+                    reject(fs.result);
+                }
+            }, false);
+            
+            fs.readAsText(path);
+        });
+    }
 }

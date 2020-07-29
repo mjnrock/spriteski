@@ -44,7 +44,7 @@ function SequencerAlgorithms() {
                     </Modal.Actions>
                 </Modal>
 
-                <Button color="blue" onClick={ e => node.dispatch(EnumMessageType.AUTO_SEQUENCER) }>
+                <Button color="blue" onClick={ e => node.dispatch(EnumMessageType.AUTO_SEQUENCER_BEGIN) }>
                     <Icon name="film" /> Create Sequence
                 </Button>
             </Form>
