@@ -4,6 +4,7 @@ export const EnumMessageType = {
     UPLOAD_IMAGE: "UPLOAD_IMAGE",
     TILE_SIZE: "TILE_SIZE",
     UPDATE_CONFIGURATION: "UPDATE_CONFIGURATION",
+    AUTO_SEQUENCER: "AUTO_SEQUENCER",
 
     // UPDATE_TILES: "UPDATE_TILES",
     // TILE_TAG: "TILE_TAG",
@@ -18,6 +19,12 @@ export const EnumMessageType = {
     // RETRACK_FRAME: "RETRACK_FRAME",
 };
 
+export const SequenceAlgorithms = {
+    "Entity.State": (state, config) => {
+        console.log(state);
+    }
+}
+
 export const reducers = [
     [ EnumMessageType.UPLOAD_IMAGE, function(state, msg) {
         const data = msg.payload || {};
@@ -30,6 +37,17 @@ export const reducers = [
         const { method, option, input } = msg.payload || {};
         
         state.config.set(method, option, input);
+
+        return state;
+    }],
+    [ EnumMessageType.AUTO_SEQUENCER, function(state, msg) {
+        const data = msg.payload || {};
+
+        const fn = SequenceAlgorithms[ state.config.value("Algorithm") ];
+
+        if(typeof fn === "function") {
+            fn(state, state.config);
+        }
 
         return state;
     }],

@@ -3,6 +3,7 @@ import { Form, Header, Button, Icon, Modal, TextArea } from "semantic-ui-react";
 import { useNodeContext } from "@lespantsfancy/hive/lib/react";
 
 import { Context } from "../../App";
+import { EnumMessageType } from "./../../state/reducers";
 
 function ALG_EntityState(collection, opts = {}) {
     return true;
@@ -47,7 +48,7 @@ function SequencerAlgorithms() {
                     </Modal.Actions>
                 </Modal>
 
-                <Button color="blue">
+                <Button color="blue" onClick={ e => node.dispatch(EnumMessageType.AUTO_SEQUENCER) }>
                     <Icon name="film" /> Create Sequence
                 </Button>
             </Form>
