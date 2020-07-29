@@ -242,4 +242,42 @@ export default class Configuration extends EventEmitter {
             fs.readAsText(path);
         });
     }
+
+    static get Seed() {
+        return {
+            Dichotomy: () => {
+                return [ true, false ];
+            },
+            Number: {
+                Range: (min, max, step = 1) => {
+                    let arr = [];
+                    if(step > 0) {
+                        for(let i = min; i <= max; i += step) {
+                            arr.push(i);
+                        }
+                    } else {
+                        for(let i = max; i >= min; i += step) {
+                            arr.push(i);
+                        }
+                    }
+
+                    return arr;
+                },
+                PowerRange: (base, coef, cap) => {
+                    let arr = [];
+                    if(coef > 1) {
+                        for(let i = base; i <= cap; i *= coef) {
+                            arr.push(i);
+                        }
+                    } else {                        
+                        for(let i = base; i >= cap; i *= coef) {
+                            arr.push(i);
+                        }
+                    }
+
+                    return arr;
+                }
+            }
+        }
+    }
 }

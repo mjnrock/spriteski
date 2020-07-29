@@ -35,6 +35,7 @@ function ConfigurationPanel() {
 
                             return (
                                 <Form.Dropdown
+                                    scrolling
                                     key={ key }
                                     label={ key }
                                     labeled={ true }
@@ -52,6 +53,7 @@ function ConfigurationPanel() {
                         } else if(typeof value === "object") {
                             return (
                                 <Form.Dropdown
+                                    scrolling
                                     key={ key }
                                     label={ key }
                                     labeled={ true }
