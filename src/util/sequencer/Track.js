@@ -12,13 +12,13 @@ export const EnumEventType = {
 }
 
 export default class Track extends EventEmitter {
-    constructor({ fps = 16, frames = [], tw = 128, th = 128 } = {}) {
+    constructor({ fps = 24, frames = [], tw = 128, th = 128 } = {}) {
         super();
 
         this.id = uuidv4();
 
         this.frames = new Map(frames);
-        this.fps = fps;
+        this._fps = fps;
 
         this.tile = {
             width: tw,
@@ -34,7 +34,7 @@ export default class Track extends EventEmitter {
     }
 
     get duration() {
-        return [ ...this.frames.values() ].reduce((acc, frame) => acc + (this.fps * (1 / frame.duration)), 0) / this.fps * 1000;
+        return [ ...this.frames.values() ].reduce((acc, frame) => acc + (frame.duration / this.fps), 0) * 1000;
     }
 
     get pixels() {
@@ -42,6 +42,17 @@ export default class Track extends EventEmitter {
             width: this.frames.size * this.tile.width,
             height: this.tile.height,
         };
+    }
+
+    get fps() {
+        return this._fps;
+    }
+    set fps(fps) {
+        this.frames.forEach((frame) => {
+            frame.duration = Math.min(frame.duration, fps);
+        });
+
+        this._fps = fps;
     }
 
     resize(tw = 128, th = 128) {
@@ -127,6 +138,11 @@ export default class Track extends EventEmitter {
             frames.splice(newIndex, 0, frame);
 
             this.frames = new Map(frames);
+
+            console.log(this.index, index, newIndex)
+            if(index === this.index) {
+                this.index = newIndex;
+            }
         }
 
         return this;
@@ -155,6 +171,7 @@ export default class Track extends EventEmitter {
 
             if(typeof index === "number") {
                 track.reorder(track.frames.size - 1, index);
+                this.index = 0;
             }
         }
 

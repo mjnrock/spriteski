@@ -71,6 +71,17 @@ export default function Frame(props) {
                 }}
             />
 
+            <span
+                style={{
+                    color: color === "yellow" ? "#fbbd08" : "#767676",
+                    fontFamily: "monospace",
+                    position: "absolute",
+                    bottom: -2,
+                    right: 4,
+                    cursor: "pointer",
+                }}
+            >{ ~~props.frame.duration }</span>
+
             <img 
                 width={ 128 }
                 height={ 128 }
@@ -85,10 +96,10 @@ export default function Frame(props) {
 //     const { node } = useNodeContext(Context);
 //     const [ resize, setResize ] = useState(props.frame.duration);
 //     const [ duration, setDuration ] = useState(props.frame.duration);
-//     const [ color, setColor ] = useState(props.isSelected ? "green" : "grey");
+//     const [ color, setColor ] = useState(props.isSelected ? "yellow" : "grey");
 
 //     useEffect(() => {
-//         setColor(props.isSelected ? "green" : "grey");
+//         setColor(props.isSelected ? "yellow" : "grey");
 //     }, [ props.isSelected ]);
 
 //     useEffect(() => {
@@ -120,6 +131,7 @@ export default function Frame(props) {
 //             draggableOpts={{ grid: [ 512 / props.fps, 512 / props.fps ] }}
 //             onResize={ (e, { size }) => setResize(size.width / (512 / props.fps)) }
 //             onResizeStop={ (e, { size }) => setDuration(resize) }
+//             onMouseDown={ e => props.track.move(~~props.index) }
 //         >
 //             <Icon
 //                 name="content"
@@ -152,5 +164,5 @@ export default function Frame(props) {
 //         </ResizableBox>
 //     );
 // }, function comparator(prevProps, nextProps) {
-//     return prevProps.frame.source === nextProps.frame.source && prevProps.isSelected === prevProps.isSelected;
+//     return prevProps.frame.source === nextProps.frame.source && prevProps.isSelected === prevProps.isSelected && prevProps.index === prevProps.index;
 // });

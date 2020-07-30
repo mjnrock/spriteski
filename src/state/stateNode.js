@@ -38,7 +38,7 @@ const StateNode = spawnStateNode({
             DirectionCount: 8,
             CounterClockwise: false,
             Algorithm: "Entity.State",
-            FPS: 16,
+            FPS: 24,
             TrackParadigm: "Z-Index"
         }
     }),

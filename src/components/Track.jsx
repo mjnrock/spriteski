@@ -65,7 +65,8 @@ export default function Track(props) {
                             style={{ marginRight: 4 }}
                             onChange={ e => node.dispatch(EnumMessageType.UPDATE_TRACK_FPS, { track: props.track, fps: ~~e.target.value }) }
                         />
-                        <Input className="text-center" value={ "128 x 128" } type="type" icon="expand" iconPosition="left" readOnly />
+                        <Input className="text-center" value={ "128 x 128" } type="type" icon="expand" iconPosition="left" readOnly style={{ marginRight: 4 }} />
+                        <Input className="text-center" value={ props.track.duration.toLocaleString(void 0, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) } type="type" label="ms" labelPosition="right" readOnly style={{ marginRight: 4 }} />
                     </Grid.Column>
                     <Grid.Column width={ 1 }>
                         <Icon name="x" color="grey" style={ { cursor: "pointer" } } />
