@@ -1,9 +1,19 @@
+import EventEmitter from "events";
 import { v4 as uuidv4 } from "uuid";
 import Base64 from "../Base64";
 import Frame from "./Frame";
 
-export default class Track {
+export const EnumEventType = {
+    START: "Track.Start",
+    STOP: "Track.Stop",
+    NEXT: "Track.Next",
+    PREVIOUS: "Track.Previous",
+}
+
+export default class Track extends EventEmitter {
     constructor({ fps, frames = [], tw = 128, th = 128 } = {}) {
+        super();
+
         this.id = uuidv4();
 
         this.frames = new Map(frames);
@@ -13,6 +23,9 @@ export default class Track {
             width: tw,
             height: th,
         };
+
+        this.index = 0;
+        this.timeout = null;
     }
 
     get spf() {
@@ -37,6 +50,43 @@ export default class Track {
 
     get(index) {
         return [ ...this.frames.values() ][ index ];
+    }
+
+    get selected() {
+        return this.get(this.index);
+    }
+    next() {
+        this.index = this.index + 1 >= this.frames.size ? 0 : this.index + 1;
+
+        this.emit(EnumEventType.NEXT, this.index);
+
+        return this;
+    }
+    previous() {
+        this.index = this.index - 1 >= 0 ? this.index - 1 : this.frames.size - 1;
+
+        this.emit(EnumEventType.PREVIOUS, this.index);
+
+        return this;
+    }
+    start() {
+        this.stop();
+        this.timeout = setTimeout(() => {
+            this.next();
+            this.start();
+        }, 1000 * (this.selected.duration / this.fps));
+
+        this.emit(EnumEventType.START);
+
+        return this;
+    }
+    stop() {
+        clearTimeout(this.timeout);
+        this.timeout = null;
+
+        this.emit(EnumEventType.START);
+
+        return this;
     }
 
     add(input, duration) {

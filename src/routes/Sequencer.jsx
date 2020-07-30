@@ -50,7 +50,7 @@ export default function Sequencer() {
         }
     }
 
-    const tracks = [ ...state.mixer.tracks.values() ];
+    const tracks = Array(...state.mixer.tracks.values());
 
     return (
         <Segment>

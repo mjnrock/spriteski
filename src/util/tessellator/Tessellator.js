@@ -66,7 +66,7 @@ export default class Tessellator {
         return new Promise((resolve, reject) => {
             Base64.Decode(input).then(canvas => {
                 if(canvas instanceof HTMLCanvasElement) {
-                    this.tileCanvas.draw(canvas);
+                    this.tileCanvas.fromDecodable(canvas);
                     this.image = new Image();
                     this.image.src = canvas.toDataURL(type, quality);
 
