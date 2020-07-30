@@ -54,7 +54,17 @@ export default function Track(props) {
                             <span style={{ marginLeft: 10 }}>Remove Frame</span>                        
                         </Button>
                         
-                        <Input className="text-center" value={ 16 } type="number" min={ 1 } max={ 60 } icon="clock outline" iconPosition="left" style={{ marginRight: 4 }} />
+                        <Input
+                            className="text-center"
+                            value={ props.track.fps }
+                            type="number"
+                            min={ 1 }
+                            max={ 60 }
+                            icon="clock outline"
+                            iconPosition="left"
+                            style={{ marginRight: 4 }}
+                            onChange={ e => node.dispatch(EnumMessageType.UPDATE_TRACK_FPS, { track: props.track, fps: ~~e.target.value }) }
+                        />
                         <Input className="text-center" value={ "128 x 128" } type="type" icon="expand" iconPosition="left" readOnly />
                     </Grid.Column>
                     <Grid.Column width={ 1 }>
@@ -112,7 +122,7 @@ export default function Track(props) {
                                                     ref={ provided.innerRef }
                                                     { ...provided.draggableProps }
                                                 >
-                                                    <Frame track={ props.track } frame={ frame } index={ index } fps={ 16 } isSelected={ props.track.index === index } dragHandleProps={ provided.dragHandleProps }>{ frame.id }</Frame>
+                                                    <Frame track={ props.track } frame={ frame } index={ index } fps={ props.track.fps } isSelected={ props.track.index === index } dragHandleProps={ provided.dragHandleProps }>{ frame.id }</Frame>
                                                 </div>
                                             ) }
                                         </Draggable>

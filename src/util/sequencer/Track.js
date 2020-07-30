@@ -12,7 +12,7 @@ export const EnumEventType = {
 }
 
 export default class Track extends EventEmitter {
-    constructor({ fps, frames = [], tw = 128, th = 128 } = {}) {
+    constructor({ fps = 16, frames = [], tw = 128, th = 128 } = {}) {
         super();
 
         this.id = uuidv4();

@@ -12,6 +12,7 @@ export const EnumMessageType = {
 
     // COLLECTION_TAG: "COLLECTION_TAG",
 
+    UPDATE_TRACK_FPS: "UPDATE_TRACK_FPS",
     // ADD_TRACK: "ADD_TRACK",
     // REORDER_TRACK: "REORDER_TRACK",
 
@@ -69,6 +70,13 @@ export const reducers = [
         return state;
     }],
     [ EnumMessageType.AUTO_SEQUENCER_COMPLETE, function(state, msg) {
+        return state;
+    }],
+    [ EnumMessageType.UPDATE_TRACK_FPS, function(state, msg) {
+        const { track, fps } = msg.payload || {};
+
+        track.fps = fps;
+        
         return state;
     }],
     // [ EnumMessageType.COLLECTION_TAG, function(state, msg) {
