@@ -16,14 +16,19 @@ export default function Track(props) {
     useEffect(() => {
         const fn = () => setSource(props.track.selected.source);
         props.track.on(EnumTrackEventType.NEXT, fn);
+        props.track.on(EnumTrackEventType.PREVIOUS, fn);
+        props.track.on(EnumTrackEventType.MOVE, fn);
 
         return () => {
             props.track.off(EnumTrackEventType.NEXT, fn);
+            props.track.off(EnumTrackEventType.PREVIOUS, fn);
+            props.track.off(EnumTrackEventType.MOVE, fn);
         }
     }, [ props.track ]);
 
     function stopPreview() {
         props.track.stop();
+        props.track.move();
     }
     function startPreview() {
         props.track.start();
@@ -65,7 +70,7 @@ export default function Track(props) {
 
                         <Button.Group icon fluid style={{ marginTop: 8 }}>
                             <Button>
-                                <Icon name="step backward" />
+                                <Icon name="step backward" onClick={ e => props.track.previous() } />
                             </Button>
                             {
                                 (props.track.timeout !== void 0 && props.track.timeout !== null) ? (
@@ -79,7 +84,7 @@ export default function Track(props) {
                                 )
                             }
                             <Button>
-                                <Icon name="step forward" />
+                                <Icon name="step forward" onClick={ e => props.track.next() } />
                             </Button>
                         </Button.Group>
                     </Grid.Column>
@@ -107,7 +112,7 @@ export default function Track(props) {
                                                     ref={ provided.innerRef }
                                                     { ...provided.draggableProps }
                                                 >
-                                                    <Frame frame={ frame } fps={ 16 } dragHandleProps={ provided.dragHandleProps }>{ frame.id }</Frame>
+                                                    <Frame track={ props.track } frame={ frame } index={ index } fps={ 16 } isSelected={ props.track.index === index } dragHandleProps={ provided.dragHandleProps }>{ frame.id }</Frame>
                                                 </div>
                                             ) }
                                         </Draggable>

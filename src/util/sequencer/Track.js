@@ -8,6 +8,7 @@ export const EnumEventType = {
     STOP: "Track.Stop",
     NEXT: "Track.Next",
     PREVIOUS: "Track.Previous",
+    MOVE: "Track.Reset",
 }
 
 export default class Track extends EventEmitter {
@@ -69,6 +70,13 @@ export default class Track extends EventEmitter {
 
         return this;
     }
+    move(index = 0) {
+        this.index = index;
+
+        this.emit(EnumEventType.MOVE, this.index);
+
+        return this;
+    }
     start() {
         this.stop();
         this.timeout = setTimeout(() => {
@@ -84,7 +92,7 @@ export default class Track extends EventEmitter {
         clearTimeout(this.timeout);
         this.timeout = null;
 
-        this.emit(EnumEventType.START);
+        this.emit(EnumEventType.STOP);
 
         return this;
     }

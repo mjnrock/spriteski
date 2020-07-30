@@ -7,10 +7,15 @@ import { Context } from "./../App";
 import { EnumMessageType } from "./../state/reducers";
 import { ResizableBox } from "react-resizable";
 
-export default React.memo(function Frame(props) {
+export default function Frame(props) {
     const { node } = useNodeContext(Context);
     const [ resize, setResize ] = useState(props.frame.duration);
     const [ duration, setDuration ] = useState(props.frame.duration);
+    const [ color, setColor ] = useState(props.isSelected ? "yellow" : "grey");
+
+    useEffect(() => {
+        setColor(props.isSelected ? "yellow" : "grey");
+    }, [ props.isSelected ]);
 
     useEffect(() => {
         node.dispatch(EnumMessageType.RESIZE_FRAME, { frame: props.frame, duration });
@@ -26,8 +31,8 @@ export default React.memo(function Frame(props) {
             maxConstraints={ [ 512, 136 ]}
             handle={
                 <Icon
-                    name="ellipsis vertical"                
-                    color="grey"
+                    name="ellipsis vertical"
+                    color={ color }
                     style={{
                         position: "absolute",
                         top: "50%",
@@ -41,10 +46,11 @@ export default React.memo(function Frame(props) {
             draggableOpts={{ grid: [ 512 / props.fps, 512 / props.fps ] }}
             onResize={ (e, { size }) => setResize(size.width / (512 / props.fps)) }
             onResizeStop={ (e, { size }) => setDuration(resize) }
+            onMouseDown={ e => props.track.move(~~props.index) }
         >
             <Icon
                 name="content"
-                color="grey"
+                color={ color }
                 style={{
                     position: "absolute",
                     top: "50%",
@@ -56,7 +62,7 @@ export default React.memo(function Frame(props) {
             
             <Icon
                 name="x"
-                color="grey"
+                color={ color }
                 style={{
                     position: "absolute",
                     top: -2,
@@ -72,6 +78,79 @@ export default React.memo(function Frame(props) {
             />
         </ResizableBox>
     );
-}, function comparator(prevProps, nextProps) {
-    return prevProps.frame.source === nextProps.frame.source;
-});
+}
+
+
+// export default React.memo(function Frame(props) {
+//     const { node } = useNodeContext(Context);
+//     const [ resize, setResize ] = useState(props.frame.duration);
+//     const [ duration, setDuration ] = useState(props.frame.duration);
+//     const [ color, setColor ] = useState(props.isSelected ? "green" : "grey");
+
+//     useEffect(() => {
+//         setColor(props.isSelected ? "green" : "grey");
+//     }, [ props.isSelected ]);
+
+//     useEffect(() => {
+//         node.dispatch(EnumMessageType.RESIZE_FRAME, { frame: props.frame, duration });
+//     }, [ duration ]);
+
+//     return (
+//         <ResizableBox
+//             className="frame-resizer"
+//             axis="x"
+//             width={ (props.frame.duration / props.fps) * 512 }
+//             height={ 136 }
+//             minConstraints={ [ 512 / props.fps, 136 ]}
+//             maxConstraints={ [ 512, 136 ]}
+//             handle={
+//                 <Icon
+//                     name="ellipsis vertical"
+//                     color={ color }
+//                     style={{
+//                         position: "absolute",
+//                         top: "50%",
+//                         right: -4,
+//                         marginTop: -4,
+//                         cursor: "ew-resize",
+//                     }}
+//                 />
+//             }
+//             handleSize={ [ 8, 8 ] }
+//             draggableOpts={{ grid: [ 512 / props.fps, 512 / props.fps ] }}
+//             onResize={ (e, { size }) => setResize(size.width / (512 / props.fps)) }
+//             onResizeStop={ (e, { size }) => setDuration(resize) }
+//         >
+//             <Icon
+//                 name="content"
+//                 color={ color }
+//                 style={{
+//                     position: "absolute",
+//                     top: "50%",
+//                     left: 4,
+//                     marginTop: -4,
+//                 }}
+//                 { ...props.dragHandleProps }
+//             />
+            
+//             <Icon
+//                 name="x"
+//                 color={ color }
+//                 style={{
+//                     position: "absolute",
+//                     top: -2,
+//                     right: -4,
+//                     cursor: "pointer",
+//                 }}
+//             />
+
+//             <img 
+//                 width={ 128 }
+//                 height={ 128 }
+//                 src={ props.frame.source }
+//             />
+//         </ResizableBox>
+//     );
+// }, function comparator(prevProps, nextProps) {
+//     return prevProps.frame.source === nextProps.frame.source && prevProps.isSelected === prevProps.isSelected;
+// });
