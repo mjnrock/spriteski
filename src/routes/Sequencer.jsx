@@ -59,6 +59,7 @@ export default function Sequencer() {
             </Segment>
 
             <Segment textAlign="center" inverted>
+                //TODO Based on state.config..TrackParadigm, change what you see here [ Z-Index: 1 Image, stacked | Weighted Variation: 1 Image, random | New Sequence: X Images, shared controls ]
                 <Image centered width={ 128 } height={ 128 } src="" />
 
                 <Button.Group icon style={{ marginTop: 8 }}>
