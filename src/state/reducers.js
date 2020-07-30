@@ -16,6 +16,7 @@ export const EnumMessageType = {
     // REORDER_TRACK: "REORDER_TRACK",
 
     // ADD_FRAME: "ADD_FRAME",
+    RESIZE_FRAME: "RESIZE_FRAME",
     REORDER_FRAME: "REORDER_FRAME",
     RETRACK_FRAME: "RETRACK_FRAME",
 };
@@ -133,6 +134,13 @@ export const reducers = [
         if(from && to) {
             from.sendToTrack(frame, to, index);
         }
+
+        return state;
+    }],
+    [ EnumMessageType.RESIZE_FRAME, function(state, msg) {
+        const { frame, duration } = msg.payload || {};
+
+        frame.duration = duration;
 
         return state;
     }],
