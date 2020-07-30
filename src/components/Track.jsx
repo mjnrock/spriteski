@@ -11,7 +11,7 @@ import { EnumEventType as EnumTrackEventType } from "./../util/sequencer/Track";
 
 export default function Track(props) {
     const { node } = useNodeContext(Context);
-    const [ source, setSource ] = useState(props.track.selected.source);
+    const [ source, setSource ] = useState((props.track.selected || {}).source);
 
     useEffect(() => {
         const fn = () => setSource(props.track.selected.source);

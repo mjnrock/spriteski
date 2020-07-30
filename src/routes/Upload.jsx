@@ -3,7 +3,7 @@ import { Segment } from "semantic-ui-react";
 import { useNodeContext } from "@lespantsfancy/hive/lib/react";
 
 import { Context } from "../App";
-import { EnumMessageType, SequenceAlgorithms } from "./../state/reducers";
+import { EnumMessageType } from "./../state/reducers";
 
 import UploadImageFile from "../components/UploadImageFile";
 import PannableContainer from "./../components/PannableContainer";
@@ -34,12 +34,6 @@ function Upload() {
             
             setHasImage(true);
         }
-    }
-
-    const fn = SequenceAlgorithms[ node.state.config.value("Algorithm") ];
-    
-    if(typeof fn === "function") {
-        fn.call(node, state, state.config);
     }
 
     // if(!hasImage) {

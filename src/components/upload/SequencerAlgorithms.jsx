@@ -44,6 +44,7 @@ function SequencerAlgorithms() {
                     </Modal.Actions>
                 </Modal>
 
+                {/* //TODO Build something to keep track of the progress of the auto sequencer, so redirect/prompt can happen upon completion */}
                 <Button color="blue" onClick={ e => node.dispatch(EnumMessageType.AUTO_SEQUENCER_BEGIN) }>
                     <Icon name="film" /> Create Sequence
                 </Button>

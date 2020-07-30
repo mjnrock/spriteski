@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Grid, Image, Segment, Button, Icon, Form } from "semantic-ui-react";
+import { Grid, Image, Segment, Button, Icon, Form, Message } from "semantic-ui-react";
 import { useNodeContext } from "@lespantsfancy/hive/lib/react";
+import { Link } from "react-router-dom";
 
 import { Context } from "../App";
 import Slider from "./Slider";
@@ -49,7 +50,10 @@ function TileSelectionGrid(props) {
 
     if(!rows.length) {
         return (
-            <Segment>The current Collection is empty</Segment>
+            <Message info>
+                <Message.Header><Link to="/upload">The Collection is Empty</Link></Message.Header>
+                <p>Once an algorithm has been executed, you will see the tessellation result grid here.</p>
+            </Message>
         );
     }
 

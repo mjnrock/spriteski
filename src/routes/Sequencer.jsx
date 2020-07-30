@@ -1,8 +1,9 @@
 /* eslint-disable */
 import React from "react";
-import { Segment, Button, Icon, Image } from "semantic-ui-react";
+import { Segment, Button, Icon, Image, Message } from "semantic-ui-react";
 import { useNodeContext } from "@lespantsfancy/hive/lib/react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import { Link } from "react-router-dom";
 
 import { Context } from "./../App";
 import { EnumMessageType } from "./../state/reducers";
@@ -52,12 +53,19 @@ export default function Sequencer() {
 
     const tracks = Array(...state.mixer.tracks.values());
 
+    if(!tracks.length) {
+        return (
+            <Segment textAlign="center">
+                <Message info>
+                    <Message.Header><Link to="/upload">Upload a Spritesheet</Link></Message.Header>
+                    <p>Once an algorithm has been executed, you can modify the result Sequence here.</p>
+                </Message>
+            </Segment>
+        )
+    }
+
     return (
         <Segment>
-            <Segment>
-                <Button onClick={ () => node.dispatch(EnumMessageType.ADD_TRACK) }>New Track</Button>
-            </Segment>
-
             <Segment textAlign="center" inverted>
                 //TODO Based on state.config..TrackParadigm, change what you see here [ Z-Index: 1 Image, stacked | Weighted Variation: 1 Image, random | New Sequence: X Images, shared controls ]
                 <Image centered width={ 128 } height={ 128 } src="" />
