@@ -78,6 +78,7 @@ export default function Sequencer() {
                 </Button.Group>
             </Segment>
 
+            //TODO Running all Track's simultaneously slows everything down too much
             <DragDropContext onDragEnd={ onDragEnd }>
                 <Droppable droppableId={ state.mixer.id } type="droppableItem">
                     { (provided, snapshot) => (
