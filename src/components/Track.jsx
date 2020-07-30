@@ -26,12 +26,17 @@ export default function Track(props) {
         }
     }, [ props.track ]);
 
-    function stopPreview() {
-        props.track.stop();
-        props.track.move();
-    }
-    function startPreview() {
-        props.track.start();
+    function previewCommand(e, cmd) {
+        if(cmd === "start") {
+            props.track.start();
+        } else if(cmd === "stop") {
+            props.track.stop();
+            props.track.move();
+        } else if(cmd === "next") {
+            props.track.next();
+        } else if(cmd === "previous") {
+            props.track.previous();
+        }
     }
 
     const frames = [ ...props.track.frames.values() ] || [];
@@ -80,22 +85,22 @@ export default function Track(props) {
                         <Image centered width={ 128 } height={ 128 } src={ source } />
 
                         <Button.Group icon fluid style={{ marginTop: 8 }}>
-                            <Button>
-                                <Icon name="step backward" onClick={ e => props.track.previous() } />
+                            <Button onClick={ e => previewCommand(e, "previous") }>
+                                <Icon name="step backward"/>
                             </Button>
                             {
                                 (props.track.timeout !== void 0 && props.track.timeout !== null) ? (
-                                    <Button>
-                                        <Icon name="stop" color="red" onClick={ stopPreview } />
+                                    <Button onClick={ e => previewCommand(e, "stop") }>
+                                        <Icon name="stop" color="red" />
                                     </Button>
                                 ) : (
-                                    <Button>
-                                        <Icon name="play" onClick={ startPreview } />
+                                    <Button onClick={ e => previewCommand(e, "start") }>
+                                        <Icon name="play" />
                                     </Button>
                                 )
                             }
-                            <Button>
-                                <Icon name="step forward" onClick={ e => props.track.next() } />
+                            <Button onClick={ e => previewCommand(e, "next") }>
+                                <Icon name="step forward" />
                             </Button>
                         </Button.Group>
                     </Grid.Column>

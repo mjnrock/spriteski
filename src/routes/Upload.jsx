@@ -12,7 +12,7 @@ import UploadComponents from "./../components/upload/package";
 
 function Upload() {
     const { node, state } = useNodeContext(Context);
-    const [ hasImage, setHasImage ] = useState();
+    const [ hasImage, setHasImage ] = useState(!!state.tessellator.image.src);
     const canvasRef = React.createRef();
 
     useEffect(() => {        
