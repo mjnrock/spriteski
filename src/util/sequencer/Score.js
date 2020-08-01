@@ -26,6 +26,17 @@ export default class Score {
         this._canvas = canvas;
     }
     
+    setBounds(x, y, w, h) {
+        this.bounds = {
+            x: x !== void 0 ? x : this.bounds.x,
+            y: y !== void 0 ? y : this.bounds.y,
+            w: w !== void 0 ? w : this.bounds.w,
+            h: h !== void 0 ? h : this.bounds.h,
+        };
+
+        return this;
+    }
+
     static async Create(mixer, opts = {}) {
         if(mixer instanceof Mixer) {
             const mix = new Score(null, opts);
