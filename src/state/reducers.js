@@ -67,7 +67,6 @@ export const reducers = [
     }],
     [ EnumMessageType.AUTO_SEQUENCER_COMPLETE, function(state, msg) {
         state.config.setByValue("isSequencing", false);
-        console.log(state.config.value("isSequencing"))
 
         return state;
     }],
