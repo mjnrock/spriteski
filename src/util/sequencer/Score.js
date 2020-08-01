@@ -8,38 +8,26 @@ export default class Score {
         this.weight = weight;
 
         if(mixer instanceof Mixer) {
-            const canvas = document.createElement("canvas");
-            const ctx = canvas.getContext("2d");
+            mixer.toCanvas().then(canvas => this.canvas = canvas);
+        }
+    }
 
-            canvas.width = mixer.pixels.width;
-            canvas.height = mixer.pixels.height + mixer.pixels.track.height;
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            mixer.tracks.each((track, row) => {
-                track.frames.each((frame, col) => {
-                    frame.each((kanvas, x, y) => {
-                        //  Bounced image
-                        ctx.drawImage(
-                            kanvas,
-                            (col * track.pixels.frame.width) + (x * track.tile.width),
-                            y * track.tile.height,
-                        );
+    static async Create(mixer, opts = {}) {
+        if(mixer instanceof Mixer) {
+            const mix = (new Score(null, opts));
 
-                        //  Original image
-                        ctx.drawImage(
-                            kanvas,
-                            (col * track.pixels.frame.width) + (x * track.tile.width),
-                            ((row + 1) * track.pixels.frame.height) + (y * track.tile.height),
-                        );
-                    });
-                });
+            return mixer.toCanvas().then(canvas => {
+                mix.canvas = canvas;
+
+                return mix;
             });
-
-            this.source = canvas;
         }
     }
 
     toImage(type = "image/png", quality = 1.0) {
-        return this.source.toDataURL(type, quality);
+        return this.canvas.toDataURL(type, quality);
+    }
+    toDataURL(...args) {
+        return this.canvas.toDataURL(...args);
     }
 };

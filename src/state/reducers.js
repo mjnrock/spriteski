@@ -30,13 +30,11 @@ export const SequenceAlgorithms = {
             state.collection.tiles = tiles;
 
             const bounds = state.tessellator.bounds;
-            if(config.value("DirectionCount") === (bounds.y + bounds.h)) {
-                for(let i = bounds.y; i < bounds.h; i++) {
-                    const track = state.sequencer.children.newTrack({ fps: config.value("FPS"), tw: state.tessellator.config.width, th: state.tessellator.config.height });
+            for(let i = bounds.y; i < config.value("DirectionCount"); i++) {
+                const track = state.sequencer.children.newTrack({ fps: config.value("FPS"), tw: state.tessellator.config.width, th: state.tessellator.config.height });
 
-                    for(let j = bounds.x; j < bounds.w; j++) {
-                        track.add(state.tessellator.get(j, i).toDataURL(), 1);
-                    }
+                for(let j = bounds.x; j < bounds.w; j++) {
+                    track.add(state.tessellator.get(j, i).toDataURL(), 1);
                 }
             }
         }).then(() => {
@@ -78,7 +76,7 @@ export const reducers = [
         console.log(state.sequencer.children)
         console.log(state.sequencer.children.get(0).frames)
 
-        state.sequencer.children.toCanvas().then(canvas => console.log(canvas.toDataURL()))
+        state.sequencer.bake().then(score => console.log(score.toDataURL()))
 
         return state;
     }],
