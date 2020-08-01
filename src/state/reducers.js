@@ -67,16 +67,8 @@ export const reducers = [
     }],
     [ EnumMessageType.AUTO_SEQUENCER_COMPLETE, function(state, msg) {
         state.config.setByValue("isSequencing", false);
-
-        console.log(state.sequencer.children)
-        // console.log(state.sequencer)
-        // console.log(state.sequencer.children)
-        // console.log(state.sequencer.collection)
-
-        console.log(state.sequencer.children)
-        console.log(state.sequencer.children.get(0).frames)
-
-        state.sequencer.bake().then(score => console.log(score.toDataURL()))
+        
+        state.sequencer.bake().then(canvas => console.log(canvas.toDataURL()))
 
         return state;
     }],
