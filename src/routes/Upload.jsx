@@ -61,10 +61,6 @@ function Upload() {
             </Segment>
 
             <Segment color="blue">
-                <UploadComponents.SequencerAlgorithms />
-            </Segment>
-
-            <Segment color="blue">
                 <UploadComponents.SequencerOptions />
             </Segment>
         </Fragment>

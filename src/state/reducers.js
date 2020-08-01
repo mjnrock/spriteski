@@ -61,15 +61,14 @@ export const reducers = [
         return state;
     }],
     [ EnumMessageType.AUTO_SEQUENCER_BEGIN, function(state, msg) {
-        const fn = SequenceAlgorithms[ state.config.value("Algorithm") ];
-
-        if(typeof fn === "function") {
-            fn.call(this, state, state.config);
-        }
+        state.config.run(this);
 
         return state;
     }],
     [ EnumMessageType.AUTO_SEQUENCER_COMPLETE, function(state, msg) {
+        state.config.setByValue("isSequencing", false);
+        console.log(state.config.value("isSequencing"))
+
         return state;
     }],
     [ EnumMessageType.UPDATE_TRACK_FPS, function(state, msg) {

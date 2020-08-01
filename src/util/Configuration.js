@@ -11,11 +11,12 @@ export const EnumEventType = {
  * {} will be trated as key-value pair systems (i.e. key = key, value = obj[ key ])
  */
 export default class Configuration extends EventEmitter {
-    constructor(options, { state = {}, defaultsByKey = {}, defaultsByValue = {} } = {}) {
+    constructor(options, { executor, state = {}, defaultsByKey = {}, defaultsByValue = {} } = {}) {
         super();
 
         this.state = state;
         this.options = options;
+        this.executor = executor;
 
         if(!Object.keys(state).length) {
             for(let option in this.options) {
@@ -27,6 +28,12 @@ export default class Configuration extends EventEmitter {
                     this.state[ option ] = null;
                 }
             }
+        }
+    }
+
+    run(thisArg, ...args) {
+        if(typeof this.executor === "function") {
+            return this.executor.call(thisArg, ...args);
         }
     }
 

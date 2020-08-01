@@ -1,5 +1,5 @@
 import { spawnStateNode } from "@lespantsfancy/hive";
-import { reducers } from "./reducers";
+import { reducers, SequenceAlgorithms } from "./reducers";
 import { effects } from "./effects";
 
 import Tessellator from "./../util/tessellator/Tessellator";
@@ -14,37 +14,27 @@ const StateNode = spawnStateNode({
     mixer: new Mixer(),
     config: new Configuration({
         DirectionCount: [ 1, 4, 8 ],
-        FirstRowDirection: {
-            "North [0°]": 0,
-            "Northeast [45°]": 45,
-            "East [90°]": 90,
-            "Southeast [135°]": 135,
-            "South [180°]": 180,
-            "Southwest [225°]": 225,
-            "West [270°]": 270,
-            "Northwest [315°]": 315,
-        },
-        CounterClockwise: Configuration.Seed.Dichotomy(),
         FPS: Configuration.Seed.Number.Range(1, 60, 1),
+        isSequencing: Configuration.Seed.Dichotomy(),
         Algorithm: [
             "Entity.State",
         ],
-        TrackParadigm: [ "Z-Index", "Weighted Variation", "New Sequence" ]
     }, {
-        defaultsByKey: {
-            FirstRowDirection: "North [0°]",
-        },
         defaultsByValue: {
             DirectionCount: 8,
-            CounterClockwise: false,
+            isSequencing: false,
             Algorithm: "Entity.State",
             FPS: 24,
-            TrackParadigm: "Z-Index"
         }
     }),
 }, reducers, effects);
 
 //  STUB
+StateNode.state.config.executor = function(...args) {
+    StateNode.state.config.setByValue("isSequencing", true);
+    
+    return SequenceAlgorithms[ StateNode.state.config.value("Algorithm") ].call(this, StateNode.state, StateNode.state.config, ...args);
+};
 StateNode.state.config.on(EnumConfigEventType.UPDATE, console.log);
 
 export default StateNode;

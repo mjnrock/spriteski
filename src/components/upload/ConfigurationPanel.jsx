@@ -1,5 +1,5 @@
 import React from "react";
-import { Form } from "semantic-ui-react";
+import { Form, Icon } from "semantic-ui-react";
 import { useNodeContext } from "@lespantsfancy/hive/lib/react";
 
 import { Context } from "../../App";
@@ -74,6 +74,10 @@ function ConfigurationPanel() {
                     })
                 }
             </Form.Group>
+
+            <Form.Button color="blue" onClick={ e => node.dispatch(EnumMessageType.AUTO_SEQUENCER_BEGIN) }>
+                <Icon name="film" /> Run
+            </Form.Button>
         </Form>
     );
 }
