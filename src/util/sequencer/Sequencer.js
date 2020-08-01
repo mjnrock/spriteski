@@ -1,13 +1,15 @@
 import { v4 as uuidv4 } from "uuid";
 import Track from "./Track";
 import Frame from "./Frame";
+import Mixer from "./Mixer";
+import TileCollection from "../TileCollection";
 
 export default class Sequencer {
     constructor({ mixer, collection } = {}) {
         this.id = uuidv4();
 
-        this.mixer = mixer;
-        this.collection = collection;
+        this.mixer = mixer || new Mixer();
+        this.collection = collection || new TileCollection();
 
         this.active = {
             track: null,

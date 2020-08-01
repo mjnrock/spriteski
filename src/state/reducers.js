@@ -32,7 +32,7 @@ export const SequenceAlgorithms = {
             const bounds = state.tessellator.bounds;
             if(config.value("DirectionCount") === (bounds.y + bounds.h)) {
                 for(let i = bounds.y; i < bounds.h; i++) {
-                    const track = state.mixer.newTrack({ fps: config.value("FPS"), tw: state.tessellator.config.width, th: state.tessellator.config.height });
+                    const track = state.sequencer.mixer.newTrack({ fps: config.value("FPS"), tw: state.tessellator.config.width, th: state.tessellator.config.height });
 
                     for(let j = bounds.x; j < bounds.w; j++) {
                         track.add(state.tessellator.get(j, i).toDataURL(), 1);  //  STUB:   4 is a test value, should be 1/FPS, but Sequencer.jsx is not built for syntax yet
@@ -67,6 +67,11 @@ export const reducers = [
     }],
     [ EnumMessageType.AUTO_SEQUENCER_COMPLETE, function(state, msg) {
         state.config.setByValue("isSequencing", false);
+
+        console.log(state.sequencer.mixer)
+        // console.log(state.sequencer)
+        // console.log(state.sequencer.mixer)
+        // console.log(state.sequencer.collection)
 
         return state;
     }],
@@ -106,14 +111,14 @@ export const reducers = [
     //     return state;
     // }],
     // [ EnumMessageType.ADD_TRACK, function(state, msg) {
-    //     state.mixer.newTrack();
+    //     state.sequencer.mixer.newTrack();
 
     //     return state;
     // }],
     // [ EnumMessageType.REORDER_TRACK, function(state, msg) {
     //     const { left, right } = msg.payload || {};
 
-    //     state.mixer.reorder(left, right);
+    //     state.sequencer.mixer.reorder(left, right);
 
     //     return state;
     // }],
