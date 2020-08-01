@@ -21,22 +21,22 @@ export default function Sequencer() {
         }
 
         if(source.droppableId === destination.droppableId) {
-            if(source.droppableId === state.sequencer.mixer.id) {
+            if(source.droppableId === state.sequencer.children.id) {
                 node.dispatch(EnumMessageType.REORDER_TRACK, {
                     left: source.index,
                     right: destination.index,
                 });
             } else {
                 node.dispatch(EnumMessageType.REORDER_FRAME, {
-                    track: state.sequencer.mixer.getTrackById(destination.droppableId),
+                    track: state.sequencer.children.getTrackById(destination.droppableId),
                     left: source.index,
                     right: destination.index,
                 });
             }
         } else {
             //  Different droppable
-            const from = state.sequencer.mixer.getTrackById(source.droppableId);
-            const to = state.sequencer.mixer.getTrackById(destination.droppableId);
+            const from = state.sequencer.children.getTrackById(source.droppableId);
+            const to = state.sequencer.children.getTrackById(destination.droppableId);
 
             if(from instanceof SequencerTrack && to instanceof SequencerTrack) {
                 const frame = from.get(source.index);
@@ -51,7 +51,7 @@ export default function Sequencer() {
         }
     }
 
-    const tracks = Array(...state.sequencer.mixer.tracks.values());
+    const tracks = Array(...state.sequencer.children.tracks.values());
 
     if(!tracks.length) {
         return (
@@ -88,7 +88,7 @@ export default function Sequencer() {
 
             //TODO Running all Track's simultaneously slows everything down too much
             <DragDropContext onDragEnd={ onDragEnd }>
-                <Droppable droppableId={ state.sequencer.mixer.id } type="droppableItem">
+                <Droppable droppableId={ state.sequencer.children.id } type="droppableItem">
                     { (provided, snapshot) => (
                         <div
                             ref={ provided.innerRef }

@@ -1,11 +1,20 @@
 import { v4 as uuidv4 } from "uuid";
+import Configuration from "./../Configuration";
 import Track from "./Track";
 
 export default class Mixer {
-    constructor({ tracks = [] } = {}) {
+    constructor({ tracks = [], tracakPradigm = "Z-Index", } = {}) {
         this.id = uuidv4();
 
         this.tracks = new Map(tracks);
+
+        this.config = new Configuration({
+            TrackParadigm: [ "Z-Index", "Weighted" ],
+        }, {
+            defaultsByValue: {
+                TrackParadigm: tracakPradigm,
+            }
+        });
     }
 
     get pixels() {
@@ -85,5 +94,32 @@ export default class Mixer {
 
     getTrackById(id) {
         return [ ...this.tracks.values() ].reduce((a, track) => (track.id === id ? track : null) || a);
+    }
+
+    async toCanvas() {
+        const size = {
+            width: 0,
+            height: 0,
+        };
+        
+        return Promise.all([ ...this.tracks.values() ].map(async track => {
+            const canvas = await track.toCanvas();
+
+            size.width = Math.max(size.width, canvas.width);
+            size.height = Math.max(size.height, canvas.height);
+
+            return [ track, canvas ];
+        })).then(canvases => {
+            const tabula = document.createElement("canvas");
+            const ctx = tabula.getContext("2d");
+            tabula.height = size.height * this.tracks.size;
+            tabula.width = size.width;
+
+            canvases.forEach(([ track, canvas ], i) => {
+                ctx.drawImage(canvas, 0, size.height * i);
+            });
+
+            return tabula;
+        });
     }
 };

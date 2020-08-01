@@ -5,10 +5,11 @@ import Mixer from "./Mixer";
 import TileCollection from "../TileCollection";
 
 export default class Sequencer {
-    constructor({ mixer, collection } = {}) {
+    constructor({ children, collection } = {}) {
         this.id = uuidv4();
 
-        this.mixer = mixer || new Mixer();
+        //TODO Sequence is instrinsically self-referencing; the Sequencer has children<Sequence|Mixer>[]
+        this.children = children || new Mixer();
         this.collection = collection || new TileCollection();
 
         this.active = {
@@ -16,6 +17,7 @@ export default class Sequencer {
             frame: null,
         };
     }
+
 
     get track() {
         return this.active.track;

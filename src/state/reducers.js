@@ -32,7 +32,7 @@ export const SequenceAlgorithms = {
             const bounds = state.tessellator.bounds;
             if(config.value("DirectionCount") === (bounds.y + bounds.h)) {
                 for(let i = bounds.y; i < bounds.h; i++) {
-                    const track = state.sequencer.mixer.newTrack({ fps: config.value("FPS"), tw: state.tessellator.config.width, th: state.tessellator.config.height });
+                    const track = state.sequencer.children.newTrack({ fps: config.value("FPS"), tw: state.tessellator.config.width, th: state.tessellator.config.height });
 
                     for(let j = bounds.x; j < bounds.w; j++) {
                         track.add(state.tessellator.get(j, i).toDataURL(), 1);
@@ -70,15 +70,15 @@ export const reducers = [
     [ EnumMessageType.AUTO_SEQUENCER_COMPLETE, function(state, msg) {
         state.config.setByValue("isSequencing", false);
 
-        console.log(state.sequencer.mixer)
+        console.log(state.sequencer.children)
         // console.log(state.sequencer)
-        // console.log(state.sequencer.mixer)
+        // console.log(state.sequencer.children)
         // console.log(state.sequencer.collection)
 
-        console.log(state.sequencer.mixer)
-        console.log(state.sequencer.mixer.get(0).frames)
+        console.log(state.sequencer.children)
+        console.log(state.sequencer.children.get(0).frames)
 
-        state.sequencer.mixer.get(0).toCanvas().then(canvas => console.log(canvas.toDataURL()))
+        state.sequencer.children.toCanvas().then(canvas => console.log(canvas.toDataURL()))
 
         return state;
     }],
@@ -118,14 +118,14 @@ export const reducers = [
     //     return state;
     // }],
     // [ EnumMessageType.ADD_TRACK, function(state, msg) {
-    //     state.sequencer.mixer.newTrack();
+    //     state.sequencer.children.newTrack();
 
     //     return state;
     // }],
     // [ EnumMessageType.REORDER_TRACK, function(state, msg) {
     //     const { left, right } = msg.payload || {};
 
-    //     state.sequencer.mixer.reorder(left, right);
+    //     state.sequencer.children.reorder(left, right);
 
     //     return state;
     // }],
