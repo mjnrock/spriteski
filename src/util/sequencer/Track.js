@@ -177,4 +177,23 @@ export default class Track extends EventEmitter {
 
         return this;
     }
+
+    async toCanvas() {
+        const proms = [];
+
+        this.frames.forEach(frame => proms.push(frame.toCanvas()));
+
+        const tabula = document.createElement("canvas");
+        const ctx = tabula.getContext("2d");
+        tabula.height = this.tile.height;
+        tabula.width = this.tile.width * this.frames.size;
+        
+        return Promise.all(proms).then(canvases => {
+            canvases.forEach((canvas, i) => {
+                ctx.drawImage(canvas, this.tile.width * i, 0);
+            });
+
+            return tabula;
+        });
+    }
 };

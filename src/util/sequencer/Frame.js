@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
+import Base64 from "../Base64";
 
 //? "Filters" are expected to give fn(elapsedTime, frame, ...args)
 export default class Frame {
@@ -73,5 +74,9 @@ export default class Frame {
         this.duration /= (2 * factor);
 
         return this;
+    }
+
+    async toCanvas() {
+        return Base64.Decode(this.source).then(canvas => canvas);
     }
 };

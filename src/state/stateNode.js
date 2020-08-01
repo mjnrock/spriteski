@@ -4,8 +4,6 @@ import { effects } from "./effects";
 
 import Tessellator from "./../util/tessellator/Tessellator";
 import TileCollection from "../util/TileCollection";
-// // import Sequencer from "../util/sequencer/Sequencer";
-import Mixer from "../util/sequencer/Mixer";
 import Configuration, { EnumEventType as EnumConfigEventType } from "./../util/Configuration";
 import Sequencer from "../util/sequencer/Sequencer";
 

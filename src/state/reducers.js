@@ -35,12 +35,14 @@ export const SequenceAlgorithms = {
                     const track = state.sequencer.mixer.newTrack({ fps: config.value("FPS"), tw: state.tessellator.config.width, th: state.tessellator.config.height });
 
                     for(let j = bounds.x; j < bounds.w; j++) {
-                        track.add(state.tessellator.get(j, i).toDataURL(), 1);  //  STUB:   4 is a test value, should be 1/FPS, but Sequencer.jsx is not built for syntax yet
+                        track.add(state.tessellator.get(j, i).toDataURL(), 1);
                     }
                 }
             }
-
-            this.dispatch(EnumMessageType.AUTO_SEQUENCER_COMPLETE);
+        }).then(() => {
+            setTimeout(() => {
+                this.dispatch(EnumMessageType.AUTO_SEQUENCER_COMPLETE);
+            }, 0);
         });
     }
 }
@@ -72,6 +74,11 @@ export const reducers = [
         // console.log(state.sequencer)
         // console.log(state.sequencer.mixer)
         // console.log(state.sequencer.collection)
+
+        console.log(state.sequencer.mixer)
+        console.log(state.sequencer.mixer.get(0).frames)
+
+        state.sequencer.mixer.get(0).toCanvas().then(canvas => console.log(canvas.toDataURL()))
 
         return state;
     }],
