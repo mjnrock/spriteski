@@ -5,7 +5,7 @@ import { useNodeContext } from "@lespantsfancy/hive/lib/react";
 import { Context } from "../../App";
 import { EnumMessageType } from "./../../state/reducers";
 
-function ConfigurationPanel() {
+function ConfigurationPanel(props) {
     const { node, state } = useNodeContext(Context);
 
     function updateConfigByValue(key, value) {
@@ -21,6 +21,10 @@ function ConfigurationPanel() {
             <Form.Group>
                 {
                     Object.entries(state.config.options).map(([ key, value ]) => {
+                        if((props.filter || []).includes(key)) {
+                            return null;
+                        }
+
                         if(Array.isArray(value)) {
                             if(value.length === 2 && value.every(v => typeof v === "boolean")) {
                                 return (

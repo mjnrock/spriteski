@@ -10,7 +10,7 @@ function SequencerOptions() {
                 <Header.Content>Sequencer Options</Header.Content>
             </Header>
 
-            <ConfigurationPanel />
+            <ConfigurationPanel filter={ [ "isSequencing" ] } />
         </Fragment>
     );
 }
