@@ -91,6 +91,9 @@ export default class Sequencer {
                     console.log(canvas.toDataURL())
                     console.log(canvas.width, canvas.height)
 
+                    console.log(score.serialize())
+                    Score.Deserialize(score.serialize()).then(data => console.log(data))
+
                 resolve(score);
             });
         }));

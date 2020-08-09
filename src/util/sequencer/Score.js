@@ -1,12 +1,13 @@
 import { v4 as uuidv4 } from "uuid";
+import Base64 from "./../Base64";
 import Mixer from "./Mixer";
 
 //TODO Create helper functions to perform hash lookups and facing lookups that would be stored in this.data
 //TODO Create accessor methods for the "current frame" and things like Elapsable (maybe make a "generator" that passes with a reference to the Score, so that multiple Elapsables can reference a single Score)
 
 export default class Score {
-    constructor(mixer, { weight = 1, canvas, bounds = {}, data = {}} = {}) {
-        this.id = uuidv4();
+    constructor(mixer, { weight = 1, canvas, bounds = {}, data = {}, id } = {}) {
+        this.id = id || uuidv4();
         
         this.weight = weight;
         this.bounds = bounds;
@@ -109,5 +110,56 @@ export default class Score {
     }
     toDataURL(...args) {
         return this.canvas.toDataURL(...args);
+    }
+
+
+    serialize() {
+        const source = this.toImage();
+
+        return JSON.stringify({
+            id: this.id,
+            weight: this.weight,
+            bounds: this.bounds,
+            data: {
+                ...this.data,
+                
+                frames: [ ...this.data.frames.entries() ],
+                direction: [ ...this.data.direction.entries() ],
+            },
+            source: source,
+        });
+    }
+    static async Deserialize(json) {
+        return new Promise((resolve, reject) => {
+            let obj = json;
+    
+            while(typeof obj === "string" || obj instanceof String) {
+                obj = JSON.parse(obj);
+            }
+    
+            const score = new Score(null, {
+                id: obj.id,
+                weight: obj.weight,
+                bounds: obj.bounds,
+                data: {
+                    ...obj.data,
+
+                    frames: new Map(obj.data.frames),
+                    direction: new Map(obj.data.direction),
+                },
+            });
+    
+            return Base64.Decode(obj.source).then(canvas => {
+                if(canvas instanceof HTMLCanvasElement) {                
+                    score.canvas = canvas;
+
+                    resolve(score);
+                } else {
+                    reject("@json.source is not a valid Base64 image");
+                }
+
+                return score;
+            });
+        });
     }
 };
