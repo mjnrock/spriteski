@@ -127,6 +127,10 @@ export default class Mixer {
                 const data = {
                     id: this.id,
                     duration: totalLength,
+                    tile: {
+                        width: tracks[ 0 ].tile.width,
+                        height: tracks[ 0 ].tile.height,
+                    },
                     tracks,
                 };
 

@@ -69,7 +69,7 @@ export default function Sequencer() {
             <Segment color="blue">
                 <Button icon color="blue" onClick={ e => node.dispatch(EnumMessageType.BAKE_SEQUENCE) }>
                     <Icon name="fire" />
-                    Bake
+                    <span style={{ marginLeft: 10 }}>Bake</span>
                 </Button>
             </Segment>
 

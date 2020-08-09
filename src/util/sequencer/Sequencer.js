@@ -1,3 +1,4 @@
+// import crypto from "crypto";
 import { v4 as uuidv4 } from "uuid";
 import Track from "./Track";
 import Frame from "./Frame";
@@ -40,8 +41,26 @@ export default class Sequencer {
     async bake() {
         return new Promise((resolve, reject) => Score.Create(this.mixer).then(score => {
             this.mixer.toData().then(data => {
-                //  STUB    Manipulate data to create a tile hash map and a facing-track map, instead of this entire object
-                score.data = data;
+                const tileHashMap = new Map();
+                const directionHashMap = new Map();
+                const thetaStep = 360 / data.tracks.length;
+
+                data.tracks.forEach((track, i) => {
+                    directionHashMap.set(i * thetaStep, {
+                        frames: new Map(track.frames.map(frame => [ frame.hash, { duration: frame.duration }])),
+                        fps: track.fps,
+                        length: track.duration,
+                    });
+
+                    track.frames.forEach((frame, j) => {
+                        tileHashMap.set(frame.hash, [ j, i ]);
+                    });
+                });
+
+                score.data = {
+                    tile: tileHashMap,
+                    direction: directionHashMap,
+                };
 
                 resolve(score);
             });
