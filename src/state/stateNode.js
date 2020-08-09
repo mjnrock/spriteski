@@ -34,6 +34,7 @@ StateNode.state.config.executor = function(...args) {
     
     return SequenceAlgorithms[ StateNode.state.config.value("Algorithm") ].call(this, StateNode.state, StateNode.state.config, ...args);
 };
+//  STUB
 StateNode.state.config.on(EnumConfigEventType.UPDATE, console.log);
 
 export default StateNode;

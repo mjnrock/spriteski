@@ -2,17 +2,21 @@ import { v4 as uuidv4 } from "uuid";
 import Mixer from "./Mixer";
 
 export default class Score {
-    constructor(mixer, { weight = 1, canvas, bounds = {} } = {}) {
+    constructor(mixer, { weight = 1, canvas, bounds = {}, data = {}} = {}) {
         this.id = uuidv4();
         
         this.weight = weight;
         this.bounds = bounds;
-        this.data = {};
+        this.data = data;
 
         if(canvas instanceof HTMLCanvasElement) {
             this.canvas = canvas;
         } else if(mixer instanceof Mixer) {
             mixer.toCanvas().then(canvas => this.canvas = canvas);
+        }
+
+        if(mixer instanceof Mixer && Object.keys(data).length) {            
+            mixer.toData().then(data => this.data = data);
         }
     }
 
