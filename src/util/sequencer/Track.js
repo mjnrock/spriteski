@@ -139,7 +139,6 @@ export default class Track extends EventEmitter {
 
             this.frames = new Map(frames);
 
-            console.log(this.index, index, newIndex)
             if(index === this.index) {
                 this.index = newIndex;
             }

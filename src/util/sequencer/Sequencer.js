@@ -9,7 +9,6 @@ export default class Sequencer {
     constructor({ mixer, collection } = {}) {
         this.id = uuidv4();
 
-        //TODO Sequence is instrinsically self-referencing; the Sequencer has children<Sequence|Mixer>[]
         //TODO Create getters/setters for taking a Mixer and abstracting it to other, say, angles (e.g. north Sequence converted to all angle Sequences, with getter(angle) => <Mixer>)
         this.mixer = mixer || new Mixer();
         this.collection = collection || new TileCollection();

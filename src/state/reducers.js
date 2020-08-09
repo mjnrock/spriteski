@@ -118,13 +118,13 @@ export const reducers = [
 
     //     return state;
     // }],
-    // [ EnumMessageType.REORDER_TRACK, function(state, msg) {
-    //     const { left, right } = msg.payload || {};
+    [ EnumMessageType.REORDER_TRACK, function(state, msg) {
+        const { left, right } = msg.payload || {};
 
-    //     state.sequencer.mixer.reorder(left, right);
+        state.sequencer.mixer.reorder(left, right);
 
-    //     return state;
-    // }],
+        return state;
+    }],
     // [ EnumMessageType.ADD_FRAME, function(state, msg) {
     //     const { track } = msg.payload || {};
         
