@@ -57,6 +57,53 @@ export default class Score {
         }
     }
 
+    get(facing, elapsedTime) {
+        const theta = Math.round(facing / this.data.step) * this.data.step;
+        const track = this.data.direction.get(theta);
+
+        let hash;
+        for(let [ threshold, frame ] of track.frames) {            
+            if(elapsedTime < threshold) {
+                hash = frame.hash;
+                break;
+            }
+        }
+
+        const [ tx, ty ] = this.data.frames.get(hash);
+        return {
+            hash,
+            position: [ tx * this.data.tile.width, ty * this.data.tile.height ],
+        };
+    }
+    
+    drawTo(canvas, { facing, elapsedTime, x, y, tx, ty }) {
+        const { position: [ sx, sy ] } = this.get(facing, elapsedTime) || {};
+
+        if(sx !== void 0 && sy !== void 0) {
+            const ctx = canvas.getContext("2d");
+
+            if(tx !== void 0 && ty !== void 0) {
+                x = tx * this.data.tile.width;
+                y = ty * this.data.tile.height;
+            }
+
+            ctx.drawImage(
+                this.canvas,
+                sx,
+                sy,
+                this.data.tile.width,
+                this.data.tile.height,
+                x,
+                y,
+                this.data.tile.width,
+                this.data.tile.height
+            );
+        }
+
+        return canvas;
+    }
+
+
     toImage(type = "image/png", quality = 1.0) {
         return this.canvas.toDataURL(type, quality);
     }

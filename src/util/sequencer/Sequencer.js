@@ -46,8 +46,15 @@ export default class Sequencer {
                 const thetaStep = 360 / data.tracks.length;
 
                 data.tracks.forEach((track, i) => {
+                    let dur = 0;
                     directionHashMap.set(i * thetaStep, {
-                        frames: new Map(track.frames.map(frame => [ frame.hash, { duration: frame.duration }])),
+                        frames: track.frames.map(frame => {                            
+                            dur += ~~((frame.duration / track.fps) * 1000);
+
+                            const result = [ dur, { hash: frame.hash, duration: frame.duration, threshold: dur } ];
+
+                            return result;
+                        }),
                         fps: track.fps,
                         length: track.duration,
                     });
@@ -58,9 +65,31 @@ export default class Sequencer {
                 });
 
                 score.data = {
-                    tile: tileHashMap,
+                    frames: tileHashMap,
                     direction: directionHashMap,
+                    step: thetaStep,
+                    tile: data.tile,
                 };
+
+                //  STUB
+                    const canvas = document.createElement("canvas");
+                    const ctx = canvas.getContext("2d");
+                    score.drawTo(canvas, {
+                        facing: 0,
+                        elapsedTime: 0,
+                        x: 0,
+                        y: 0,
+                    });
+                    console.log(canvas.toDataURL())
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    score.drawTo(canvas, {
+                        facing: 180,
+                        elapsedTime: 0,
+                        x: 0,
+                        y: 0,
+                    });
+                    console.log(canvas.toDataURL())
+                    console.log(canvas.width, canvas.height)
 
                 resolve(score);
             });
