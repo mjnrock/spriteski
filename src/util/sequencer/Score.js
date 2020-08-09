@@ -1,6 +1,9 @@
 import { v4 as uuidv4 } from "uuid";
 import Mixer from "./Mixer";
 
+//TODO Create helper functions to perform hash lookups and facing lookups that would be stored in this.data
+//TODO Create accessor methods for the "current frame" and things like Elapsable
+
 export default class Score {
     constructor(mixer, { weight = 1, canvas, bounds = {}, data = {}} = {}) {
         this.id = uuidv4();
