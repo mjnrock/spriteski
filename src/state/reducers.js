@@ -6,6 +6,7 @@ export const EnumMessageType = {
     UPDATE_CONFIGURATION: "UPDATE_CONFIGURATION",
     AUTO_SEQUENCER_BEGIN: "AUTO_SEQUENCER_BEGIN",
     AUTO_SEQUENCER_COMPLETE: "AUTO_SEQUENCER_COMPLETE",
+    BAKE_SEQUENCE: "BAKE_SEQUENCE",
 
     // UPDATE_TILES: "UPDATE_TILES",
     // TILE_TAG: "TILE_TAG",
@@ -31,7 +32,7 @@ export const SequenceAlgorithms = {
 
             const bounds = state.tessellator.bounds;
             for(let i = bounds.y; i < config.value("DirectionCount"); i++) {
-                const track = state.sequencer.children.newTrack({ fps: config.value("FPS"), tw: state.tessellator.config.width, th: state.tessellator.config.height });
+                const track = state.sequencer.mixer.newTrack({ fps: config.value("FPS"), tw: state.tessellator.config.width, th: state.tessellator.config.height });
 
                 for(let j = bounds.x; j < bounds.w; j++) {
                     track.add(state.tessellator.get(j, i).toDataURL(), 1);
@@ -68,7 +69,12 @@ export const reducers = [
     [ EnumMessageType.AUTO_SEQUENCER_COMPLETE, function(state, msg) {
         state.config.setByValue("isSequencing", false);
         
-        state.sequencer.bake().then(canvas => console.log(canvas.toDataURL()))
+        // state.sequencer.bake().then(score => console.log(score, score.toDataURL()))
+
+        return state;
+    }],
+    [ EnumMessageType.BAKE_SEQUENCE, function(state, msg) {        
+        state.sequencer.bake();
 
         return state;
     }],
@@ -108,14 +114,14 @@ export const reducers = [
     //     return state;
     // }],
     // [ EnumMessageType.ADD_TRACK, function(state, msg) {
-    //     state.sequencer.children.newTrack();
+    //     state.sequencer.mixer.newTrack();
 
     //     return state;
     // }],
     // [ EnumMessageType.REORDER_TRACK, function(state, msg) {
     //     const { left, right } = msg.payload || {};
 
-    //     state.sequencer.children.reorder(left, right);
+    //     state.sequencer.mixer.reorder(left, right);
 
     //     return state;
     // }],

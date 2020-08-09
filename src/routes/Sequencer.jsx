@@ -21,22 +21,22 @@ export default function Sequencer() {
         }
 
         if(source.droppableId === destination.droppableId) {
-            if(source.droppableId === state.sequencer.children.id) {
+            if(source.droppableId === state.sequencer.mixer.id) {
                 node.dispatch(EnumMessageType.REORDER_TRACK, {
                     left: source.index,
                     right: destination.index,
                 });
             } else {
                 node.dispatch(EnumMessageType.REORDER_FRAME, {
-                    track: state.sequencer.children.getTrackById(destination.droppableId),
+                    track: state.sequencer.mixer.getTrackById(destination.droppableId),
                     left: source.index,
                     right: destination.index,
                 });
             }
         } else {
             //  Different droppable
-            const from = state.sequencer.children.getTrackById(source.droppableId);
-            const to = state.sequencer.children.getTrackById(destination.droppableId);
+            const from = state.sequencer.mixer.getTrackById(source.droppableId);
+            const to = state.sequencer.mixer.getTrackById(destination.droppableId);
 
             if(from instanceof SequencerTrack && to instanceof SequencerTrack) {
                 const frame = from.get(source.index);
@@ -51,7 +51,7 @@ export default function Sequencer() {
         }
     }
 
-    const tracks = Array(...state.sequencer.children.tracks.values());
+    const tracks = Array(...state.sequencer.mixer.tracks.values());
 
     if(!tracks.length) {
         return (
@@ -66,8 +66,14 @@ export default function Sequencer() {
 
     return (
         <Segment>
+            <Segment color="blue">
+                <Button icon color="blue" onClick={ e => node.dispatch(EnumMessageType.BAKE_SEQUENCE) }>
+                    <Icon name="fire" />
+                    Bake
+                </Button>
+            </Segment>
+
             <Segment textAlign="center" inverted>
-                //TODO Based on state.config..TrackParadigm, change what you see here [ Z-Index: 1 Image, stacked | Weighted Variation: 1 Image, random | New Sequence: X Images, shared controls ]
                 <Image centered width={ 128 } height={ 128 } src="" />
 
                 <Button.Group icon style={{ marginTop: 8 }}>
@@ -88,7 +94,7 @@ export default function Sequencer() {
 
             //TODO Running all Track's simultaneously slows everything down too much
             <DragDropContext onDragEnd={ onDragEnd }>
-                <Droppable droppableId={ state.sequencer.children.id } type="droppableItem">
+                <Droppable droppableId={ state.sequencer.mixer.id } type="droppableItem">
                     { (provided, snapshot) => (
                         <div
                             ref={ provided.innerRef }

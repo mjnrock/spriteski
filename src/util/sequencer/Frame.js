@@ -1,3 +1,4 @@
+import crypto from "crypto";
 import { v4 as uuidv4 } from "uuid";
 import Base64 from "../Base64";
 
@@ -78,5 +79,17 @@ export default class Frame {
 
     async toCanvas() {
         return Base64.Decode(this.source).then(canvas => canvas);
+    }
+
+    async toData() {
+        return new Promise((resolve, reject) => {
+            resolve({
+                id: this.id,
+                source: this.source,
+                duration: this.duration,
+                filters: this.filters,
+                hash: crypto.createHash("md5").update(this.source).digest("hex"),   //? Create a hash of this.source
+            });
+        });
     }
 };

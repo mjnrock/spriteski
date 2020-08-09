@@ -196,4 +196,22 @@ export default class Track extends EventEmitter {
             return tabula;
         });
     }
+
+    async toData() {
+        return new Promise((resolve, reject) => {
+            Promise.all([ ...this.frames.values() ].map(async frame => {
+                return await frame.toData();
+            })).then(frames => {    
+                const data = {
+                    id: this.id,
+                    fps: this.fps,
+                    tile: this.tile,
+                    duration: this.duration,
+                    frames,
+                };
+
+                resolve(data);
+            });
+        });
+    }
 };

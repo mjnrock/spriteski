@@ -1,20 +1,11 @@
 import { v4 as uuidv4 } from "uuid";
-import Configuration from "./../Configuration";
 import Track from "./Track";
 
 export default class Mixer {
-    constructor({ tracks = [], tracakPradigm = "Z-Index", } = {}) {
+    constructor({ tracks = [] } = {}) {
         this.id = uuidv4();
 
         this.tracks = new Map(tracks);
-
-        this.config = new Configuration({
-            TrackParadigm: [ "Z-Index", "Weighted" ],
-        }, {
-            defaultsByValue: {
-                TrackParadigm: tracakPradigm,
-            }
-        });
     }
 
     get pixels() {
@@ -97,7 +88,7 @@ export default class Mixer {
     }
 
     async toCanvas() {
-        const size = {
+        const meta = {
             width: 0,
             height: 0,
         };
@@ -105,21 +96,42 @@ export default class Mixer {
         return Promise.all([ ...this.tracks.values() ].map(async track => {
             const canvas = await track.toCanvas();
 
-            size.width = Math.max(size.width, canvas.width);
-            size.height = Math.max(size.height, canvas.height);
+            meta.width = Math.max(meta.width, canvas.width);
+            meta.height = Math.max(meta.height, canvas.height);
 
             return [ track, canvas ];
         })).then(canvases => {
             const tabula = document.createElement("canvas");
             const ctx = tabula.getContext("2d");
-            tabula.height = size.height * this.tracks.size;
-            tabula.width = size.width;
+            tabula.height = meta.height * this.tracks.size;
+            tabula.width = meta.width;
 
             canvases.forEach(([ track, canvas ], i) => {
-                ctx.drawImage(canvas, 0, size.height * i);
+                ctx.drawImage(canvas, 0, meta.height * i);
             });
 
             return tabula;
         });
     }
-};
+
+    async toData() {
+        return new Promise((resolve, reject) => {
+            let totalLength = 0;
+            Promise.all([ ...this.tracks.values() ].map(async track => {
+                const trackData = await track.toData();
+
+                totalLength = Math.max(trackData.duration, totalLength);
+
+                return trackData;
+            })).then(tracks => {    
+                const data = {
+                    id: this.id,
+                    duration: totalLength,
+                    tracks,
+                };
+
+                resolve(data);
+            });
+        });
+    }
+}

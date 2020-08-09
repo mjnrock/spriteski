@@ -7,11 +7,12 @@ export default class Score {
         
         this.weight = weight;
         this.bounds = bounds;
+        this.data = {};
 
         if(canvas instanceof HTMLCanvasElement) {
-            this._canvas = canvas;
+            this.canvas = canvas;
         } else if(mixer instanceof Mixer) {
-            mixer.toCanvas().then(canvas => this._canvas = canvas);
+            mixer.toCanvas().then(canvas => this.canvas = canvas);
         }
     }
 
@@ -39,12 +40,12 @@ export default class Score {
 
     static async Create(mixer, opts = {}) {
         if(mixer instanceof Mixer) {
-            const mix = new Score(null, opts);
+            const score = new Score(null, opts);
 
             return mixer.toCanvas().then(canvas => {
-                mix.canvas = opts.canvas || canvas;
+                score.canvas = opts.canvas || canvas;
 
-                return mix;
+                return score;
             });
         }
     }
