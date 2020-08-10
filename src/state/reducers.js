@@ -8,19 +8,13 @@ export const EnumMessageType = {
     AUTO_SEQUENCER_COMPLETE: "AUTO_SEQUENCER_COMPLETE",
     BAKE_SEQUENCE: "BAKE_SEQUENCE",
 
-    // UPDATE_TILES: "UPDATE_TILES",
-    // TILE_TAG: "TILE_TAG",
-
-    // COLLECTION_TAG: "COLLECTION_TAG",
-
     UPDATE_TRACK_FPS: "UPDATE_TRACK_FPS",
-    // ADD_TRACK: "ADD_TRACK",
-    // REORDER_TRACK: "REORDER_TRACK",
+    REORDER_TRACK: "REORDER_TRACK",
 
-    // ADD_FRAME: "ADD_FRAME",
     RESIZE_FRAME: "RESIZE_FRAME",
     REORDER_FRAME: "REORDER_FRAME",
     RETRACK_FRAME: "RETRACK_FRAME",
+    REMOVE_FRAME: "REMOVE_FRAME",
 };
 
 //TODO Eventually move this to whatever class becomes the "Sequencer facilitator" wrapper
@@ -68,8 +62,6 @@ export const reducers = [
     }],
     [ EnumMessageType.AUTO_SEQUENCER_COMPLETE, function(state, msg) {
         state.config.setByValue("isSequencing", false);
-        
-        // state.sequencer.bake().then(score => console.log(score, score.toDataURL()))
 
         return state;
     }],
@@ -85,20 +77,6 @@ export const reducers = [
         
         return state;
     }],
-    // [ EnumMessageType.COLLECTION_TAG, function(state, msg) {
-    //     const tags = msg.payload || {};
-
-    //     state.collection.setTags(...tags);
-
-    //     return state;
-    // }],
-    // [ EnumMessageType.UPDATE_TILES, function(state, msg) {
-    //     const tiles = msg.payload || {};
-
-    //     state.collection.tiles = tiles;
-
-    //     return state;
-    // }],
     [ EnumMessageType.TILE_SIZE, function(state, msg) {
         const { width, height } = msg.payload || {};
 
@@ -106,33 +84,14 @@ export const reducers = [
 
         return state;
     }],
-    // [ EnumMessageType.TILE_TAG, function(state, msg) {
-    //     const { x, y, tags } = msg.payload || {};
-
-    //     state.collection.setTileTags(x, y, ...tags);
-
-    //     return state;
-    // }],
-    // [ EnumMessageType.ADD_TRACK, function(state, msg) {
-    //     state.sequencer.mixer.newTrack();
-
-    //     return state;
-    // }],
     [ EnumMessageType.REORDER_TRACK, function(state, msg) {
         const { left, right } = msg.payload || {};
+        console.log(EnumMessageType.REORDER_TRACK)
 
         state.sequencer.mixer.reorder(left, right);
 
         return state;
     }],
-    // [ EnumMessageType.ADD_FRAME, function(state, msg) {
-    //     const { track } = msg.payload || {};
-        
-    //     const frame = new Frame();
-    //     track.frames.set(frame.id, frame);
-        
-    //     return state;
-    // }],
     [ EnumMessageType.REORDER_FRAME, function(state, msg) {
         const { track, left, right } = msg.payload || {};
 
@@ -155,6 +114,13 @@ export const reducers = [
         const { frame, duration } = msg.payload || {};
 
         frame.duration = duration;
+
+        return state;
+    }],
+    [ EnumMessageType.REMOVE_FRAME, function(state, msg) {
+        const { track, frame } = msg.payload || {};
+
+        track.remove(frame);
 
         return state;
     }],

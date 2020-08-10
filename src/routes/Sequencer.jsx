@@ -92,6 +92,7 @@ export default function Sequencer() {
                 </Button.Group>
             </Segment>
 
+            //TODO Removing all Frames in a Track is not robust enough to work properly under that case; need "Add Frame" / "Add Track" paradigm to compensate, alongside conditional execution
             //TODO Running all Track's simultaneously slows everything down too much
             <DragDropContext onDragEnd={ onDragEnd }>
                 <Droppable droppableId={ state.sequencer.mixer.id } type="droppableItem">

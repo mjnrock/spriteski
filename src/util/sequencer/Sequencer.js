@@ -49,7 +49,7 @@ export default class Sequencer {
                     let dur = 0;
                     directionHashMap.set(i * thetaStep, {
                         frames: track.frames.map(frame => {                            
-                            dur += ~~((frame.duration / track.fps) * 1000);
+                            dur += ((frame.duration / track.fps) * 1000);
 
                             const result = [ dur, { hash: frame.hash, duration: frame.duration, threshold: dur } ];
 

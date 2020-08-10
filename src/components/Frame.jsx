@@ -63,6 +63,7 @@ export default function Frame(props) {
             <Icon
                 name="x"
                 color={ color }
+                onClick={ () => node.dispatch(EnumMessageType.REMOVE_FRAME, { track: props.track, frame: props.frame }) }
                 style={{
                     position: "absolute",
                     top: -2,

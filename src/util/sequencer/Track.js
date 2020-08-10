@@ -89,13 +89,15 @@ export default class Track extends EventEmitter {
         return this;
     }
     start() {
-        this.stop();
-        this.timeout = setTimeout(() => {
-            this.next();
-            this.start();
-        }, 1000 * (this.selected.duration / this.fps));
-
-        this.emit(EnumEventType.START);
+        if(this.frames.size) {
+            this.stop();
+            this.timeout = setTimeout(() => {
+                this.next();
+                this.start();
+            }, 1000 * (this.selected.duration / this.fps));
+    
+            this.emit(EnumEventType.START);
+        }
 
         return this;
     }
@@ -123,11 +125,13 @@ export default class Track extends EventEmitter {
                 }
             })
         }
+        this.index = 0;
 
         return this;
     }
     remove(input) {
-        this.frames.delete(input);
+        this.frames.delete(input.id);
+        this.index = 0;
     }
 
     reorder(index, newIndex) {
