@@ -53,7 +53,7 @@ export default class Mixer {
         return this;
     }
     remove(track) {
-        this.tracks.delete(track);
+        this.tracks.delete(track.id);
 
         return this;
     }

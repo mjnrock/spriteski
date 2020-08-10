@@ -10,6 +10,7 @@ export const EnumMessageType = {
 
     UPDATE_TRACK_FPS: "UPDATE_TRACK_FPS",
     REORDER_TRACK: "REORDER_TRACK",
+    REMOVE_TRACK: "REMOVE_TRACK",
 
     RESIZE_FRAME: "RESIZE_FRAME",
     REORDER_FRAME: "REORDER_FRAME",
@@ -86,9 +87,15 @@ export const reducers = [
     }],
     [ EnumMessageType.REORDER_TRACK, function(state, msg) {
         const { left, right } = msg.payload || {};
-        console.log(EnumMessageType.REORDER_TRACK)
 
         state.sequencer.mixer.reorder(left, right);
+
+        return state;
+    }],
+    [ EnumMessageType.REMOVE_TRACK, function(state, msg) {
+        const { track } = msg.payload || {};
+
+        state.sequencer.mixer.remove(track);
 
         return state;
     }],

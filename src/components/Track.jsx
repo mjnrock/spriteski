@@ -74,7 +74,7 @@ export default function Track(props) {
                         <Input className="text-center" value={ props.track.duration.toLocaleString(void 0, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) } type="type" label="ms" labelPosition="right" readOnly style={{ marginRight: 4 }} />
                     </Grid.Column>
                     <Grid.Column width={ 1 }>
-                        <Icon name="x" color="grey" style={ { cursor: "pointer" } } />
+                        <Icon name="x" color="grey" style={ { cursor: "pointer" } } onClick={ () => node.dispatch(EnumMessageType.REMOVE_TRACK, { track: props.track }) }/>
                     </Grid.Column>
                 </Grid.Row>
             </Grid>
