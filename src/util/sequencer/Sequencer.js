@@ -45,6 +45,7 @@ export default class Sequencer {
                 const directionHashMap = new Map();
                 const thetaStep = 360 / data.tracks.length;
 
+                let maxLength = 0;
                 data.tracks.forEach((track, i) => {
                     let dur = 0;
                     directionHashMap.set(i * thetaStep, {
@@ -59,6 +60,8 @@ export default class Sequencer {
                         length: track.duration,
                     });
 
+                    maxLength = Math.max(maxLength, track.duration);
+
                     track.frames.forEach((frame, j) => {
                         tileHashMap.set(frame.hash, [ j, i ]);
                     });
@@ -69,6 +72,7 @@ export default class Sequencer {
                     direction: directionHashMap,
                     step: thetaStep,
                     tile: data.tile,
+                    duration: maxLength,
                 };
 
                 //  STUB
