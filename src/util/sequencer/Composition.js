@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 
 export const EnumFacing = {
-    D8TD: {
+    TOP_DOWN: {
         0: [ "left", "right", "body", ],    //"ground", "head", "corona" ],
         45: [ "left", "right", "body", ],   //"ground", "head", "corona" ],
         90: [ "left", "body", "right", ],   //"ground", "head", "corona" ],
@@ -26,7 +26,7 @@ export default class Composition {
      * @param {int} elapsedTime (ms)
      * @returns [ { name, score, data: Score.get(@facing, @elapsedTime) }, ... ]
      */
-    get(facing, elapsedTime, { lookup = EnumFacing.D8TD } = {}) {
+    get(facing, elapsedTime, { lookup = EnumFacing.TOP_DOWN } = {}) {
         const arr = [ ...this.scores.entries() ];
         arr.sort(([ aname ], [ bname ]) => lookup[ facing ].indexOf(aname) - lookup[ facing ].indexOf(bname));
 
