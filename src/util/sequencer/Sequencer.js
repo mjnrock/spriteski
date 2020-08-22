@@ -96,7 +96,13 @@ export default class Sequencer {
                     console.log(canvas.width, canvas.height)
 
                     console.log(score.serialize())
-                    Score.Deserialize(score.serialize()).then(data => console.log(data))
+                    Score.Deserialize(score.serialize()).then(data => {
+                        var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data));
+                        var dlAnchorElem = document.createElement("a");
+                        dlAnchorElem.setAttribute("href", dataStr);
+                        dlAnchorElem.setAttribute("download", `${ Date.now() }.json`);
+                        dlAnchorElem.click();
+                    })
 
                 resolve(score);
             });
