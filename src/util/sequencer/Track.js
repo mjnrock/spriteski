@@ -169,7 +169,7 @@ export default class Track extends EventEmitter {
 
     sendToTrack(frame, track, index) {
         if(frame instanceof Frame && track instanceof Track) {
-            this.remove(frame.id);
+            this.remove(frame);
             track.add(frame);
 
             if(typeof index === "number") {

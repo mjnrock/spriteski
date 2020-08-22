@@ -10,7 +10,7 @@ import Frame from "./Frame";
 import { EnumEventType as EnumTrackEventType } from "./../util/sequencer/Track";
 
 export default function Track(props) {
-    const { node } = useNodeContext(Context);
+    const { node, state } = useNodeContext(Context);
     const [ source, setSource ] = useState((props.track.selected || {}).source);
 
     useEffect(() => {
@@ -70,7 +70,7 @@ export default function Track(props) {
                             style={{ marginRight: 4 }}
                             onChange={ e => node.dispatch(EnumMessageType.UPDATE_TRACK_FPS, { track: props.track, fps: ~~e.target.value }) }
                         />
-                        <Input className="text-center" value={ "128 x 128" } type="type" icon="expand" iconPosition="left" readOnly style={{ marginRight: 4 }} />
+                        <Input className="text-center" value={ `${ state.tessellator.config.width } x ${ state.tessellator.config.height }` } type="type" icon="expand" iconPosition="left" readOnly style={{ marginRight: 4 }} />
                         <Input className="text-center" value={ props.track.duration.toLocaleString(void 0, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) } type="type" label="ms" labelPosition="right" readOnly style={{ marginRight: 4 }} />
                     </Grid.Column>
                     <Grid.Column width={ 1 }>
@@ -82,7 +82,7 @@ export default function Track(props) {
             <Grid celled>
                 <Grid.Row>
                     <Grid.Column width={ 3 }>
-                        <Image centered width={ 128 } height={ 128 } src={ source } />
+                        <Image centered width={ state.tessellator.config.width } height={ state.tessellator.config.height } src={ source } />
 
                         <Button.Group icon fluid style={{ marginTop: 8 }}>
                             <Button onClick={ e => previewCommand(e, "previous") }>

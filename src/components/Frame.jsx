@@ -8,7 +8,7 @@ import { EnumMessageType } from "./../state/reducers";
 import { ResizableBox } from "react-resizable";
 
 export default function Frame(props) {
-    const { node } = useNodeContext(Context);
+    const { node, state } = useNodeContext(Context);
     const [ resize, setResize ] = useState(props.frame.duration);
     const [ duration, setDuration ] = useState(props.frame.duration);
     const [ color, setColor ] = useState(props.isSelected ? "yellow" : "grey");
@@ -26,9 +26,9 @@ export default function Frame(props) {
             className="frame-resizer"
             axis="x"
             width={ (props.frame.duration / props.fps) * 512 }
-            height={ 136 }
-            minConstraints={ [ 512 / props.fps, 136 ]}
-            maxConstraints={ [ 512, 136 ]}
+            height={ state.tessellator.config.height + 8 }
+            minConstraints={ [ 512 / props.fps, state.tessellator.config.height + 8 ]}
+            maxConstraints={ [ 512, state.tessellator.config.height + 8 ]}
             handle={
                 <Icon
                     name="ellipsis vertical"
@@ -84,8 +84,8 @@ export default function Frame(props) {
             >{ ~~props.frame.duration }</span>
 
             <img 
-                width={ 128 }
-                height={ 128 }
+                width={ state.tessellator.config.width }
+                height={ state.tessellator.config.height }
                 src={ props.frame.source }
             />
         </ResizableBox>

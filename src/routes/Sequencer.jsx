@@ -13,6 +13,7 @@ import SequencerTrack from "./../util/sequencer/Track";
 export default function Sequencer() {
     const { node, state } = useNodeContext(Context);
 
+    console.log(state.tessellator)
     function onDragEnd(result) {
         const { source, destination } = result;
 
@@ -74,7 +75,7 @@ export default function Sequencer() {
             </Segment>
 
             <Segment textAlign="center" inverted>
-                <Image centered width={ 128 } height={ 128 } src="" />
+                <Image centered width={ state.tessellator.config.width } height={ state.tessellator.config.height } src="" />
 
                 <Button.Group icon style={{ marginTop: 8 }}>
                     <Button basic inverted>

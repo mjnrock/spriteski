@@ -60,6 +60,7 @@ export default class Tessellator {
     resize(width, height) {
         this.config.width = width;
         this.config.height = height;
+        this.tileCanvas.resize(width, height);
     }
 
     copyFrom(input, { type = "image/png", quality = 1.0 } = {}) {
