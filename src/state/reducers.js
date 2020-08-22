@@ -6,6 +6,7 @@ export const EnumMessageType = {
     UPDATE_CONFIGURATION: "UPDATE_CONFIGURATION",
     AUTO_SEQUENCER_BEGIN: "AUTO_SEQUENCER_BEGIN",
     AUTO_SEQUENCER_COMPLETE: "AUTO_SEQUENCER_COMPLETE",
+    NAME_SEQUENCE: "NAME_SEQUENCE",
     BAKE_SEQUENCE: "BAKE_SEQUENCE",
 
     UPDATE_TRACK_FPS: "UPDATE_TRACK_FPS",
@@ -68,6 +69,13 @@ export const reducers = [
     }],
     [ EnumMessageType.BAKE_SEQUENCE, function(state, msg) {        
         state.sequencer.bake();
+
+        return state;
+    }],
+    [ EnumMessageType.NAME_SEQUENCE, function(state, msg) {   
+        const data = msg.payload || {};
+
+        state.sequencer.rename(data);
 
         return state;
     }],

@@ -7,8 +7,9 @@ import Score from "./Score";
 import TileCollection from "../TileCollection";
 
 export default class Sequencer {
-    constructor({ mixer, collection } = {}) {
+    constructor({ mixer, collection, name } = {}) {
         this.id = uuidv4();
+        this.name = name;
 
         //TODO Create getters/setters for taking a Mixer and abstracting it to other, say, angles (e.g. north Sequence converted to all angle Sequences, with getter(angle) => <Mixer>)
         this.mixer = mixer || new Mixer();
@@ -36,6 +37,10 @@ export default class Sequencer {
         if(frame instanceof Frame) {
             this.active.frame = frame;
         }
+    }
+
+    rename(name) {
+        this.name = name;
     }
 
     async bake() {
@@ -100,7 +105,7 @@ export default class Sequencer {
                         var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data));
                         var dlAnchorElem = document.createElement("a");
                         dlAnchorElem.setAttribute("href", dataStr);
-                        dlAnchorElem.setAttribute("download", `${ Date.now() }.json`);
+                        dlAnchorElem.setAttribute("download", `${ this.name.trim().length ? this.name : Date.now }.json`);
                         dlAnchorElem.click();
                     })
 

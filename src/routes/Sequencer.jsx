@@ -1,6 +1,6 @@
 /* eslint-disable */
-import React from "react";
-import { Segment, Button, Icon, Image, Message } from "semantic-ui-react";
+import React, { useEffect, useState } from "react";
+import { Segment, Button, Icon, Image, Message, Input } from "semantic-ui-react";
 import { useNodeContext } from "@lespantsfancy/hive/lib/react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { Link } from "react-router-dom";
@@ -12,8 +12,13 @@ import SequencerTrack from "./../util/sequencer/Track";
 
 export default function Sequencer() {
     const { node, state } = useNodeContext(Context);
+    const [ sequenceName, setSequenceName ] = useState("");
 
-    console.log(state.tessellator)
+    function startBake() {
+        node.dispatch(EnumMessageType.NAME_SEQUENCE, sequenceName);
+        node.dispatch(EnumMessageType.BAKE_SEQUENCE);
+    }
+
     function onDragEnd(result) {
         const { source, destination } = result;
 
@@ -68,10 +73,12 @@ export default function Sequencer() {
     return (
         <Segment>
             <Segment color="blue">
-                <Button icon color="blue" onClick={ e => node.dispatch(EnumMessageType.BAKE_SEQUENCE) }>
+                <Button icon color="blue" onClick={ e => startBake() }>
                     <Icon name="fire" />
                     <span style={{ marginLeft: 10 }}>Bake</span>
                 </Button>
+
+                <Input className="text-center" type="text" value={ sequenceName } placeholder="Change filename..." onChange={ e => setSequenceName(e.target.value) } style={{ marginLeft: 4 }} />
             </Segment>
 
             <Segment textAlign="center" inverted>
