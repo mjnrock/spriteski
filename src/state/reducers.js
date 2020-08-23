@@ -73,7 +73,7 @@ export const reducers = [
         return state;
     }],
     [ EnumMessageType.NAME_SEQUENCE, function(state, msg) {   
-        const data = msg.payload || {};
+        const data = msg.payload || "";
 
         state.sequencer.rename(data);
 

@@ -89,7 +89,7 @@ export default class Sequencer {
                         x: 0,
                         y: 0,
                     });
-                    console.log(canvas.toDataURL())
+                    
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
                     score.drawTo(canvas, {
                         facing: 180,
@@ -97,17 +97,14 @@ export default class Sequencer {
                         x: 0,
                         y: 0,
                     });
-                    console.log(canvas.toDataURL())
-                    console.log(canvas.width, canvas.height)
 
-                    console.log(score.serialize())
-                    Score.Deserialize(score.serialize()).then(data => {
-                        var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data));
-                        var dlAnchorElem = document.createElement("a");
-                        dlAnchorElem.setAttribute("href", dataStr);
-                        dlAnchorElem.setAttribute("download", `${ this.name.trim().length ? this.name : Date.now }.json`);
-                        dlAnchorElem.click();
-                    })
+                    const encoded = "data:text/json;charset=utf-8," + encodeURIComponent(score.serialize());
+                    const ele = document.createElement("a");
+                    let name = String(this.name || Date.now());
+                    
+                    ele.setAttribute("href", encoded);
+                    ele.setAttribute("download", `${ name.trim() }.json`);
+                    ele.click();
 
                 resolve(score);
             });
