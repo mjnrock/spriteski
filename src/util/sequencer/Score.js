@@ -2,8 +2,10 @@ import { v4 as uuidv4 } from "uuid";
 import Base64 from "./../Base64";
 import Mixer from "./Mixer";
 
-//TODO Create helper functions to perform hash lookups and facing lookups that would be stored in this.data
-//TODO Create accessor methods for the "current frame" and things like Elapsable (maybe make a "generator" that passes with a reference to the Score, so that multiple Elapsables can reference a single Score)
+export const GAME_TILE_SIZE = {
+    WIDTH: 128,
+    HEIGHT: 128,
+};
 
 export default class Score {
     constructor(mixer, { weight = 1, canvas, bounds = {}, data = {}, id } = {}) {
@@ -22,7 +24,33 @@ export default class Score {
         if(mixer instanceof Mixer && Object.keys(data).length) {            
             mixer.toData().then(data => this.data = data);
         }
+
+        // this.config = {
+        //     shouldRepeat: true,
+        // };
     }
+
+    // toggle(key) {
+    //     if(key in this.config) {
+    //         this.config[ key ] = !this.config[ key ];
+    //     }
+
+    //     return this;
+    // }
+    // turnOn(key) {
+    //     if(key in this.config) {
+    //         this.config[ key ] = true;
+    //     }
+
+    //     return this;
+    // }
+    // turnOff(key) {
+    //     if(key in this.config) {
+    //         this.config[ key ] = false;
+    //     }
+
+    //     return this;
+    // }
 
     get canvas() {
         if("x0" in this.bounds && "y0" in this.bounds && "x1" in this.bounds && "y1" in this.bounds) {
@@ -64,6 +92,13 @@ export default class Score {
         const theta = Math.round(facing / this.data.step) * this.data.step;
         const track = this.data.direction.get(theta);
 
+        if(track.frames.length === 1) {
+            return {
+                hash: track.frames[ 0 ].hash,
+                position: [ 0, 0 ],
+            };
+        }
+
         let hash;
         for(let [ threshold, frame ] of track.frames) {            
             if(elapsedTime < threshold) {
@@ -79,15 +114,15 @@ export default class Score {
         };
     }
     
-    drawTo(canvas, { facing, elapsedTime, x, y, tx, ty }) {
+    drawTo(canvas, { facing, elapsedTime, x, y, tx, ty, tw, th }) {
         const { position: [ sx, sy ] } = this.get(facing, elapsedTime) || {};
 
         if(sx !== void 0 && sy !== void 0) {
             const ctx = canvas.getContext("2d");
 
             if(tx !== void 0 && ty !== void 0) {
-                x = tx * this.data.tile.width;
-                y = ty * this.data.tile.height;
+                x = tx * (tw || GAME_TILE_SIZE.WIDTH);
+                y = ty * (th || GAME_TILE_SIZE.HEIGHT);
             }
 
             ctx.drawImage(
@@ -96,8 +131,8 @@ export default class Score {
                 sy,
                 this.data.tile.width,
                 this.data.tile.height,
-                x,
-                y,
+                x - this.data.tile.width / 2,
+                y - this.data.tile.height / 2,
                 this.data.tile.width,
                 this.data.tile.height
             );
