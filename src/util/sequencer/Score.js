@@ -63,6 +63,9 @@ export default class Score {
         this._canvas = canvas;
     }
     
+    /**
+     * Bounds is designed to create a subwindow of a canvas, in case there is a master sprite sheet
+     */
     setBounds(x, y, w, h) {
         this.bounds = {
             x: x !== void 0 ? x : this.bounds.x,
@@ -86,19 +89,22 @@ export default class Score {
         }
     }
 
-    get(facing, elapsedTime) {
-        elapsedTime = elapsedTime % this.data.duration;
-        
+    get(facing, elapsedTime) {        
         const theta = Math.round(facing / this.data.step) * this.data.step;
         const track = this.data.direction.get(theta);
 
         if(track.frames.length === 1) {
+            const hash = track.frames[ 0 ][ 1 ].hash;
+            const [ tx, ty ] = this.data.frames.get(hash);
+
             return {
-                hash: track.frames[ 0 ].hash,
-                position: [ 0, 0 ],
+                hash,
+                position: [ tx * this.data.tile.width, ty * this.data.tile.height ],
             };
         }
 
+        elapsedTime = elapsedTime % this.data.duration;
+        
         let hash;
         for(let [ threshold, frame ] of track.frames) {            
             if(elapsedTime < threshold) {
